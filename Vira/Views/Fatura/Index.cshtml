@@ -1,0 +1,195 @@
+﻿@using Vira.Models
+@model List<Fatura>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+<br />
+<div class="card card-default">
+    <div class="card-header">
+        <div class="row">
+            <h5 class="card-title mb-sm-1 col-md-11">
+                <strong>Fatura İşlemleri</strong>
+            </h5>
+            <a href="#" class="btn btn-primary ekle col-md-1" data-target="@Url.Action("ModalAc", "Fatura")">Yeni Kayıt</a>
+        </div>
+    </div>
+
+    <!--Fatura Listesi-->
+
+    <div style="margin-left:1%; margin-right:1%">
+        <br />
+        <table id="liste" class="table table-bordered table-hover table-sm">
+            <thead>
+                <tr>
+                    <th style="width:3%"><small><strong>Id</strong></small></th>
+                    <th style="width:5%"><small><strong>Fatura No</strong></small></th>
+                    <th style="width:5%"><small><strong>Fatura Tipi</strong></small></th>
+                    <th style="width:5%"><small><strong>Fatura Tarihi</strong></small></th>
+                    <th style="width:30%"><small><strong>Kurum</strong></small></th>
+                    <th style="width:6%"><small><strong>Tutar Toplamı</strong></small></th>
+                    <th style="width:6%"><small><strong>Kdv Toplamı</strong></small></th>
+                    <th style="width:6%"><small><strong>Ödenecek Tutar</strong></small></th>
+                    <th style="width:4%"></th>
+                    <th style="width:3%"></th>
+                    <th style="width:7%"></th>
+                    <th style="width:7%"></th>
+                </tr>
+            </thead>
+            @foreach (var f in Model)
+            {
+                <tr>
+                    <td><small>@f.FaturaId</small></td>
+                    <td><small>@f.FaturaNo</small></td>
+                    <td><small>@f.FaturaTipi</small></td>
+                    <td><small>@f.FaturaTarihi.ToString("dd.MM.yyyy")</small></td>
+                    <td><small>@f.Kurum.KurumAdi</small></td>
+                    <td style="text-align:right"><small>@f.FaturaToplami.ToString("N")</small></td>
+                    <td style="text-align:right"><small>@f.FaturaKdvToplami.ToString("N")</small></td>
+                    <td style="text-align:right"><small>@f.FaturaOdenecekTutar.ToString("N")</small></td>
+                    <td><a href="#" class="btn btn-success btn-sm fGuncelle" data-target="@Url.Action("FaturaGetir", "Fatura")/@f.FaturaId">Güncelle</a></td>
+                    <td><a href="@Url.Action("FaturaDetayIndex", "Fatura")/@f.FaturaId" class="btn btn-info btn-sm">Detay</a></td>
+                    <td><a href="#" class="btn btn-danger btn-sm dosya" data-target="@Url.Action("ModalDosya", "Fatura")/@f.FaturaId">Dosya Yükle</a></td>
+                    <td><a href="#" class="btn btn-primary btn-sm dosyaAc" data-target="@Url.Action("ModalDosyaListe", "Fatura")/@f.FaturaId">Dosya Listesi</a></td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+
+<div class="container">
+    <!--Ekle Modal -->
+    <div class="modal fade" id="myModalE" role="dialog">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <!--Güncelle Modal -->
+    <div class="modal fade" id="myModalG" role="dialog">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <!--Bilgi Modal -->
+    <div class="modal fade" id="myModalD" role="dialog">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <!--Bilgi Modal -->
+    <div class="modal fade" id="myModalDA" role="dialog">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="//code.jquery.com/jquery-1.12.4.js"></script>
+<script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+
+
+<script type="text/javascript">
+    $(function () {
+        $("body").on("click", ".ekle", function () {
+            var url = $(this).data("target");
+            $.post(url, function (data) { })
+                .done(function (data) {
+                    $("#myModalE .modal-body").html(data);
+                    $("#myModalE").modal("show");
+                })
+                .fail(function () {
+                    $("#myModalE .modal-body").text("Hata!!");
+                    $("#myModalE").modal("show");
+                })
+        });
+    });
+    $(function () {
+        $("body").on("click", ".fGuncelle", function () {
+            var url = $(this).data("target");
+            $.post(url, function (data) { })
+                .done(function (data) {
+                    $("#myModalG .modal-body").html(data);
+                    $("#myModalG").modal("show");
+                })
+                .fail(function () {
+                    $("#myModalG .modal-body").text("Hata!!");
+                    $("#myModalG").modal("show");
+                })
+        });
+    });
+    $(function () {
+        $("body").on("click", ".dosya", function () {
+            var url = $(this).data("target");
+            $.post(url, function (data) { })
+                .done(function (data) {
+                    $("#myModalD .modal-body").html(data);
+                    $("#myModalD").modal("show");
+                })
+                .fail(function () {
+                    $("#myModalD .modal-body").text("Hata!!");
+                    $("#myModalD").modal("show");
+                })
+        });
+    });
+    $(function () {
+        $("body").on("click", ".dosyaAc", function () {
+            var url = $(this).data("target");
+            $.post(url, function (data) { })
+                .done(function (data) {
+                    $("#myModalDA .modal-body").html(data);
+                    $("#myModalDA").modal("show");
+                })
+                .fail(function () {
+                    $("#myModalDA .modal-body").text("Hata!!");
+                    $("#myModalDA").modal("show");
+                })
+        });
+    });
+    $(document).ready(function () {
+        $('#IllerId').change(function () {
+            var IlId = $(this).val();
+            var IlceL = $('#IlcelerId');
+            IlceL.empty();
+            $.ajax({
+                url: '@Url.Action("DosyaListe","Fatura")',
+                type: 'POST',
+                dataType: 'json',
+                data: { 'IlId': IlId },
+                success: function (data) {
+                    $.each(data, function (index, option) {
+                        IlceL.append('<option value=' + option.Value + '>' + option.Text + '</option>');
+                    });
+                }
+            });
+        });
+    });
+    $('#liste').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Turkish.json"
+        }
+    });
+</script>
+

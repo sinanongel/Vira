@@ -1,0 +1,44 @@
+﻿@model Vira.Models.MalHizmet
+
+<div class="card card-default">
+    <div class="card-header bg-dark">
+        <div class="row">
+            <h5 class="card-title mb-sm-1 col-md-11" style="color:white">
+                <strong>Mal/Hizmet Güncelleme</strong>
+            </h5>
+        </div>
+    </div>
+    <div class="container">
+        <form action="@Url.Action("MalHizmetGuncelle", "MalHizmet")" method="post">
+            <hr />
+            @Html.HiddenFor(x => x.MalHizmetId)
+        <div class="form-horizontal">
+            <div class="container form-group-sm row">
+                <label class="col-form-label-sm col-md-4 text-right" style="color:red"><b>Mal/Hizmet Adı</b></label>
+                <div class="col-8">
+                    @Html.TextBoxFor(x => x.MalHizmetAdi, new { @class = "form-control", @style = "width:300px", @maxlength = "100" })
+                </div>
+            </div>
+            <br />
+            <div class="container form-group-sm row">
+                <label class="col-form-label-sm col-md-4 text-right" style="color:red"><b>Mal/Hizmet Grubu</b></label>
+                <div class="col-8">
+                    @Html.DropDownListFor(x => x.BirimId, (List<SelectListItem>)ViewBag.brmListe, new { @class = "form-control", @style = "width:100px" })
+                </div>
+            </div>
+            <br />
+            <div class="container form-group-sm row">
+                <label class="col-form-label-sm col-md-4 text-right" style="color:red"><b>Mal/Hizmet Grubu</b></label>
+                <div class="col-8">
+                    @Html.DropDownListFor(x => x.MalHizmetTuru, (List<SelectListItem>)ViewBag.tListe, new { @class = "form-control", @style = "width:100px" })
+                </div>
+            </div>
+            <br />
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Vazgeç</button>
+                <button class="btn btn-success">Güncelle</button>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>

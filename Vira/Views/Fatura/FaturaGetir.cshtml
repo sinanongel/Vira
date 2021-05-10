@@ -1,0 +1,51 @@
+﻿@model Vira.Models.Fatura
+
+<div class="card card-default">
+    <div class="card-header bg-dark">
+        <div class="row">
+            <h5 class="card-title mb-sm-1 col-md-11" style="color:white">
+                <strong>Fatura Başlığı Girişi</strong>
+            </h5>
+        </div>
+    </div>
+    <div class="container">
+        <form action="@Url.Action("FaturaGuncelle", "Fatura")" method="post">
+            <hr />
+            @Html.HiddenFor(x => x.FaturaId)
+            <div class="form-horizontal">
+                <div class="container form-group-sm row">
+                    <label class="col-form-label col-md-3 text-right" style="color:red"><b>Fatura No</b></label>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(x => x.FaturaNo, new { @class = "form-control", @style = "width:170px;", @maxlength = "16" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label col-md-3 text-right" style="color:red"><b>Fatura Tipi</b></label>
+                    <div class="col-md-9">
+                        @Html.DropDownListFor(x => x.FaturaTipi, (List<SelectListItem>)ViewBag.tListe, new { @class = "form-control", @style = "width:120px" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label col-md-3 text-right" style="color:red"><b>Fatura Tarihi</b></label>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(x => x.FaturaTarihi, "{0:yyyy-MM-dd}", new { @class = "form-control", @style = "width:160px;", @type = "date" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group row">
+                    <label class="col-form-label col-md-3 text-right" style="color:red"><b>Kurum</b></label>
+                    <div class="col-md-9">
+                        @Html.DropDownListFor(x => x.KurumId, (List<SelectListItem>)ViewBag.kList, new { @class = "form-control", @style = "width:400px", @required = "" })
+                    </div>
+                </div>
+                <br />
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Vazgeç</button>
+                    <button class="btn btn-success">Güncelle</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

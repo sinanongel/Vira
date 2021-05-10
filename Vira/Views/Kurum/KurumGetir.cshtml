@@ -1,0 +1,92 @@
+﻿@model Vira.Models.Kurum
+
+<div class="card card-default">
+    <div class="card-header bg-dark">
+        <div class="row">
+            <h5 class="card-title mb-sm-1 col-md-11" style="color:white">
+                <strong>Tedarikçi Güncelleme</strong>
+            </h5>
+        </div>
+    </div>
+    <div class="container">
+        <form action="@Url.Action("KurumGuncelle", "Kurum")" method="post">
+            <hr />
+            @Html.HiddenFor(x => x.KurumId)
+            <div class="form-horizontal">
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-3 text-right" style="color:red"><b>Kurum Adı</b></label>
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(x => x.KurumAdi, new { @class = "form-control", @style = "width:400px;", @maxlength = "75" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-3 text-right"><b>İlgili Kişi</b></label>
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(x => x.KurumIlgiliKisi, new { @class = "form-control", @style = "width:300px;", @maxlength = "30" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-3 text-right" style="color:red"><b>Adres</b></label>
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(x => x.KurumAdres, new { @class = "form-control", @style = "width:400px;", @maxlength = "100" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-3 text-right" style="color:red"><b>İl/İlçe</b></label>
+                    <div class="col-sm-4">
+                        @Html.DropDownListFor(x => x.IllerId, (List<SelectListItem>)ViewBag.iList, new { @class = "form-control", @style = "width:200px" })
+                    </div>
+                    <div class="col-sm-5">
+                        @Html.DropDownListFor(x => x.IlcelerId, (List<SelectListItem>)ViewBag.ilcList, new { @class = "form-control", @style = "width:260px" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-3 text-right"><b>Telefon</b></label>
+                    <div class="col-sm-2">
+                        @Html.TextBoxFor(x => x.KurumTelefon, new { @class = "form-control", @style = "width:150px;", @maxlength = "11" })
+                    </div>
+                    <label class="col-form-label-sm col-md-3 text-right"><b>Gsm</b></label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(x => x.KurumGsm, new { @class = "form-control", @style = "width:150px;", @maxlength = "11" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-3 text-right"><b>E-Posta</b></label>
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(x => x.KurumEPosta, new { @class = "form-control", @style = "width:300px;", @maxlength = "50" })
+                    </div>
+                </div>
+                <br />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Vazgeç</button>
+                <button class="btn btn-success">Güncelle</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#IllerId').change(function () {
+            var IlId = $(this).val();
+            var IlceL = $('#IlcelerId');
+            IlceL.empty();
+            $.ajax({
+                url: '@Url.Action("IlceListe", "Kurum")',
+                type: 'POST',
+                dataType: 'json',
+                data: { 'IlId': IlId },
+                success: function (data) {
+                    $.each(data, function (index, option) {
+                        IlceL.append('<option value=' + option.Value + '>' + option.Text + '</option>');
+                    });
+                }
+            });
+        });
+    });
+</script>

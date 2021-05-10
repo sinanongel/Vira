@@ -1,0 +1,156 @@
+﻿@using Vira.Models
+@model List<FaturaDetay>
+@{
+    ViewBag.Title = "FaturaDetayIndex";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+<br />
+<div class="card card-default">
+    <div class="card-header">
+        <div class="row">
+            <h5 class="card-title mb-sm-1 col-md-10">
+                <strong>Fatura Detay İşlemleri</strong>
+            </h5>
+            <a href="@Url.Action("Index", "Fatura")" class="btn btn-danger col-md-1">Fatura Listesi</a>
+            <a href="#" class="btn btn-primary ekle col-md-1" data-target="@Url.Action("ModalFaturaDetayAc", "Fatura")/@ViewBag.FaturaId">Yeni Kayıt</a>
+        </div>
+    </div>
+    <br />
+    <!--Fatura Başlığı-->
+    <div class="card-deck" style="margin-left:1%; margin-right:1%">
+        <div class="card">
+            <div class="card-body text-white bg-info">
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-5 text-right"><b>Firma :</b></label>
+                    <label class="col-form-label-sm col-7"><b>@ViewBag.FirmaAd</b></label>
+                </div>
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-5 text-right"><b>Fatura No :</b></label>
+                    <label class="col-form-label-sm col-7"><b>@ViewBag.FSira - @ViewBag.FTipi</b></label>
+                </div>
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-5 text-right"><b>Fatura Tarihi :</b></label>
+                    <label class="col-form-label-sm col-7"><b>@ViewBag.FaturaTarihi</b></label>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body text-white bg-danger">
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-6 text-right"><b>Fatura Toplamı :</b></label>
+                    <label class="col-form-label-sm col-3 text-right"><b>@ViewBag.FaturaToplam.ToString("N")</b></label>
+                </div>
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-6 text-right"><b>Kdv Toplamı :</b></label>
+                    <label class="col-form-label-sm col-3 text-right"><b>@ViewBag.FaturaKdvToplam.ToString("N")</b></label>
+                </div>
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-6 text-right"><b>Ödenecek Tutar :</b></label>
+                    <label class="col-form-label-sm col-3 text-right"><b>@ViewBag.FaturaOdenecektutar.ToString("N")</b></label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <!--Ödeme Listesi-->
+    <div style="margin-left:1%; margin-right:1%">
+        <table id="liste" class="table table-bordered table-hover table-sm">
+            <thead>
+                <tr>
+                    <th style="width:35%"><small><strong>Mal/Hizmet</strong></small></th>
+                    <th style="width:8%"><small><strong>Miktar</strong></small></th>
+                    <th style="width:5%"><small><strong>Birim</strong></small></th>
+                    <th style="width:8%"><small><strong>Birim Fiyat</strong></small></th>
+                    <th style="width:5%"><small><strong>Döviz Cinsi</strong></small></th>
+                    <th style="width:5%"><small><strong>Kur</strong></small></th>
+                    <th style="width:8%"><small><strong>Birim Fiyat(TL)</strong></small></th>
+                    <th style="width:5%"><small><strong>Kdv Oranı(%)</strong></small></th>
+                    <th style="width:8%"><small><strong>Kdv Tutarı</strong></small></th>
+                    <th style="width:8%"><small><strong>Tutar</strong></small></th>
+                    <th style="width:5%"></th>
+                </tr>
+            </thead>
+            @foreach (var fd in Model)
+            {
+                <tr>
+                    <td><small>@fd.MalHizmet.MalHizmetAdi</small></td>
+                    <td style="text-align:right"><small>@fd.FdMiktar</small></td>
+                    <td><small>@fd.Birim.BirimAdi</small></td>
+                    <td style="text-align:right"><small>@fd.FdBirimFiyat.ToString("N8")</small></td>
+                    <td><small>@fd.Doviz.DovizCinsi</small></td>
+                    <td style="text-align:right"><small>@fd.FdKur.ToString("N")</small></td>
+                    <td style="text-align:right"><small>@fd.FdBirimFiyatTl.ToString("N8")</small></td>
+                    <td style="text-align:right"><small>@fd.Kdv.KdvOrani</small></td>
+                    <td style="text-align:right"><small>@fd.KdvTutar.ToString("N")</small></td>
+                    <td style="text-align:right"><small>@fd.FdTutar.ToString("N")</small></td>
+                    <td><a href="#" class="btn btn-sm btn-success guncelle" data-target="@Url.Action("FaturaDetayGetir", "Fatura")/@fd.FaturaDetayId">Güncelle</a></td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+
+<div class="container">
+    <!--Ekle Modal -->
+    <div class="modal fade" id="myModalE" role="dialog">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <!--Güncelle Modal -->
+    <div class="modal fade" id="myModalG" role="dialog">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="//code.jquery.com/jquery-1.12.4.js"></script>
+<script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $("body").on("click", ".ekle", function () {
+            var url = $(this).data("target");
+            $.post(url, function (data) { })
+                .done(function (data) {
+                    $("#myModalE .modal-body").html(data);
+                    $("#myModalE").modal("show");
+                })
+                .fail(function () {
+                    $("#myModalE .modal-body").text("Hata!!");
+                    $("#myModalE").modal("show");
+                })
+        });
+    });
+    $(function () {
+        $("body").on("click", ".guncelle", function () {
+            var url = $(this).data("target");
+            $.post(url, function (data) { })
+                .done(function (data) {
+                    $("#myModalG .modal-body").html(data);
+                    $("#myModalG").modal("show");
+                })
+                .fail(function () {
+                    $("#myModalG .modal-body").text("Hata!!");
+                    $("#myModalG").modal("show");
+                })
+        });
+    });
+    $('#liste').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Turkish.json"
+        }
+    });
+</script>

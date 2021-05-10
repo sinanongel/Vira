@@ -1,0 +1,32 @@
+﻿@using Vira.Models
+@model List<Dosya>
+
+<div class="card card-default">
+    <div class="card-header bg-dark">
+        <div class="row">
+            <h5 class="card-title mb-sm-1 col-md-11" style="color:white">
+                <strong>Dosya Listesi</strong>
+            </h5>
+        </div>
+    </div>
+
+    <div style="margin-left:1%; margin-right:1%">
+        <table id="liste" class="table table-bordered table-hover table-sm" style="margin-top:20px">
+            <thead>
+                <tr>
+                    <th>Dosya Türü</th>
+                    <th>Dosya</th>
+                    <th></th>
+                </tr>
+            </thead>
+            @foreach (var t in Model)
+            {
+                <tr>
+                    <td>@t.DosyaTuru.DosyaTuruAd</td>
+                    <td>@t.DosyaAdi</td>
+                    <td>@Html.ActionLink("Download", "DosyaAc", new { dosya = t.DosyaAdi, @target = "_blank" })</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
