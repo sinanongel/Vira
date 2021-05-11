@@ -22,7 +22,7 @@
             <div class="card-body text-white bg-info">
                 <div class="container form-group-sm row">
                     <label class="col-form-label-sm col-5 text-right"><b>Firma :</b></label>
-                    <label class="col-form-label-sm col-7"><b>@ViewBag.FirmaAd</b></label>
+                    <label class="col-form-label-sm col-7"><b>@ViewBag.KurumAd - @ViewBag.KurumUnvan</b></label>
                 </div>
                 <div class="container form-group-sm row">
                     <label class="col-form-label-sm col-5 text-right"><b>Fatura No :</b></label>
@@ -54,9 +54,10 @@
     <br />
     <!--Ödeme Listesi-->
     <div style="margin-left:1%; margin-right:1%">
-        <table id="liste" class="table table-bordered table-hover table-sm">
+        <table id="liste" class="table table-bordered table-hover table-sm display">
             <thead>
                 <tr>
+                    <th>#</th>
                     <th style="width:35%"><small><strong>Mal/Hizmet</strong></small></th>
                     <th style="width:8%"><small><strong>Miktar</strong></small></th>
                     <th style="width:5%"><small><strong>Birim</strong></small></th>
@@ -73,7 +74,15 @@
             @foreach (var fd in Model)
             {
                 <tr>
-                    <td><small>@fd.MalHizmet.MalHizmetAdi</small></td>
+                    <td class="align-middle" style="font-size:12px;"></td>
+                    @if (fd.MalHizmet.StokKod == null)
+                    {
+                        <td><small>@fd.MalHizmet.MalHizmetAdi</small></td>
+                    }
+                    else
+                    {
+                        <td><small>@fd.MalHizmet.StokKod - @fd.MalHizmet.MalHizmetAdi</small></td>
+                    }
                     <td style="text-align:right"><small>@fd.FdMiktar</small></td>
                     <td><small>@fd.Birim.BirimAdi</small></td>
                     <td style="text-align:right"><small>@fd.FdBirimFiyat.ToString("N8")</small></td>
@@ -116,7 +125,8 @@
 </div>
 
 <link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
-<script src="//code.jquery.com/jquery-1.12.4.js"></script>
+@*<script src="//code.jquery.com/jquery-1.12.4.js"></script>*@
+<script src="~/Scripts/jquery-3.4.1.js"></script>
 <script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
 
 <script type="text/javascript">
@@ -148,9 +158,22 @@
                 })
         });
     });
-    $('#liste').DataTable({
+    var t = $('#liste').DataTable({
         "language": {
             "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Turkish.json"
-        }
+        },
+        "columnDefs": [{
+            "searchable": false,
+            "orderable": false,
+            "targets": 0,
+        }],
+        "order": [[1, 'asc']]
+    });
+
+    t.on('draw.dt', function () {
+        var PageInfo = $('#liste').DataTable().page.info();
+        t.column(0, { page: 'current' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1 + PageInfo.start;
+        });
     });
 </script>

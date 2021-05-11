@@ -70,6 +70,7 @@ namespace Vira.Controllers
         public ActionResult MalHizmetGuncelle(MalHizmet p)
         {
             var mlhmt = c.MalHizmets.Find(p.MalHizmetId);
+            mlhmt.StokKod = p.StokKod;
             mlhmt.MalHizmetAdi = p.MalHizmetAdi;
             mlhmt.MalHizmetTuru = p.MalHizmetTuru;
             mlhmt.BirimId = p.BirimId;

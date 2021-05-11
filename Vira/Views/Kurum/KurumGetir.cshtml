@@ -14,9 +14,16 @@
             @Html.HiddenFor(x => x.KurumId)
             <div class="form-horizontal">
                 <div class="container form-group-sm row">
-                    <label class="col-form-label-sm col-md-3 text-right" style="color:red"><b>Kurum Adı</b></label>
+                    <label class="col-form-label-sm col-md-3 text-right" style="color:red"><b>Kurum Kısa Adı</b></label>
                     <div class="col-sm-9">
-                        @Html.TextBoxFor(x => x.KurumAdi, new { @class = "form-control", @style = "width:400px;", @maxlength = "75" })
+                        @Html.TextBoxFor(x => x.KurumAdi, new { @class = "form-control", @style = "width:100px;", @maxlength = "75" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-3 text-right" style="color:red"><b>Kurum Ünvanı</b></label>
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(x => x.KurumUnvani, new { @class = "form-control", @style = "width:400px;", @maxlength = "100" })
                     </div>
                 </div>
                 <br />

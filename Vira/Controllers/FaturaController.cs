@@ -23,7 +23,7 @@ namespace Vira.Controllers
             List<SelectListItem> kurumListe = (from t in c.Kurums.ToList()
                                                select new SelectListItem
                                                {
-                                                   Text = t.KurumAdi,
+                                                   Text = t.KurumAdi + " - " + t.KurumUnvani,
                                                    Value = t.KurumId.ToString()
                                                }).ToList();
 
@@ -31,8 +31,14 @@ namespace Vira.Controllers
             tipListe.Add(new SelectListItem() { Text = "Alış" });
             tipListe.Add(new SelectListItem() { Text = "Satış" });
 
+            List<SelectListItem> turListe = new List<SelectListItem>();
+            turListe.Add(new SelectListItem() { Text = "Çekiş" });
+            turListe.Add(new SelectListItem() { Text = "Veriş" });
+            turListe.Add(new SelectListItem() { Text = "Ceza" });
+
             ViewBag.kList = kurumListe;
-            ViewBag.tListe = tipListe;
+            ViewBag.tiListe = tipListe;
+            ViewBag.tuListe = turListe;
 
             return PartialView("FaturaEkle");
         }
@@ -57,7 +63,7 @@ namespace Vira.Controllers
             List<SelectListItem> kurumListe = (from t in c.Kurums.ToList()
                                                select new SelectListItem
                                                {
-                                                   Text = t.KurumAdi,
+                                                   Text = t.KurumAdi + " - " + t.KurumUnvani,
                                                    Value = t.KurumId.ToString()
                                                }).ToList();
 
@@ -65,8 +71,14 @@ namespace Vira.Controllers
             tipListe.Add(new SelectListItem() { Text = "Alış" });
             tipListe.Add(new SelectListItem() { Text = "Satış" });
 
+            List<SelectListItem> turListe = new List<SelectListItem>();
+            turListe.Add(new SelectListItem() { Text = "Çekiş" });
+            turListe.Add(new SelectListItem() { Text = "Veriş" });
+            turListe.Add(new SelectListItem() { Text = "Ceza" });
+
             ViewBag.kList = kurumListe;
-            ViewBag.tListe = tipListe;
+            ViewBag.tiListe = tipListe;
+            ViewBag.tuListe = turListe;
 
             return PartialView("FaturaGetir", fatGet);
         }
@@ -75,6 +87,7 @@ namespace Vira.Controllers
             var fat = c.Faturas.Find(p.FaturaId);
             fat.FaturaNo = p.FaturaNo;
             fat.FaturaTipi = p.FaturaTipi;
+            fat.FaturaTuru = p.FaturaTuru;
             fat.FaturaTarihi = p.FaturaTarihi;
             fat.KurumId = p.KurumId;
             c.SaveChanges();
@@ -86,7 +99,8 @@ namespace Vira.Controllers
             var liste = c.FaturaDetays.Where(x => x.FaturaId == id).ToList();
             var fatSira = c.Faturas.Where(x => x.FaturaId == id).Select(y => y.FaturaNo).FirstOrDefault();
             var fatTipi = c.Faturas.Where(x => x.FaturaId == id).Select(y => y.FaturaTipi).FirstOrDefault();
-            var firAd = c.Faturas.Where(x => x.FaturaId == id).Select(y => y.Kurum.KurumAdi).FirstOrDefault();
+            var kurAd = c.Faturas.Where(x => x.FaturaId == id).Select(y => y.Kurum.KurumAdi).FirstOrDefault();
+            var kurUnvan = c.Faturas.Where(x => x.FaturaId == id).Select(y => y.Kurum.KurumUnvani).FirstOrDefault();
             var fatTarihi = c.Faturas.Where(x => x.FaturaId == id).Select(y => y.FaturaTarihi).FirstOrDefault();
             var fatToplam = c.Faturas.Where(x => x.FaturaId == id).Select(y => y.FaturaToplami).FirstOrDefault();
             var fatKdvToplam = c.Faturas.Where(x => x.FaturaId == id).Select(y => y.FaturaKdvToplami).FirstOrDefault();
@@ -94,7 +108,8 @@ namespace Vira.Controllers
 
             ViewBag.FSira = fatSira;
             ViewBag.FTipi = fatTipi;
-            ViewBag.FirmaAd = firAd;
+            ViewBag.KurumAd = kurAd;
+            ViewBag.KurumUnvan = kurUnvan;
             ViewBag.FaturaTarihi = fatTarihi.ToString("d");
             ViewBag.FaturaId = id;
             ViewBag.FaturaToplam = fatToplam;
@@ -274,11 +289,27 @@ namespace Vira.Controllers
         [HttpPost]
         public ActionResult DosyaYukle(Dosya p)
         {
+            var KurumAd = c.Faturas.Where(x => x.FaturaId == p.FaturaId).Select(y => y.Kurum.KurumAdi).FirstOrDefault();
+            var FaturaTuru = c.Faturas.Where(x => x.FaturaId == p.FaturaId).Select(y => y.FaturaTuru).FirstOrDefault();
+            DateTime FaturaTarihi = c.Faturas.Where(x => x.FaturaId == p.FaturaId).Select(y => y.FaturaTarihi).FirstOrDefault();
+            string dosyaAdi;
+
+            var ay = FaturaTarihi.ToString("MM");
+            var yil = FaturaTarihi.ToString("yyyy");
+;
             if (Request.Files.Count > 0)
             {
-                //string dosyaAd = Guid.NewGuid().ToString("D");
+                //string dosyaAdi = Guid.NewGuid().ToString("D");
                 //string dosyaAdi = dosyaAd.Replace('-', '_');
-                string dosyaAdi = Path.GetFileName(Request.Files[0].FileName);
+                //string dosyaAdi = Path.GetFileName(Request.Files[0].FileName);
+                if(FaturaTuru is null)
+                {
+                    dosyaAdi = KurumAd + '_' + yil + '_' + ay;
+                }
+                else
+                {
+                    dosyaAdi = KurumAd + '_' + FaturaTuru.ToUpper() + '_' + yil + '_' + ay;
+                }
                 string uzanti = Path.GetExtension(Request.Files[0].FileName);
                 string yol = "~/App_Data/Dosya/" + dosyaAdi + uzanti;
                 Request.Files[0].SaveAs(Server.MapPath(yol));

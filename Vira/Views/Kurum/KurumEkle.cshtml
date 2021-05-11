@@ -13,9 +13,16 @@
             <hr />
             <div class="form-horizontal">
                 <div class="container form-group-sm row">
-                    <label class="col-form-label-sm col-md-3 text-right" style="color:red"><b>Kurum Adı</b></label>
+                    <label class="col-form-label-sm col-md-3 text-right" style="color:red"><b>Kurum Kısa Adı</b></label>
                     <div class="col-sm-9">
-                        <input style="width:400px;" type="text" class="form-control" name="KurumAdi" maxlength="75" required oninvalid="this.setCustomValidity('Bu alan boş geçilemez!')" oninput="setCustomValidity('')" />
+                        <input style="width:100px;" type="text" class="form-control" name="KurumAdi" maxlength="20" required oninvalid="this.setCustomValidity('Bu alan boş geçilemez!')" oninput="setCustomValidity('')" />
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-3 text-right" style="color:red"><b>Kurum Ünvanı</b></label>
+                    <div class="col-sm-9">
+                        <input style="width:400px;" type="text" class="form-control" name="KurumUnvani" maxlength="100" required oninvalid="this.setCustomValidity('Bu alan boş geçilemez!')" oninput="setCustomValidity('')" />
                     </div>
                 </div>
                 <br />

@@ -17,6 +17,10 @@ namespace Vira.Models
         public string KurumAdi { get; set; }
 
         [Column(TypeName = "Varchar")]
+        [StringLength(100)]
+        public string KurumUnvani { get; set; }
+
+        [Column(TypeName = "Varchar")]
         [StringLength(30)]
         public string KurumIlgiliKisi { get; set; }
 

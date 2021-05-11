@@ -86,6 +86,7 @@ namespace Vira.Controllers
         {
             var kurum = c.Kurums.Find(p.KurumId);
             kurum.KurumAdi = p.KurumAdi;
+            kurum.KurumUnvani = p.KurumUnvani;
             kurum.KurumIlgiliKisi = p.KurumIlgiliKisi;
             kurum.KurumAdres = p.KurumAdres;
             kurum.IllerId = p.IllerId;

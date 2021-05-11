@@ -22,8 +22,12 @@
                 <br />
                 <div class="container form-group-sm row">
                     <label class="col-form-label col-md-3 text-right" style="color:red"><b>Fatura Tipi</b></label>
-                    <div class="col-md-9">
-                        @Html.DropDownListFor(x => x.FaturaTipi, (List<SelectListItem>)ViewBag.tListe, new { @class = "form-control", @style = "width:120px" })
+                    <div class="col-md-2">
+                        @Html.DropDownListFor(x => x.FaturaTipi, (List<SelectListItem>)ViewBag.tiListe, new { @class = "form-control", @style = "width:120px" })
+                    </div>
+                    <label class="col-form-label col-md-3 text-right" style="color:red"><b>Fatura Türü</b></label>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(x => x.FaturaTuru, (List<SelectListItem>)ViewBag.tuListe, "- Seçiniz -", new { @class = "form-control", @style = "width:120px" })
                     </div>
                 </div>
                 <br />

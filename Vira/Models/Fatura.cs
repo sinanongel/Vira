@@ -23,6 +23,10 @@ namespace Vira.Models
         [Column(TypeName = "Varchar")]
         [StringLength(5)]
         public string FaturaTipi { get; set; }
+
+        [Column(TypeName = "Varchar")]
+        [StringLength(5)]
+        public string FaturaTuru { get; set; }
         public bool FaturaOdemeDurumu { get; set; }
 
         public int KurumId { get; set; }

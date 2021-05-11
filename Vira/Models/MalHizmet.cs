@@ -11,7 +11,11 @@ namespace Vira.Models
     {
         [Key]
         public int MalHizmetId { get; set; }
-        
+
+        [Column(TypeName = "Varchar")]
+        [StringLength(10)]
+        public string StokKod { get; set; }
+
         [Column(TypeName ="Varchar")]
         [StringLength(100)]
         public string MalHizmetAdi { get; set; }
