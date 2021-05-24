@@ -32,12 +32,22 @@
                 <br />
                 <div class="container form-group-sm row">
                     <label class="col-form-label col-md-3 text-right" style="color:red"><b>Fatura Tarihi</b></label>
-                    <div class="col-md-9">
-                        <input style="width:160px;" type="date" class="form-control" name="FaturaTarihi" />
+                    <div class="col-md-3">
+                        <input style="width:155px;" type="date" class="form-control" name="FaturaTarihi" />
                     </div>
                 </div>
                 <br />
-                <div class="container form-group row">
+                <div class="container form-group-sm row">
+                    <label class="col-form-label col-md-3 text-right" style="color:red"><b>Fatura Dönemi</b></label>
+                    <div class="col-md-2">
+                        @Html.DropDownListFor(x => x.YillarId, (List<SelectListItem>)ViewBag.dYil, new { @class = "form-control", @style = "width:85px" })
+                    </div>
+                    <div class="col-md-7">
+                        @Html.DropDownListFor(x => x.AyId, (List<SelectListItem>)ViewBag.dAy, "- Seçiniz -", new { @class = "form-control", @style = "width:110px" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
                     <label class="col-form-label col-md-3 text-right" style="color:red"><b>Kurum</b></label>
                     <div class="col-md-9">
                         @Html.DropDownListFor(x => x.KurumId, (List<SelectListItem>)ViewBag.kList, "----------------------- Seçiniz ----------------------", new { @class = "form-control", @style = "width:400px", @required = "" })

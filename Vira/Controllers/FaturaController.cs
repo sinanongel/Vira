@@ -27,9 +27,25 @@ namespace Vira.Controllers
                                                    Value = t.KurumId.ToString()
                                                }).ToList();
 
+            List<SelectListItem> donemYil = (from t in c.Yillars.ToList()
+                                             orderby t.YillarId descending
+                                               select new SelectListItem
+                                               {
+                                                   Text = t.Yil,
+                                                   Value = t.YillarId.ToString()
+                                               }).ToList();
+
+            List<SelectListItem> donemAy = (from t in c.Ays.ToList()
+                                               select new SelectListItem
+                                               {
+                                                   Text = t.AyAd,
+                                                   Value = t.AyId.ToString()
+                                               }).ToList();
+
             List<SelectListItem> tipListe = new List<SelectListItem>();
             tipListe.Add(new SelectListItem() { Text = "Alış" });
             tipListe.Add(new SelectListItem() { Text = "Satış" });
+            tipListe.Add(new SelectListItem() { Text = "İade" });
 
             List<SelectListItem> turListe = new List<SelectListItem>();
             turListe.Add(new SelectListItem() { Text = "Çekiş" });
@@ -39,6 +55,8 @@ namespace Vira.Controllers
             ViewBag.kList = kurumListe;
             ViewBag.tiListe = tipListe;
             ViewBag.tuListe = turListe;
+            ViewBag.dYil = donemYil;
+            ViewBag.dAy = donemAy;
 
             return PartialView("FaturaEkle");
         }
@@ -67,9 +85,25 @@ namespace Vira.Controllers
                                                    Value = t.KurumId.ToString()
                                                }).ToList();
 
+            List<SelectListItem> donemYil = (from t in c.Yillars.ToList()
+                                             orderby t.YillarId descending
+                                             select new SelectListItem
+                                             {
+                                                 Text = t.Yil,
+                                                 Value = t.YillarId.ToString()
+                                             }).ToList();
+
+            List<SelectListItem> donemAy = (from t in c.Ays.ToList()
+                                            select new SelectListItem
+                                            {
+                                                Text = t.AyAd,
+                                                Value = t.AyId.ToString()
+                                            }).ToList();
+
             List<SelectListItem> tipListe = new List<SelectListItem>();
             tipListe.Add(new SelectListItem() { Text = "Alış" });
             tipListe.Add(new SelectListItem() { Text = "Satış" });
+            tipListe.Add(new SelectListItem() { Text = "İade" });
 
             List<SelectListItem> turListe = new List<SelectListItem>();
             turListe.Add(new SelectListItem() { Text = "Çekiş" });
@@ -79,17 +113,21 @@ namespace Vira.Controllers
             ViewBag.kList = kurumListe;
             ViewBag.tiListe = tipListe;
             ViewBag.tuListe = turListe;
+            ViewBag.dYil = donemYil;
+            ViewBag.dAy = donemAy;
 
             return PartialView("FaturaGetir", fatGet);
         }
         public ActionResult FaturaGuncelle(Fatura p)
         {
-            var fat = c.Faturas.Find(p.FaturaId);
+            var fat = c.Faturas.Find(p.FaturaId);           
             fat.FaturaNo = p.FaturaNo;
             fat.FaturaTipi = p.FaturaTipi;
             fat.FaturaTuru = p.FaturaTuru;
             fat.FaturaTarihi = p.FaturaTarihi;
             fat.KurumId = p.KurumId;
+            fat.YillarId = p.YillarId;
+            fat.AyId = p.AyId;
             c.SaveChanges();
 
             return RedirectToAction("Index");
@@ -121,6 +159,8 @@ namespace Vira.Controllers
         [HttpPost]
         public ActionResult ModalFaturaDetayAc(int id)
         {
+            var fatTipi = c.Faturas.Where(x => x.FaturaId == id).Select(y => y.FaturaTipi).FirstOrDefault();
+
             List<SelectListItem> biListe = (from b in c.Birims.OrderBy(b => b.BirimId).ToList()
                                             select new SelectListItem
                                             {
@@ -143,9 +183,10 @@ namespace Vira.Controllers
                                                }).ToList();
 
             List<SelectListItem> mhListe = (from m in c.MalHizmets
+                                            where m.MalHizmetTuru == fatTipi
                                             select new SelectListItem
                                             {
-                                                Text = m.MalHizmetAdi,
+                                                Text = m.StokKod + " - " + m.MalHizmetAdi,
                                                 Value = m.MalHizmetId.ToString()
                                             }).ToList();
 
@@ -166,14 +207,28 @@ namespace Vira.Controllers
         public ActionResult FaturaDetayEkle(FaturaDetay p)
         {
             var KdvOran = c.Kdvs.Where(x => x.KdvId == p.KdvId).Select(y => y.KdvOrani).FirstOrDefault();
-            var FdBirimFiyatTl = Math.Round((p.FdBirimFiyat * p.FdKur), 8);
-            var FdTutar = Math.Round((FdBirimFiyatTl * p.FdMiktar), 2);
-            var KdvTutar = Math.Round((FdTutar * Convert.ToInt32(KdvOran) / 100), 2);
-
+            decimal FdBirimFiyatTl = 0;
+            decimal FdTutar = 0;
+            decimal KdvTutar = 0;
+            decimal FdBirimFiyat = 0;
             var faturaId = p.FaturaId;
+
+            if (p.FdTutar == 0)
+            {
+                FdBirimFiyatTl = Math.Round((p.FdBirimFiyat * p.FdKur), 8);
+                FdTutar = Math.Round((FdBirimFiyatTl * p.FdMiktar), 2);
+                p.FdTutar = FdTutar;
+            }
+            else if(p.FdBirimFiyat == 0)
+            {
+                FdBirimFiyatTl = Math.Round((p.FdTutar / p.FdMiktar), 8);
+                FdBirimFiyat = Math.Round((FdBirimFiyatTl / p.FdKur), 8);
+                p.FdBirimFiyat = FdBirimFiyat;
+            }
+            KdvTutar = Math.Round((p.FdTutar * Convert.ToInt32(KdvOran) / 100), 2);
+
             p.FdBirimFiyatTl = FdBirimFiyatTl;
             p.KdvTutar = KdvTutar;
-            p.FdTutar = FdTutar;
             c.FaturaDetays.Add(p);
             c.SaveChanges();
 
@@ -190,7 +245,10 @@ namespace Vira.Controllers
         }
         public ActionResult FaturaDetayGetir(int? id)
         {
+            var fatTipi = c.FaturaDetays.Where(x => x.FaturaDetayId == id).Select(y => y.Fatura.FaturaTipi).FirstOrDefault();
+
             List<SelectListItem> mhizListe = (from mh in c.MalHizmets.OrderBy(m => m.MalHizmetAdi).ToList()
+                                              where mh.MalHizmetTuru == fatTipi
                                               select new SelectListItem
                                               {
                                                   Text = mh.MalHizmetAdi,
@@ -296,13 +354,13 @@ namespace Vira.Controllers
 
             var ay = FaturaTarihi.ToString("MM");
             var yil = FaturaTarihi.ToString("yyyy");
-;
+            ;
             if (Request.Files.Count > 0)
             {
                 //string dosyaAdi = Guid.NewGuid().ToString("D");
                 //string dosyaAdi = dosyaAd.Replace('-', '_');
                 //string dosyaAdi = Path.GetFileName(Request.Files[0].FileName);
-                if(FaturaTuru is null)
+                if (FaturaTuru is null)
                 {
                     dosyaAdi = KurumAd + '_' + yil + '_' + ay;
                 }
@@ -348,10 +406,29 @@ namespace Vira.Controllers
         }
         public FileResult DosyaAc(string dosya)
         {
+            //var cd = new ContentDispositionHeaderValue("attachment")
+            //{
+            //    FileNameStar = dosya
+            //};
+            //Response.Headers.Add(HeaderNames.ContentDisposition, cd.ToString());
+
+
             Response.AppendHeader("Content-Disposition", "inline; filename" + dosya + ";");
 
-            string yol = AppDomain.CurrentDomain.BaseDirectory + "App_Data/Dosya/";
+            string yol = "~/App_Data/Dosya/";
+
+            //string yol = AppDomain.CurrentDomain.DynamicDirectory;
             return File(yol + dosya, System.Net.Mime.MediaTypeNames.Application.Pdf, dosya);
+        }
+        [HttpPost]
+        public JsonResult BirimGetir(int MalHizmetId)
+        {
+            var birimId = c.MalHizmets.Where(x => x.MalHizmetId == MalHizmetId).Select(y => y.Birim.BirimId).FirstOrDefault();
+            var birimAd = c.MalHizmets.Where(x => x.MalHizmetId == MalHizmetId).Select(y => y.Birim.BirimAdi).FirstOrDefault();
+
+            var birim = new { birimId, birimAd };
+
+            return Json(birim, JsonRequestBehavior.AllowGet);
         }
     }
 }

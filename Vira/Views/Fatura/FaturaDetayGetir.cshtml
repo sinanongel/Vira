@@ -24,10 +24,12 @@
                 <div class="container form-group-sm row">
                     <label class="col-form-label-sm col-md-3 text-right"><b>Miktar</b></label>
                     <div class="col-sm-2">
-                        @Html.TextBoxFor(x => x.FdMiktar, new { @class = "form-control FdMiktar", @style = "width:85px; text-align:right;", @id = "FdMiktar" })
+                        @Html.TextBoxFor(x => x.FdMiktar, new { @class = "form-control FdMiktar", @style = "width:100px; text-align:right; ", @id = "FdMiktar" })
                     </div>
                     <div class="col-sm-7">
-                        @Html.DropDownListFor(x => x.BirimId, (List<SelectListItem>)ViewBag.bList, new { @class = "form-control", @style = "width:100px" })
+                        @Html.TextBoxFor(x => x.Birim.BirimAdi, new { @class = "form-control BirimAd border-0", @style = "width:85px; color:blue" })
+                        @Html.TextBoxFor(x => x.BirimId, new { @class = "BirimId", @style = "width:85px; ", @type = "hidden" })
+                        @*@Html.DropDownListFor(x => x.BirimId, (List<SelectListItem>)ViewBag.bList, new { @class = "form-control", @style = "width:100px" })*@
                     </div>
                 </div>
                 <br />
@@ -52,20 +54,6 @@
                         @Html.DropDownListFor(x => x.KdvId, (List<SelectListItem>)ViewBag.kList, new { @class = "form-control", @style = "width:80px; text-align:right;", @id = "KdvId", @name = "KdvId" })
                     </div>
                 </div>
-                @*<div class="container form-group-sm row">
-            <label class="col-form-label-sm col-sm-3 text-right"><b>Birim Fiyat(TL)</b></label>
-            <div class="col-sm-1">
-                @Html.TextBoxFor(x => x.FdBirimFiyatTl, new { @class = "form-control", @style = "width:150px; text-align:right;", @id = "FdBirimFiyatTl", @readonly = "readonly" })
-            </div>
-            <label class="col-form-label-sm col-md-2 text-right"><b>Kdv Tutar</b></label>
-            <div class="col-sm-1">
-                @Html.TextBoxFor(x => x.KdvTutar, new { @class = "form-control", @style = "width:150px; text-align:right;", @id = "KdvTutar", @name = "KdvTutar", @readonly = "readonly" })
-            </div>
-            <label class="col-form-label-sm col-md-2 text-right"><b>Tutar</b></label>
-            <div class="col-sm-2">
-                @Html.TextBoxFor(x => x.FdTutar, new { @class = "form-control", @style = "width:150px; text-align:right;", @id = "FdTutar", @name = "FdTutar", @readonly = "readonly" })
-            </div>
-        </div>*@
                 <br />
             </div>
             <div class="modal-footer">
@@ -76,70 +64,23 @@
     </div>
 </div>
 
-@*<script type="text/javascript">
-    function OnChangeEvent() {
-        var BirimFiyat = $(".FdBirimFiyat").val();
-        alert(BirimFiyat);
-        var BrmFiyat = BirimFiyat.replace(/,/g, '.');
-        var Kur = $(".FdKur").val();
-        var Kr = Kur.replace(/,/g, '.');
-        var Miktar = $(".FdMiktar").val();
-        var Mktr = Miktar.replace(/,/g, '.');
-        var KdvOran = $("#FKdvId option:selected").text();
-
-        var BirimFiyatTl = (parseFloat(BrmFiyat).toFixed(8) * parseFloat(Kr)).toFixed(8);
-        var Tutar = (BirimFiyatTl * parseFloat(Mktr)).toFixed(2);
-        var KdvTutar = ((Tutar * parseFloat(KdvOran)) / 100).toFixed(2);
-        var BrmFiyatTl = BirimFiyatTl.replace(".", ",");
-        var Ttr = Tutar.replace(".", ",");
-        var Kdvttr = KdvTutar.replace(".", ",");
-
-        $("#FdBirimFiyatTl").val(BrmFiyatTl);
-        $("#FdTutar").val(Ttr);
-        $("#KdvTutar").val(Kdvttr);
-    }
+<script type="text/javascript">
     $(document).ready(function () {
-        $(".FdBirimFiyat").change(function () {
-            var BirimFiyat = $(".FdBirimFiyat").val();
-            alert(BirimFiyat);
-            var BrmFiyat = BirimFiyat.replace(/,/g, '.');
-            var Kur = $(".FdKur").val();
-            var Kr = Kur.replace(/,/g, '.');
-            var Miktar = $(".FdMiktar").val();
-            var Mktr = Miktar.replace(/,/g, '.');
-            var KdvOran = $("#FKdvId option:selected").text();
-
-            var BirimFiyatTl = (parseFloat(BrmFiyat).toFixed(8) * parseFloat(Kr)).toFixed(8);
-            var Tutar = (BirimFiyatTl * parseFloat(Mktr)).toFixed(2);
-            var KdvTutar = ((Tutar * parseFloat(KdvOran)) / 100).toFixed(2);
-            var BrmFiyatTl = BirimFiyatTl.replace(".", ",");
-            var Ttr = Tutar.replace(".", ",");
-            var Kdvttr = KdvTutar.replace(".", ",");
-
-            $("#FdBirimFiyatTl").val(BrmFiyatTl);
-            $("#FdTutar").val(Ttr);
-            $("#KdvTutar").val(Kdvttr);
-        })
-    })
-    function hesapla() {
-        var BirimFiyat = $(".FdBirimFiyat").val();
-        var BrmFiyat = BirimFiyat.replace(/,/g, '.');
-        var Kur = $(".FdKur").val();
-        var Kr = Kur.replace(/,/g, '.');
-        var Miktar = $(".FdMiktar").val();
-        var Mktr = Miktar.replace(/,/g, '.');
-        var KdvOran = $("#FKdvId option:selected").text();
-
-        var BirimFiyatTl = (parseFloat(BrmFiyat).toFixed(8) * parseFloat(Kr)).toFixed(8);
-        var Tutar = (BirimFiyatTl * parseFloat(Mktr)).toFixed(2);
-        var KdvTutar = ((Tutar * parseFloat(KdvOran)) / 100).toFixed(2);
-        var BrmFiyatTl = BirimFiyatTl.replace(".", ",");
-        var Ttr = Tutar.replace(".", ",");
-        var Kdvttr = KdvTutar.replace(".", ",");
-
-        $("#FdBirimFiyatTl").val(BrmFiyatTl);
-        $("#FdTutar").val(Ttr);
-        $("#KdvTutar").val(Kdvttr);
-    }
-    setInterval("hesapla()", 100);
-</script>*@
+        $('#MalHizmetId').change(function () {
+            var MalHizmetId = $(this).val();
+            var birimAd;
+            $.ajax({
+                url: '@Url.Action("BirimGetir","Fatura")',
+                type: 'POST',
+                dataType: 'json',
+                data: { 'MalHizmetId': MalHizmetId },
+                success: function (data) {
+                    birimAd = data.birimAd;
+                    birimId = data.birimId;
+                    $(".BirimAd").val(birimAd);
+                    $(".BirimId").val(birimId);
+                }
+            });
+        });
+    });
+</script>

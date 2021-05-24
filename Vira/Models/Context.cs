@@ -20,6 +20,9 @@ namespace Vira.Models
         public DbSet<FaturaDetay> FaturaDetays { get; set; }
         public DbSet<Kdv> Kdvs { get; set; }
         public DbSet<Kullanici> Kullanicis { get; set; }
+        public DbSet<Ay> Ays { get; set; }
+        public DbSet<Yillar> Yillars { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<FaturaDetay>().Property(x => x.FdBirimFiyat).HasPrecision(18, 8);

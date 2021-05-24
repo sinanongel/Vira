@@ -29,6 +29,7 @@ namespace Vira.Controllers
             List<SelectListItem> turListe = new List<SelectListItem>();
             turListe.Add(new SelectListItem() { Text = "Alış" });
             turListe.Add(new SelectListItem() { Text = "Satış" });
+            turListe.Add(new SelectListItem() { Text = "İade" });
 
             ViewBag.brmListe = birimListe;
             ViewBag.tListe = turListe;

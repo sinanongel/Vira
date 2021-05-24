@@ -16,22 +16,48 @@
                 <div class="container form-group row">
                     <label class="col-form-label col-md-3 text-right" style="color:red"><b>Mal/Hizmet Adı</b></label>
                     <div class="col-md-9">
-                        @Html.DropDownListFor(x => x.MalHizmetId, (List<SelectListItem>)ViewBag.mhList, "----------------------- Seçiniz ----------------------", new { @class = "form-control", @style = "width:400px", @name = "BirimId", @id = "BirimId" })
+                        @Html.DropDownListFor(x => x.MalHizmetId, (List<SelectListItem>)ViewBag.mhList, "----------------------- Seçiniz ----------------------", new { @class = "form-control", @style = "width:400px" })
                     </div>
                 </div>
                 <div class="container form-group row">
                     <label class="col-form-label col-md-3 text-right" style="color:red"><b>Miktar</b></label>
                     <div class="col-md-2">
-                        <input type="text" id="FdMiktar" name="FdMiktar" placeholder="Miktar" class="form-control FdMiktar" style="width:85px; text-align:right" required oninvalid="this.setCustomValidity('Bu alan boş geçilemez!')" oninput="setCustomValidity('')" />
+                        <input type="text" id="FdMiktar" name="FdMiktar" placeholder="Miktar" class="form-control FdMiktar" style="width:100px; text-align:right" required oninvalid="this.setCustomValidity('Bu alan boş geçilemez!')" oninput="setCustomValidity('')" />
                     </div>
                     <div class="col-md-7">
-                        @Html.DropDownListFor(x => x.BirimId, (List<SelectListItem>)ViewBag.bList, new { @class = "form-control", @style = "width:100px", @name = "BirimId", @id = "BirimId" })
+                        @*<label class="form-control BirimId border-0" name="BirimId" />*@
+                        <input class="form-control BirimAd border-0" style="color:blue" />
+                        <input type="hidden" class="BirimId" name="BirimId" id="BirimId" />
+                        @*@Html.DropDownListFor(x => x.BirimId, (List<SelectListItem>)ViewBag.bList, new { @class = "form-control", @style = "width:100px", @name = "BirimId", @id = "BirimId" })*@
                     </div>
                 </div>
                 <div class="container form-group row">
+                    <label class="col-form-label col-md-3 text-right" style="color:red"><b>Hesaplama Şekli</b></label>
+                    <div id="myRadioGroup" class="form-check">
+                        <div>
+                            <input class="form-check-input" type="radio" name="hesaplama" checked="checked" value="2" />
+                            <label class="form-check-label" for="inlineRadio1">Birim Fiyattan Toplamı Hesaplama</label>
+                        </div>
+                        <div>
+                            <input class="form-check-input" type="radio" name="hesaplama" value="3" />
+                            <label class="form-check-label" for="inlineRadio1">Toplamdan Birim Fiyatı Hesaplama</label>
+                        </div>
+                    </div>
+                </div>
+                <div id="Hesaplama2" class="container form-group row desc">
                     <label class="col-form-label col-md-3 text-right" style="color:red"><b>Birim Fiyat</b></label>
                     <div class="col-md-2">
                         <input id="FdBirimFiyat" name="FdBirimFiyat" type="text" class="form-control FdBirimFiyat" placeholder="Birim Fiyat" style="width:150px; text-align:right;" />
+                    </div>
+                    <label class="col-form-label col-md-3 text-right" style="color:red"><b>Döviz Cinsi</b></label>
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(x => x.DovizId, (List<SelectListItem>)ViewBag.dList, new { @class = "form-control", @style = "width:90px", @name = "DovizId", @id = "DovizId" })
+                    </div>
+                </div>
+                <div id="Hesaplama3" class="container form-group row desc" style="display: none;">
+                    <label class="col-form-label col-md-3 text-right" style="color:red"><b>Tutar</b></label>
+                    <div class="col-md-2">
+                        <input id="FdTutar" name="FdTutar" type="text" class="form-control FdTutar" placeholder="Tutar" style="width:150px; text-align:right;" />
                     </div>
                     <label class="col-form-label col-md-3 text-right" style="color:red"><b>Döviz Cinsi</b></label>
                     <div class="col-md-4">
@@ -48,20 +74,6 @@
                         @Html.DropDownListFor(x => x.KdvId, (List<SelectListItem>)ViewBag.kList, new { @class = "form-control", @style = "width:80px", @id = "FKdvId" })
                     </div>
                 </div>
-                @*<div class="container form-group row">
-            <label class="col-form-label col-md-3 text-right"><b>Birim Fiyat(TL)</b></label>
-            <div class="col-md-1">
-                <input type="text" id="FdBirimFiyatTl" name="FdBirimFiyatTl" class="form-control" style="width:150px; text-align:right;" readonly />
-            </div>
-            <label class="col-form-label col-md-2 text-right"><b>Kdv Tutar</b></label>
-            <div class="col-md-1">
-                <input style="width:150px; text-align:right;" type="text" class="form-control" name="KdvTutar" id="KdvTutar" readonly />
-            </div>
-            <label class="col-form-label col-md-2 text-right"><b>Tutar</b></label>
-            <div class="col-md-2">
-                <input style="width:150px; text-align:right;" type="text" class="form-control" name="FdTutar" id="FdTutar" readonly />
-            </div>
-        </div>*@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Vazgeç</button>
                     <button class="btn btn-info">Ekle</button>
@@ -72,25 +84,29 @@
 </div>
 
 <script type="text/javascript">
-    function hesapla() {
-        var BirimFiyat = $(".FdBirimFiyat").val();
-        var BrmFiyat = BirimFiyat.replace(/,/g, '.');
-        var Kur = $(".FdKur").val();
-        var Kr = Kur.replace(/,/g, '.');
-        var Miktar = $(".FdMiktar").val();
-        var Mktr = Miktar.replace(/,/g, '.');
-        var KdvOran = $("#FKdvId option:selected").text();
+    $(document).ready(function () {
+        $('#MalHizmetId').change(function () {
+            var MalHizmetId = $(this).val();
+            var birimAd;
+            $.ajax({
+                url: '@Url.Action("BirimGetir","Fatura")',
+                type: 'POST',
+                dataType: 'json',
+                data: { 'MalHizmetId': MalHizmetId },
+                success: function (data) {
+                    birimAd = data.birimAd;
+                    birimId = data.birimId;
+                    $(".BirimAd").val(birimAd);
+                    $(".BirimId").val(birimId);
+                }
+            });
+        });
 
-        var BirimFiyatTl = (parseFloat(BrmFiyat).toFixed(8) * parseFloat(Kr)).toFixed(8);
-        var Tutar = (BirimFiyatTl * parseFloat(Mktr)).toFixed(2);
-        var KdvTutar = ((Tutar * parseFloat(KdvOran)) / 100).toFixed(2);
-        var BrmFiyatTl = BirimFiyatTl.replace(".", ",");
-        var Ttr = Tutar.replace(".", ",");
-        var Kdvttr = KdvTutar.replace(".", ",");
+        $("input[name$='hesaplama']").click(function () {
+            var test = $(this).val();
 
-        $("#FdBirimFiyatTl").val(BrmFiyatTl);
-        $("#FdTutar").val(Ttr);
-        $("#KdvTutar").val(Kdvttr);
-    }
-    setInterval("hesapla()", 100);
+            $("div.desc").hide();
+            $("#Hesaplama" + test).show();
+        });
+    });
 </script>

@@ -1,0 +1,214 @@
+﻿@using Vira.Models
+@model List<FaturaDetay>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+<link href="~/Content/div.datatable.css" rel="stylesheet" />
+<br />
+<div class="card card-default">
+    <div class="card-header">
+        <div class="row">
+            <h5 class="card-title mb-sm-1 col-md-10">
+                <strong>Fatura Detay İşlemleri</strong>
+            </h5>
+            <a href="@Url.Action("Index", "Fatura")" class="btn btn-danger col-md-1">Fatura Listesi</a>
+            <a href="#" class="btn btn-primary ekle col-md-1" data-target="@Url.Action("ModalFaturaDetayAc", "Fatura")/@ViewBag.FaturaId">Yeni Kayıt</a>
+        </div>
+    </div>
+    <br />
+    <div class="btn-group" style="margin-left:1%; margin-right:100%" role="group" aria-label="Basic example">
+        <a href="#" class="btn btn-secondary group-by" data-column="1">Kurum</a>
+        <a href="#" class="btn btn-secondary group-by" data-column="2">Mal/Hizmet</a>
+    </div>
+    <table id="example" class="table table-bordered display" style="width:100%">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th><small><strong>Kurum</strong></small></th>
+                <th><small><strong>Mal/Hizmet</strong></small></th>
+                <th><small><strong>Miktar</strong></small></th>
+                <th><small><strong>Birim</strong></small></th>
+                <th><small><strong>Birim Fiyat</strong></small></th>
+                <th><small><strong>Döviz Cinsi</strong></small></th>
+                <th><small><strong>Kur</strong></small></th>
+                <th><small><strong>Birim Fiyat(TL)</strong></small></th>
+                <th><small><strong>Kdv Oranı(%)</strong></small></th>
+                <th><small><strong>Kdv Tutarı</strong></small></th>
+                <th><small><strong>Tutar</strong></small></th>
+                @*<th style="width:3%">#</th>
+                <th style="width:10%"><small><strong>Kurum</strong></small></th>
+                <th style="width:20%"><small><strong>Mal/Hizmet</strong></small></th>
+                <th style="width:5%"><small><strong>Miktar</strong></small></th>
+                <th style="width:5%"><small><strong>Birim</strong></small></th>
+                <th style="width:10%"><small><strong>Birim Fiyat</strong></small></th>
+                <th style="width:5%"><small><strong>Döviz Cinsi</strong></small></th>
+                <th style="width:5%"><small><strong>Kur</strong></small></th>
+                <th style="width:10%"><small><strong>Birim Fiyat(TL)</strong></small></th>
+                <th style="width:5%"><small><strong>Kdv Oranı(%)</strong></small></th>
+                <th style="width:5%"><small><strong>Kdv Tutarı</strong></small></th>
+                <th style="width:5%"><small><strong>Tutar</strong></small></th>*@
+            </tr>
+        </thead>
+        @foreach (var fd in Model)
+        {
+            <tr>
+                <td class="align-middle" style="font-size:12px; ">@fd.FaturaDetayId</td>
+                <td><small>@fd.Fatura.Kurum.KurumAdi</small></td>
+                @if (fd.MalHizmet.StokKod == null)
+                {
+                    <td><small>@fd.MalHizmet.MalHizmetAdi</small></td>
+                }
+                else
+                {
+                    <td><small>@fd.MalHizmet.StokKod - @fd.MalHizmet.MalHizmetAdi</small></td>
+                }
+                <td style="text-align:right"><small>@fd.FdMiktar</small></td>
+                <td><small>@fd.Birim.BirimAdi</small></td>
+                <td style="text-align:right"><small>@fd.FdBirimFiyat.ToString("N8")</small></td>
+                <td><small>@fd.Doviz.DovizCinsi</small></td>
+                <td style="text-align:right"><small>@fd.FdKur.ToString("N")</small></td>
+                <td style="text-align:right"><small>@fd.FdBirimFiyatTl.ToString("N8")</small></td>
+                <td style="text-align:right"><small>@fd.Kdv.KdvOrani</small></td>
+                <td style="text-align:right"><small>@fd.KdvTutar.ToString("N")</small></td>
+                <td style="text-align:right"><small>@fd.FdTutar.ToString("N")</small></td>
+            </tr>
+        }
+    </table>
+</div>
+
+
+
+@*<link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/rowgroup/1.1.2/css/rowGroup.dataTables.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/rowgroup/1.1.2/js/dataTables.rowGroup.min.js"></script>*@
+
+<link href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/rowgroup/1.1.2/css/rowGroup.dataTables.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/fixedheader/3.1.8/css/fixedHeader.dataTables.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/rowgroup/1.1.2/js/dataTables.rowGroup.min.js"></script>
+<script src="https://cdn.datatables.net/fixedheader/3.1.8/js/dataTables.fixedHeader.min.js"></script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#example thead tr').clone(true).appendTo('#example thead');
+        $('#example thead tr:eq(1) th').each(function (i) {
+            //var title = $(this).text();
+            $(this).html('<input type="text" placeholder="Ara" />');
+
+            $('input', this).on('keyup change', function () {
+                if (table.column(i).search() !== this.value) {
+                    table
+                        .column(i)
+                        .search(this.value)
+                        .draw();
+                }
+            });
+        });
+
+        var table = $('#example').DataTable({
+            scrollY: "500px",
+            scrollX: true,
+            scrollCollapse: true,
+            paging: false,
+            language: {
+                "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Turkish.json"
+            },
+            orderFixed: [[2, 'asc']],
+            rowGroup: {
+                startRender: null,
+                endRender: function (rows, group) {
+                    var salaryAvg = rows
+                        .data()
+                        .pluck(8)
+                        .reduce(function (a, b) {
+                            return a + b.replace(/[^\d]/g, '') * 1 / 100000000;
+                        }, 0);
+                    salaryAvg = $.fn.dataTable.render.number('.', ',', 8).display(salaryAvg);
+
+                    var ageAvg = rows
+                        .data()
+                        .pluck(3)
+                        .reduce(function (a, b) {
+                            return a + b.replace(/[^\d]/g, '') * 1 / 100;
+                        }, 0);
+
+                    return $('<tr/>')
+                        .append('<td colspan="3" style="font-size:14px;">' + group + ' toplamı : </td>')
+                        .append('<td style="text-align:right; font-size:14px;">' + ageAvg.toFixed(2) + '</td>')
+                        .append('<td/>')
+                        .append('<td/>')
+                        .append('<td/>')
+                        .append('<td/>')
+                        .append('<td style="text-align:right; font-size:14px;">' + salaryAvg + '</td>')
+                        .append('<td/>')
+                        .append('<td/>')
+                        .append('<td/>');
+                },
+                dataSrc: 1,
+                //endRender: function (rows, group) {
+                //    var avg = rows
+                //        .data()
+                //        .pluck(8)
+                //        .reduce(function (a, b) {
+                //            return a + b.replace(/[^\d]/g, '') * 1 / 100000000;
+                //            //return a + b * 1;
+                //        }, 0);
+
+                //    return group + ' Toplamı ' + ': ' + //avg;
+                //        $.fn.dataTable.render.number('.', ',', 8).display(avg);
+                //},
+                //dataSrc: 1
+                orderCellsTop: true,
+                fixedHeader: true//,
+                //footerCallback: function (row, data, start, end, display) {
+                //    var api = this.api(), data;
+
+                //    // Remove the formatting to get integer data for summation
+                //    var intVal = function (i) {
+                //        return typeof i === 'string' ?
+                //            i.replace(/[\$,]/g, '') * 1 :
+                //            typeof i === 'number' ?
+                //                i : 0;
+                //    };
+
+                //    // Total over all pages
+                //    total = api
+                //        .column(4)
+                //        .data()
+                //        .reduce(function (a, b) {
+                //            return intVal(a) + intVal(b);
+                //        }, 0);
+
+                //    // Total over this page
+                //    pageTotal = api
+                //        .column(4, { page: 'current' })
+                //        .data()
+                //        .reduce(function (a, b) {
+                //            return intVal(a) + intVal(b);
+                //        }, 0);
+
+                //    // Update footer
+                //    $(api.column(4).footer()).html(
+                //        '$' + pageTotal + ' ( $' + total + ' total)'
+                //    );
+            }
+        });
+
+        // Change the fixed ordering when the data source is updated
+        table.on('rowgroup-datasrc', function (e, dt, val) {
+            table.order.fixed({ pre: [[val, 'asc']] }).draw();
+        });
+
+        $('a.group-by').on('click', function (e) {
+            e.preventDefault();
+
+            table.rowGroup().dataSrc($(this).data('column'));
+        });
+    });
+</script>
