@@ -1,0 +1,82 @@
+﻿@using Vira.Models.Siniflar
+@model List<AylikUretim>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+<br />
+<div class="card mb-4">
+    <div class="card-header"><i class="fas fa-table mr-1"></i>Aylık Üretim Miktarı Tablosu</div>
+    <div class="card-body">
+        <table id="liste" class="table table-bordered table-hover table-sm display">
+            <thead>
+                <tr>
+                    <th style="width:5%"><small><strong>Yıl</strong></small></th>
+                    <th style="width:5%"><small><strong>Ocak</strong></small></th>
+                    <th style="width:5%"><small><strong>Şubat</strong></small></th>
+                    <th style="width:5%"><small><strong>Mart</strong></small></th>
+                    <th style="width:5%"><small><strong>Nisan</strong></small></th>
+                    <th style="width:5%"><small><strong>Mayıs</strong></small></th>
+                    <th style="width:5%"><small><strong>Haziran</strong></small></th>
+                    <th style="width:5%"><small><strong>Temmuz</strong></small></th>
+                    <th style="width:5%"><small><strong>Ağustos</strong></small></th>
+                    <th style="width:5%"><small><strong>Eylül</strong></small></th>
+                    <th style="width:5%"><small><strong>Ekim</strong></small></th>
+                    <th style="width:5%"><small><strong>Kasım</strong></small></th>
+                    <th style="width:5%"><small><strong>Aralık</strong></small></th>
+                </tr>
+            </thead>
+            @foreach (var f in Model)
+            {
+                <tr>
+                    <td style="text-align: right;"><small>@f.Yil</small></td>
+                    <td style="text-align: right;"><small>@f.Ocak</small></td>
+                    <td style="text-align: right;"><small>@f.Subat</small></td>
+                    <td style="text-align: right;"><small>@f.Mart</small></td>
+                    <td style="text-align: right;"><small>@f.Nisan</small></td>
+                    <td style="text-align: right;"><small>@f.Mayis</small></td>
+                    <td style="text-align: right;"><small>@f.Haziran</small></td>
+                    <td style="text-align: right;"><small>@f.Temmuz</small></td>
+                    <td style="text-align: right;"><small>@f.Agustos</small></td>
+                    <td style="text-align: right;"><small>@f.Eylul</small></td>
+                    <td style="text-align: right;"><small>@f.Ekim</small></td>
+                    <td style="text-align: right;"><small>@f.Kasim</small></td>
+                    <td style="text-align: right;"><small>@f.Aralik</small></td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+
+<link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="~/Content/Background.css" rel="stylesheet" />
+<script src="//code.jquery.com/jquery-1.12.4.js"></script>
+<script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript">
+    $('#liste').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Turkish.json"
+        },
+        "order": [[0, "desc"]],
+        "paging": false,
+        "searching": false,
+        "info": false,
+        "ordering": false,
+        "drawCallback": function (settings) {
+            var api = this.api();
+            var total = 0;
+            api.columns({ page: 'current', order: 'applied' }).every(function (columnIdx, tableLoop, columnLoop) {
+                var data = this.data();
+                total += data[1].replace(/[^\d]/g, '') * 1 / 100;
+                data[2] = $.fn.dataTable.render.number('.', ',', 2).display(total);
+                this.data(data);
+            })
+        },
+        "createdRow": function (row, data, dataIndex) {
+            if (data[0] == "Ortalama") {
+                $(row).addClass('red');
+            }
+        }
+    });
+</script>

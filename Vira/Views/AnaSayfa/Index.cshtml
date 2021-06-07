@@ -1,9 +1,146 @@
-﻿
+﻿@using Vira.Models
+@model List<FaturaDetay>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
-<br />
-<div>
-    <img src="~/Images/viraLogo.jpg" class="mx-auto d-block"/>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Result Visualization</title>
+
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                url: '@Url.Action("VisualizeMiktarResult", "AnaSayfa")',
+                success: function (result) {
+                    google.charts.load('current', {
+                        'packages': ['corechart']
+                    });
+                    google.charts.setOnLoadCallback(function () {
+                        drawChart(result);
+                    });
+                }
+            });
+        });
+
+        function drawChart(result) {
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Name');
+            data.addColumn('number', 'Miktarlar');
+            var dataArray = [];
+
+
+            $.each(result, function (i, obj) {
+                dataArray.push([obj.Aylar, obj.Adet]);
+            });
+            data.addRows(dataArray);
+
+            var view = new google.visualization.DataView(data);
+            view.setColumns([0, 1,
+                {
+                    calc: "stringify",
+                    sourceColumn: 1,
+                    type: "string",
+                    role: "annotation"
+                }]);
+
+            var columnChartOptions = {
+                title: "Üretim Grafiği",
+                //width: 200,
+                height: 400,
+                bar: { groupWidth: "50%" },
+                hAxis:
+                {
+                    title: 'Aylar',
+                    titleTextStyle: { color: '#333' },
+                    slantedText: true,
+                }
+            };
+
+            var columnChart = new google.visualization.ColumnChart(document
+                .getElementById('columnchart_div'));
+
+            columnChart.draw(view, columnChartOptions);
+        }
+
+        window.onresize = drawChart;
+    </script>
+</head>
+<body>
+    <br />
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header"><i class="fas fa-chart-bar mr-1"></i>Aylık Üretim Miktarları Grafiği</div>
+                <div Style="font-family: Corbel; text-align:center; height:500px; " class="card-body ">
+                    <div id="columnchart_div"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header"><i class="fas fa-table mr-1"></i>Aylık Üretim Miktarı Tablosu</div>
+                <div class="card-body">
+                    <table id="liste" class="table table-bordered table-hover table-sm display">
+                        <thead>
+                            <tr>
+                                <th style="width:5%"><small><strong>Dönem</strong></small></th>
+                                <th style="width:5%"><small><strong>Miktar</strong></small></th>
+                                <th style="width:5%"><small><strong>Birim</strong></small></th>
+                                <th style="width:5%"><small><strong>Kümülatif Toplam</strong></small></th>
+                            </tr>
+                        </thead>
+                        @foreach (var f in Model)
+                        {
+                            <tr>
+                                <td><small>@f.Fatura.Yillar.Yil - @f.Fatura.Ay.AyAd</small></td>
+                                <td style="text-align: right;"><small>@f.FdMiktar.ToString("N")</small></td>
+                                <td><small>@f.Birim.BirimAdi</small></td>
+                                <td class="align-middle" style="text-align: right; font-size:12px;"></td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+
+<link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="//code.jquery.com/jquery-1.12.4.js"></script>
+<script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript">
+    $('#liste').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Turkish.json"
+        },
+        "order": [[0, "desc"]],
+        "paging": false,
+        "searching": false,
+        "info": false,
+        "ordering": false,
+        "drawCallback": function (settings) {
+            var api = this.api();
+            var total = 0;
+            api.rows({ page: 'current', order: 'applied' }).every(function (rowIdx, tableLoop, rowLoop) {
+                var data = this.data();
+                total += data[1].replace(/[^\d]/g, '') * 1 / 100;
+                data[3] = $.fn.dataTable.render.number('.', ',', 2).display(total);
+                this.data(data);
+            })
+        }
+    });
+</script>
+

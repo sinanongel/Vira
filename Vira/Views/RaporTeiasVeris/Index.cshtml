@@ -1,0 +1,102 @@
+﻿@using Vira.Models.Siniflar
+@model List<TeiasVeris>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+<br />
+<div class="card mb-4">
+    <div class="card-header"><i class="fas fa-table mr-1"></i>TEİAŞ Veriş Raporu</div>
+    <div class="card-body">
+        <table id="example" class="table table-bordered table-hover table-sm display" style="width:100%">
+            <thead>
+                <tr>
+                    <th hidden></th>
+                    <th hidden></th>
+                    <th style="width:5%"><small><strong>Dönem</strong></small></th>
+                    <th style="width:5%"><small><strong>Fatura Tarihi</strong></small></th>
+                    <th style="width:5%"><small><strong>Üretim Miktarı</strong></small></th>
+                    <th style="width:5%"><small><strong>Sistem Kullanım Bedeli (Sabit)</strong></small></th>
+                    <th style="width:5%"><small><strong>Sistem Kullanım Bedeli (Değişken)</strong></small></th>
+                    <th style="width:5%"><small><strong>Sistem İşletim Bedeli</strong></small></th>
+                    <th style="width:5%"><small><strong>İletim Ek Ücreti</strong></small></th>
+                    <th style="width:5%"><small><strong>Toplam</strong></small></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var f in Model)
+                {
+                    <tr>
+                        <td hidden>@f.Yil</td>
+                        <td hidden>@f.AyId</td>
+                        <td style="text-align: center;"><small>@f.Donem</small></td>
+                        <td style="text-align: center;"><small>@string.Format("{0:d}", @f.FaturaTarihi)</small></td>
+                        <td style="text-align: right;"><small>@string.Format("{0:n}", @f.UretimMiktari)</small></td>
+                        <td style="text-align: right;"><small>@string.Format("{0:c}", @f.SistemKullanimBedeliS)</small></td>
+                        <td style="text-align: right;"><small>@string.Format("{0:c}", @f.SistemKullanimBedeliD)</small></td>
+                        <td style="text-align: right;"><small>@string.Format("{0:c}", @f.SistemIsletimBedeli)</small></td>
+                        <td style="text-align: right;"><small>@string.Format("{0:c}", @f.IletimEkUcreti)</small></td>
+                        <td style="text-align: right;"><small>@string.Format("{0:c}", @f.Toplam)</small></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="~/Content/DataTables/css/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/Content/DataTables/css/fixedHeader.bootstrap.min.css" rel="stylesheet" />
+
+<script src="//code.jquery.com/jquery-1.12.4.js"></script>
+<script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/DataTables/dataTables.buttons.min.js"></script>
+<script src="~/Scripts/jszip.min.js"></script>
+<script src="~/Scripts/pdfmake.min.js"></script>
+<script src="~/Scripts/vfs_fonts.js"></script>
+<script src="~/Scripts/DataTables/buttons.html5.min.js"></script>
+<script src="~/Scripts/DataTables/dataTables.fixedHeader.min.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        $('#example').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Turkish.json"
+            },
+            "aLengthMenu": [[12, 24, 36, 48, -1], [12, 24, 36, 48, "Hepsi"]],
+            "iDisplayLength": 12,
+            "order": [0, 'desc'],
+            "ordering": true,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    footer: true,
+                    title: 'TEİAŞ VERİŞ RAPORU',
+                    text: '<i class="fa fa-file-excel"></i>',
+                    titleAttr: 'EXCEL',
+                    exportOptions: {
+                        columns: [':visible', ':visible'],
+                        format: {
+                            body: function (data, row, column, node) {
+                                data = $('<p>' + data + '</p>').text();
+                                return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
+                            }
+                        }
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    orientation:'landscape',
+                    title: 'TEİAŞ VERİŞ RAPORU',
+                    text: '<i class="fa fa-file-pdf"></i>',
+                    titleAttr: 'PDF',
+                    exportOptions: {
+                        columns: [':visible', ':visible']
+                    }
+                }
+            ],
+        });
+    });
+</script>
