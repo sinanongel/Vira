@@ -49,9 +49,17 @@
 </div>
 
 <link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
-<link href="~/Content/Background.css" rel="stylesheet" />
+<link href="~/Content/DataTables/css/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/Content/DataTables/css/fixedHeader.bootstrap.min.css" rel="stylesheet" />
+
 <script src="//code.jquery.com/jquery-1.12.4.js"></script>
 <script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/DataTables/dataTables.buttons.min.js"></script>
+<script src="~/Scripts/jszip.min.js"></script>
+<script src="~/Scripts/pdfmake.min.js"></script>
+<script src="~/Scripts/vfs_fonts.js"></script>
+<script src="~/Scripts/DataTables/buttons.html5.min.js"></script>
+<script src="~/Scripts/DataTables/dataTables.fixedHeader.min.js"></script>
 
 <script type="text/javascript">
     $('#liste').DataTable({
@@ -77,6 +85,35 @@
             if (data[0] == "Ortalama") {
                 $(row).addClass('red');
             }
-        }
+        },
+        "dom": 'Bfrtip',
+        "buttons": [
+            {
+                extend: 'excelHtml5',
+                footer: true,
+                title: 'TEİAŞ VERİŞ RAPORU',
+                text: '<i class="fa fa-file-excel"></i>',
+                titleAttr: 'EXCEL',
+                exportOptions: {
+                    columns: [':visible', ':visible'],
+                    format: {
+                        body: function (data, row, column, node) {
+                            data = $('<p>' + data + '</p>').text();
+                            return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
+                        }
+                    }
+                }
+            },
+            {
+                extend: 'pdfHtml5',
+                orientation: 'landscape',
+                title: 'TEİAŞ VERİŞ RAPORU',
+                text: '<i class="fa fa-file-pdf"></i>',
+                titleAttr: 'PDF',
+                exportOptions: {
+                    columns: [':visible', ':visible']
+                }
+            }
+        ],
     });
 </script>

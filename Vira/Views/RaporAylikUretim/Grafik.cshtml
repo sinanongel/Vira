@@ -1,0 +1,199 @@
+﻿@using Vira.Models.Siniflar
+@model List<AylikUretim>
+@{
+    ViewBag.Title = "Grafik";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Result Visualization</title>
+
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                url: '@Url.Action("VisualizeMiktarResult", "RaporAylikUretim")',
+                success: function (result) {
+                    google.charts.load('current', {
+                        'packages': ['corechart']
+                    });
+                    google.charts.setOnLoadCallback(function () {
+                        drawChart(result);
+                    });
+                }
+            });
+        });
+
+        function drawChart(result) {
+            var data = new google.visualization.DataTable();
+
+            //var numCols = data[0].length;
+            //alert(numCols);
+
+            data.addColumn('string', 'Name');
+            data.addColumn('number', 'Ocak');
+            data.addColumn('number', 'Şubat');
+            data.addColumn('number', 'Mart');
+            data.addColumn('number', 'Nisan');
+            data.addColumn('number', 'Mayıs');
+            data.addColumn('number', 'Haziran');    
+            data.addColumn('number', 'Temmuz');
+            data.addColumn('number', 'Ağustos');
+            data.addColumn('number', 'Eylül');
+            data.addColumn('number', 'Ekim');
+            data.addColumn('number', 'Kasım');
+            data.addColumn('number', 'Aralık');
+            var dataArray = [];
+
+
+            $.each(result, function (i, obj) {
+                dataArray.push([
+                    obj.Yil,
+                    obj.Ocak,
+                    obj.Subat,
+                    obj.Mart,
+                    obj.Nisan,
+                    obj.Mayis,
+                    obj.Haziran,
+                    obj.Temmuz,
+                    obj.Agustos,
+                    obj.Eylul,
+                    obj.Ekim,
+                    obj.Kasim,
+                    obj.Aralik
+                ]);
+            });
+            data.addRows(dataArray);
+
+            var view = new google.visualization.DataView(data);
+            view.setColumns([0, 1,
+                //{
+                //    calc: "stringify",
+                //    sourceColumn: 1,
+                //    type: "string",
+                //    role: "annotation"
+                //},
+                2,
+                //{
+                //    calc: "stringify",
+                //    sourceColumn: 2,
+                //    type: "string",
+                //    role: "annotation"
+                //},
+                3,
+                //{
+                //    calc: "stringify",
+                //    sourceColumn: 3,
+                //    type: "string",
+                //    role: "annotation"
+                //},
+                4,
+                //{
+                //    calc: "stringify",
+                //    sourceColumn: 4,
+                //    type: "string",
+                //    role: "annotation"
+                //},
+                5,
+                //{
+                //    calc: "stringify",
+                //    sourceColumn: 5,
+                //    type: "string",
+                //    role: "annotation"
+                //},
+                6,
+                //{
+                //    calc: "stringify",
+                //    sourceColumn: 6,
+                //    type: "string",
+                //    role: "annotation"
+                //},
+                7,
+                //{
+                //    calc: "stringify",
+                //    sourceColumn: 7,
+                //    type: "string",
+                //    role: "annotation"
+                //},
+                8,
+                //{
+                //    calc: "stringify",
+                //    sourceColumn: 8,
+                //    type: "string",
+                //    role: "annotation"
+                //},
+                9,
+                //{
+                //    calc: "stringify",
+                //    sourceColumn: 9,
+                //    type: "string",
+                //    role: "annotation"
+                //},
+                10,
+                //{
+                //    calc: "stringify",
+                //    sourceColumn: 10,
+                //    type: "string",
+                //    role: "annotation"
+                //},
+                11,
+                //{
+                //    calc: "stringify",
+                //    sourceColumn: 11,
+                //    type: "string",
+                //    role: "annotation"
+                //},
+                12//,
+                //{
+                //    calc: "stringify",
+                //    sourceColumn: 12,
+                //    type: "string",
+                //    role: "annotation"
+                //}
+            ]);
+
+            var columnChartOptions = {
+                title: "Üretim Grafiği",
+                width: 1800,
+                height: 800,
+                bar: { groupWidth: "90%" },
+                hAxis:
+                {
+                    title: 'Yıllar',
+                    titleTextStyle: { color: '#333' },
+                    slantedText: true,
+                }
+            };
+
+            var columnChart = new google.visualization.ColumnChart(document
+                .getElementById('columnchart_div'));
+
+            columnChart.draw(view, columnChartOptions);
+        }
+
+        window.onresize = drawChart;
+    </script>
+</head>
+<body>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-12">
+                <div class="card-header"><i class="fas fa-chart-bar mr-1"></i>Aylık Üretim Miktarları Grafiği</div>
+                <div Style="font-family: Corbel; text-align:center; height:600px; " class="card-body ">
+                    <div id="columnchart_div"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

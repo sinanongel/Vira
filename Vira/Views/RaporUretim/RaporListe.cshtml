@@ -1,0 +1,14 @@
+﻿@using Vira.Models
+@model List<FaturaDetay>
+
+@foreach (var f in Model)
+{
+<tr>
+    <td class="align-middle" style="font-size:12px;"></td>
+    <td><small>@f.Fatura.Yillar.Yil - @f.Fatura.Ay.AyAd</small></td>
+    <td><small>@f.Fatura.FaturaTarihi.ToString("dd.MM.yyyy")</small></td>
+    <td style="text-align: right;"><small>@f.FdMiktar.ToString("N")</small></td>
+    <td><small>@f.Birim.BirimAdi</small></td>
+    <td class="align-middle" style="text-align: right; font-size:12px;"></td>
+</tr>
+}

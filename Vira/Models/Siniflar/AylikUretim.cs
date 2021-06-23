@@ -20,17 +20,5 @@ namespace Vira.Models.Siniflar
         public decimal? Ekim { get; set; }
         public decimal? Kasim { get; set; }
         public decimal? Aralik { get; set; }
-        public decimal? OrtalamaOcak { get; set; }
-        public decimal? OrtalamaŞubat { get; set; }
-        public decimal? OrtalamaMart { get; set; }
-        public decimal? OrtalamaNisan { get; set; }
-        public decimal? OrtalamaMayis { get; set; }
-        public decimal? OrtalamaHaziran { get; set; }
-        public decimal? OrtalamaTemmuz { get; set; }
-        public decimal? OrtalamaAgustos { get; set; }
-        public decimal? OrtalamaEylul { get; set; }
-        public decimal? OrtalamaEkim { get; set; }
-        public decimal? OrtalamaKasim { get; set; }
-        public decimal? OrtalamaAralik { get; set; }
     }
 }

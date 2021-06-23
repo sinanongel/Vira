@@ -180,6 +180,7 @@
     <Compile Include="Controllers\RaporAylikUretimController.cs" />
     <Compile Include="Controllers\RaporFaturaController.cs" />
     <Compile Include="Controllers\RaporTeiasVerisController.cs" />
+    <Compile Include="Controllers\RaporUretimController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -199,7 +200,9 @@
     <Compile Include="Models\Kurum.cs" />
     <Compile Include="Models\MalHizmet.cs" />
     <Compile Include="Models\Siniflar\AylikUretim.cs" />
+    <Compile Include="Models\Siniflar\AylikUretimGrafik.cs" />
     <Compile Include="Models\Siniflar\AylikUretimListe.cs" />
+    <Compile Include="Models\Siniflar\FaturaRapor.cs" />
     <Compile Include="Models\Siniflar\Miktar.cs" />
     <Compile Include="Models\Siniflar\TeiasVeris.cs" />
     <Compile Include="Models\Yillar.cs" />
@@ -2290,6 +2293,12 @@
     <Content Include="Views\RaporFatura\Index.cshtml" />
     <Content Include="Views\RaporAylikUretim\Index.cshtml" />
     <Content Include="Views\RaporTeiasVeris\Index.cshtml" />
+    <Content Include="Views\RaporAylikUretim\Grafik.cshtml" />
+    <Content Include="Views\RaporUretim\Index.cshtml" />
+    <Content Include="Views\RaporUretim\RaporListe.cshtml" />
+    <Content Include="Views\RaporFatura\RaporListeDetayli.cshtml" />
+    <Content Include="Views\RaporFatura\RaporListeDetaysiz.cshtml" />
+    <Content Include="Views\RaporFatura\ParametreListe.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Dosya\" />

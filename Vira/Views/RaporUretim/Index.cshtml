@@ -1,0 +1,129 @@
+﻿@model Vira.Models.Siniflar.FaturaRapor
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+<br />
+<div class="card mb-4">
+    <div class="card-header"><i class="fas fa-table mr-1"></i>TEİAŞ Üretim Raporu</div>
+    <div class="card-body">
+        <div>
+            <form action="@Url.Action("Index", "RaporUretim")" method="post">
+                <div class="form-horizontal">
+                    <div class="container form-group-sm row">
+                        <label class="col-form-label-sm col-2"><b>Dönem Başı (Yıl/Ay)</b></label>
+                        <div class="col-1">
+                            @Html.DropDownListFor(x => x.BasYil, (List<SelectListItem>)ViewBag.dYil, "Seçiniz", new { @class = "form-control", @style = "width:90px" })
+                        </div>
+                        <div class="col-2">
+                            @Html.DropDownListFor(x => x.BasAy, (List<SelectListItem>)ViewBag.dAy, "- Seçiniz -", new { @class = "form-control", @style = "width:120px" })
+                        </div>
+                        <label class="col-form-label-sm col-2"><b>Dönem Sonu (Yıl/Ay)</b></label>
+                        <div class="col-1">
+                            @Html.DropDownListFor(x => x.BitYil, (List<SelectListItem>)ViewBag.dYil, "Seçiniz", new { @class = "form-control", @style = "width:90px" })
+                        </div>
+                        <div class="col-2">
+                            @Html.DropDownListFor(x => x.BitAy, (List<SelectListItem>)ViewBag.dAy, "- Seçiniz -", new { @class = "form-control", @style = "width:120px" })
+                        </div>
+                        <div class="col-1">
+                            <button id="liste" style="width:100px" class="btn btn-success">Listele</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <hr />
+        <table id="tablo" class="table table-bordered table-hover table-sm display">
+            <thead>
+                <tr>
+                    <th style="width:5%">#</th>
+                    <th style="width:5%"><small><strong>Dönem</strong></small></th>
+                    <th style="width:5%"><small><strong>Tarih</strong></small></th>
+                    <th style="width:5%"><small><strong>Miktar</strong></small></th>
+                    <th style="width:5%"><small><strong>Birim</strong></small></th>
+                    <th style="width:5%"><small><strong>Kümülatif Toplam</strong></small></th>
+                </tr>
+            </thead>
+            @Html.Action("RaporListe", "RaporUretim")
+        </table>
+    </div>
+</div>
+
+<link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="~/Content/DataTables/css/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/Content/DataTables/css/fixedHeader.bootstrap.min.css" rel="stylesheet" />
+
+<script src="//code.jquery.com/jquery-1.12.4.js"></script>
+<script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/DataTables/dataTables.buttons.min.js"></script>
+<script src="~/Scripts/jszip.min.js"></script>
+<script src="~/Scripts/pdfmake.min.js"></script>
+<script src="~/Scripts/vfs_fonts.js"></script>
+<script src="~/Scripts/DataTables/buttons.html5.min.js"></script>
+<script src="~/Scripts/DataTables/dataTables.fixedHeader.min.js"></script>
+
+<script type="text/javascript">
+    var t = $('#tablo').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Turkish.json"
+        },
+        "scrollY": "500px",
+        "scrollX": true,
+        //"order": [[0, "desc"]],
+        "paging": false,
+        "searching": false,
+        "info": false,
+        "ordering": false,
+        "drawCallback": function (settings) {
+            var api = this.api();
+            var total = 0;
+            api.rows({ page: 'current', order: 'applied' }).every(function (rowIdx, tableLoop, rowLoop) {
+                var data = this.data();
+                total += data[3].replace(/[^\d]/g, '') * 1 / 100;
+                data[5] = $.fn.dataTable.render.number('.', ',', 2).display(total);
+                this.data(data);
+            })
+        },
+        "columnDefs": [{
+            "searchable": false,
+            "orderable": false,
+            "targets": 0
+        }],
+        "order": [[1, 'asc']],
+        "dom": 'Bfrtip',
+        "buttons": [
+            {
+                extend: 'excelHtml5',
+                footer: true,
+                title: 'TEİAŞ VERİŞ RAPORU',
+                text: '<i class="fa fa-file-excel"></i>',
+                titleAttr: 'EXCEL',
+                exportOptions: {
+                    columns: [':visible', ':visible'],
+                    format: {
+                        body: function (data, row, column, node) {
+                            data = $('<p>' + data + '</p>').text();
+                            return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
+                        }
+                    }
+                }
+            },
+            {
+                extend: 'pdfHtml5',
+                title: 'TEİAŞ ÜRETİM RAPORU',
+                text: '<i class="fa fa-file-pdf"></i>',
+                titleAttr: 'PDF',
+                exportOptions: {
+                    columns: [':visible', ':visible']
+                }
+            }
+        ]
+    });
+    t.on('order.dt draw.dt', function () {
+        var PageInfo = $('#tablo').DataTable().page.info();
+        t.column(0, { page: 'current', order:'applied' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1 + PageInfo.start;
+            t.cell(cell).invalidate('dom');
+        });
+    });
+</script>
