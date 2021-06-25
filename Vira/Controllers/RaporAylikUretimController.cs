@@ -16,6 +16,20 @@ namespace Vira.Controllers
         {
             return View(AylikUretimRaporu());
         }
+
+        public decimal ocak;
+        public decimal subat;
+        public decimal mart;
+        public decimal nisan;
+        public decimal mayis;
+        public decimal haziran;
+        public decimal temmuz;
+        public decimal agustos;
+        public decimal eylul;
+        public decimal ekim;
+        public decimal kasim;
+        public decimal aralik;
+        public string yil = "";
         public List<AylikUretim> AylikUretimRaporu()
         {
             List<AylikUretim> ayUrtm = new List<AylikUretim>();
@@ -32,10 +46,20 @@ namespace Vira.Controllers
                 })
                 .ToList();
 
+            var yilListe = c.FaturaDetays
+                .Where(x => x.MalHizmetId == 4)
+                .GroupBy(y => new { y.Fatura.Yillar.Yil })
+                .OrderBy(z => new { z.Key.Yil })
+                .Select(g => new { g.Key.Yil, YilCount = g.Count() })
+                .ToList();
+
+            var yil1 = yilListe[0].Yil;
+
             int kayitSayisi = miktarListe.Count();
             int eklenekKayit = 12 - kayitSayisi / 12;
 
             List<AylikUretimListe> aylikUretimListe = new List<AylikUretimListe>();
+
 
             for (int i = 0; i < kayitSayisi; i++)
             {
@@ -47,37 +71,24 @@ namespace Vira.Controllers
                 });
             }
 
-            if (eklenekKayit != 0)
+            for (int j = 0; j < yilListe.Count(); j++)
             {
-                string sonYil = miktarListe.Last().Yil;
-
-                for (int i = 0; i < eklenekKayit; i++)
+                yil = yilListe[j].Yil;
+                for (int i = 0; i < aylikUretimListe.Count(); i++)
                 {
-                    aylikUretimListe.Add(new AylikUretimListe
-                    {
-                        Yil = sonYil,
-                        AyAd = "",
-                        Miktar = 0
-                    });
+                    if (aylikUretimListe[i].AyAd == "Ocak" && aylikUretimListe[i].Yil == yil) { ocak = aylikUretimListe[i].Miktar; } else if (ocak == 0) { ocak = 0; }
+                    if (aylikUretimListe[i].AyAd == "Şubat" && aylikUretimListe[i].Yil == yil) { subat = aylikUretimListe[i].Miktar; } else if (subat == 0) { subat = 0; }
+                    if (aylikUretimListe[i].AyAd == "Mart" && aylikUretimListe[i].Yil == yil) { mart = aylikUretimListe[i].Miktar; } else if (mart == 0) { mart = 0; }
+                    if (aylikUretimListe[i].AyAd == "Nisan" && aylikUretimListe[i].Yil == yil) { nisan = aylikUretimListe[i].Miktar; } else if (nisan == 0) { nisan = 0; }
+                    if (aylikUretimListe[i].AyAd == "Mayıs" && aylikUretimListe[i].Yil == yil) { mayis = aylikUretimListe[i].Miktar; } else if (mayis == 0) { mayis = 0; }
+                    if (aylikUretimListe[i].AyAd == "Haziran" && aylikUretimListe[i].Yil == yil) { haziran = aylikUretimListe[i].Miktar; } else if (haziran == 0) { haziran = 0; }
+                    if (aylikUretimListe[i].AyAd == "Temmuz" && aylikUretimListe[i].Yil == yil) { temmuz = aylikUretimListe[i].Miktar; } else if (temmuz == 0) { temmuz = 0; }
+                    if (aylikUretimListe[i].AyAd == "Ağustos" && aylikUretimListe[i].Yil == yil) { agustos = aylikUretimListe[i].Miktar; } else if (agustos == 0) { agustos = 0; }
+                    if (aylikUretimListe[i].AyAd == "Eylül" && aylikUretimListe[i].Yil == yil) { eylul = aylikUretimListe[i].Miktar; } else if (eylul == 0) { eylul = 0; }
+                    if (aylikUretimListe[i].AyAd == "Ekim" && aylikUretimListe[i].Yil == yil) { ekim = aylikUretimListe[i].Miktar; } else if (ekim == 0) { ekim = 0; }
+                    if (aylikUretimListe[i].AyAd == "Kasım" && aylikUretimListe[i].Yil == yil) { kasim = aylikUretimListe[i].Miktar; } else if (kasim == 0) { kasim = 0; }
+                    if (aylikUretimListe[i].AyAd == "Aralık" && aylikUretimListe[i].Yil == yil) { aralik = aylikUretimListe[i].Miktar; } else if (aralik == 0) { aralik = 0; }
                 }
-            }
-
-            for (int i = 0; i < aylikUretimListe.Count(); i = i + 12)
-            {
-                string yil = aylikUretimListe[i].Yil;
-                decimal ocak = aylikUretimListe[i].Miktar;
-                decimal subat = aylikUretimListe[i + 1].Miktar;
-                decimal mart = aylikUretimListe[i + 2].Miktar;
-                decimal nisan = aylikUretimListe[i + 3].Miktar;
-                decimal mayis = aylikUretimListe[i + 4].Miktar;
-                decimal haziran = aylikUretimListe[i + 5].Miktar;
-                decimal temmuz = aylikUretimListe[i + 6].Miktar;
-                decimal agustos = aylikUretimListe[i + 7].Miktar;
-                decimal eylul = aylikUretimListe[i + 8].Miktar;
-                decimal ekim = aylikUretimListe[i + 9].Miktar;
-                decimal kasim = aylikUretimListe[i + 10].Miktar;
-                decimal aralik = aylikUretimListe[i + 11].Miktar;
-
                 ayUrtm.Add(new AylikUretim
                 {
                     Yil = yil,
@@ -111,6 +122,20 @@ namespace Vira.Controllers
                     Kasim = ocak + subat + mart + nisan + mayis + haziran + temmuz + agustos + eylul + ekim + kasim,
                     Aralik = ocak + subat + mart + nisan + mayis + haziran + temmuz + agustos + eylul + ekim + kasim + aralik,
                 });
+
+                yil = "";
+                ocak = 0;
+                subat = 0;
+                mart = 0;
+                nisan = 0;
+                mayis = 0;
+                haziran = 0;
+                temmuz = 0;
+                agustos = 0;
+                eylul = 0;
+                ekim = 0;
+                kasim = 0;
+                aralik = 0;
             }
 
             decimal ocakTop = 0,
@@ -297,7 +322,7 @@ namespace Vira.Controllers
                 grafik.Add(new AylikUretimGrafik
                 {
                     KolonAdi = ay,
-                    Miktar=ayMiktar,
+                    Miktar = ayMiktar,
                 });
             }
 
