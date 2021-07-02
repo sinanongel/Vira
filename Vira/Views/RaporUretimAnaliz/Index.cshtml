@@ -1,0 +1,28 @@
+﻿@model Vira.Models.Siniflar.UretimAnaliz
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+<br />
+<div class="card mb-4">
+    <div class="card-header"><i class="fas fa-table mr-1"></i>Aylık Üretim Analiz Raporu</div>
+    <div class="card-body">
+        <div>
+            <form action="@Url.Action("Index", "RaporUretimAnaliz")" method="post">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <label class="col-form-label-sm" style="text-align:right;"><b>Yıl</b></label>
+                    </div>
+                    <div class="form-group mx-sm-3">
+                        @Html.DropDownListFor(x => x.Yil, (List<SelectListItem>)ViewBag.dYil, "Seçiniz", new { @class = "form-control", @style = "width:100px" })
+                    </div>
+                    <div class="form-group mx-sm-1">
+                        <button id="liste" style="width:100px" class="btn btn-success">Listele</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <hr />
+        @Html.Action("RaporListe", "RaporUretimAnaliz")
+    </div>
+</div>

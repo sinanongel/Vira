@@ -1,0 +1,233 @@
+﻿@using Vira.Models.Siniflar
+@model List<UretimAnaliz>
+@{
+    ViewBag.Title = "RaporYillarListe";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+<br />
+<div class="card mb-4">
+    <div class="card-header"><i class="fas fa-table mr-1"></i>Yıllık Üretim Analiz Raporu</div>
+    <div class="card-body">
+        <span style="color:red">@ViewBag.Mesaj</span>
+        <table id="tablo" class="table table-bordered table-hover table-sm display">
+            <thead>
+                <tr>
+                    <th style="width:5%">#</th>
+                    <th style="width:5%"><small><strong>Yıllar</strong></small></th>
+                    <th style="width:5%"><small><strong>Yıllık Üretim</strong></small></th>
+                    <th style="width:5%"><small><strong>Yekdem Tutarı(TL)</strong></small></th>
+                    <th style="width:5%"><small><strong>Yekdem Tutarı(USD)</strong></small></th>
+                    <th style="width:5%"><small><strong>Ortalama Aylık(USD/TL)</strong></small></th>
+                    <th style="width:5%"><small><strong>Vira Kestiği Fatura</strong></small></th>
+                    <th style="width:5%"><small><strong>Epiaş  Kestiği Fatura</strong></small></th>
+                    <th style="width:5%"><small><strong>Fatura Farkı(TL)</strong></small></th>
+                    <th style="width:5%"><small><strong>Fatura Farkı(USD)</strong></small></th>
+                    <th style="width:5%"><small><strong>Kar/Zarar</strong></small></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="align-middle" style="font-size:12px;"></td>
+                        <td><small>@item.Yil</small></td>
+                        <td style="text-align: right;"><small>@item.AylikUretim.ToString("N")</small></td>
+                        <td style="text-align: right;"><small>@string.Format("{0:c}", @item.YekdemTutari)</small></td>
+                        <td style="text-align: right;"><small>$@string.Format("{0:n}", @item.YekdemTutariUsd)</small></td>
+                        <td style="text-align: right;"><small>@string.Format("{0:n5}", @item.OrtalamaAylikUsdTl)</small></td>
+                        <td style="text-align: right;"><small>@string.Format("{0:c}", @item.ViraFaturaDegeri)</small></td>
+                        <td style="text-align: right;"><small>@string.Format("{0:c}", @item.EpiaşFaturaDegeri)</small></td>
+                        <td style="text-align: right;"><small>@string.Format("{0:c}", @item.FaturaFarkıTl)</small></td>
+                        <td style="text-align: right;"><small>$@string.Format("{0:n}", @item.FaturaFarkıUsd)</small></td>
+                        <td style="text-align: right;"><small>$@string.Format("{0:n}", @item.KarZarar)</small></td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="2" style="color:blue;">1 MW = $@ViewBag.BirimFiyatUsd</th>
+                    <th colspan="1" style="text-align:right">Toplam</th>
+                    <th style="text-align: right; font-size: 14px;"></th>
+                    <th style="text-align: right; font-size: 14px;"></th>
+                    <th style="text-align: right; font-size: 14px;"></th>
+                    <th style="text-align: right; font-size: 14px;"></th>
+                    <th style="text-align: right; font-size: 14px;"></th>
+                    <th style="text-align: right; font-size: 14px;"></th>
+                    <th style="text-align: right; font-size: 14px;"></th>
+                    <th style="text-align: right; font-size: 14px;"></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+<link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="~/Content/DataTables/css/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/Content/DataTables/css/fixedHeader.bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/negatifDeger.css" rel="stylesheet" />
+
+<script src="//code.jquery.com/jquery-1.12.4.js"></script>
+<script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/DataTables/dataTables.buttons.min.js"></script>
+<script src="~/Scripts/jszip.min.js"></script>
+<script src="~/Scripts/pdfmake.min.js"></script>
+<script src="~/Scripts/vfs_fonts.js"></script>
+<script src="~/Scripts/DataTables/buttons.html5.min.js"></script>
+<script src="~/Scripts/DataTables/dataTables.fixedHeader.min.js"></script>
+
+<script type="text/javascript">
+    var numFormat = $.fn.dataTable.render.number('.', ',', 2).display;
+    var numFormat1 = $.fn.dataTable.render.number('.', ',', 5).display;
+    var t = $('#tablo').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Turkish.json"
+        },
+        "scrollY": "525px",
+        "scrollX": true,
+        "paging": false,
+        "searching": false,
+        "info": false,
+        "ordering": false,
+        "columnDefs": [{
+            "searchable": false,
+            "orderable": false,
+            "targets": 0
+        },
+        {
+            "targets": 10,
+            "createdCell": function (td, cellData, rowData, row, col) {
+                if (cellData.replace(/[^+-\d]/g, '') * 1 / 100 < 0) {
+                    $(td).css('background-color', 'red')
+                    $(td).css('color', 'White')
+                }
+                if (cellData.replace(/[^+-\d]/g, '') * 1 / 100 > 0) {
+                    $(td).css('background-color', 'green')
+                    $(td).css('color', 'White')
+                }
+            }
+        }],
+        "order": [[1, 'asc']],
+        "dom": 'Bfrtip',
+        "buttons": [
+            {
+                extend: 'excelHtml5',
+                footer: true,
+                title: "Yıllık Üretim Analiz Raporu",
+                text: '<i class="fa fa-file-excel"></i>',
+                titleAttr: 'EXCEL',
+                exportOptions: {
+                    columns: [':visible', ':visible'],
+                    format: {
+                        body: function (data, row, column, node) {
+                            data = $('<p>' + data + '</p>').text();
+                            return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
+                        }
+                    }
+                }
+            },
+            {
+                extend: 'pdfHtml5',
+                orientation: 'landscape',
+                title: "Yıllık Üretim Analiz Raporu",
+                text: '<i class="fa fa-file-pdf"></i>',
+                titleAttr: 'PDF',
+                exportOptions: {
+                    columns: [':visible', ':visible']
+                }
+            }
+        ],
+        "footerCallback": function (row, data, start, end, display) {
+            var api = this.api(), data;
+
+            // Remove the formatting to get integer data for summation
+            var intVal = function (i) {
+                return typeof i === 'string' ?
+                    i.replace(/[^+-\d]/g, '') * 1 /100 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+
+            // Total over this page
+            yakdemToplam = api
+                .column(3, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+            yakdemUsdToplam = api
+                .column(4, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+            viraToplam = api
+                .column(6, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+            epiasToplam = api
+                .column(7, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+            faturaFarkiTl = api
+                .column(8, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+            faturaFarkiUsd = api
+                .column(9, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+            karZararTop = api
+                .column(10, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+            // Update footer
+            $(api.column(3).footer()).html(
+                '₺' + numFormat(yakdemToplam)
+            );
+            $(api.column(4).footer()).html(
+                '$' + numFormat(yakdemUsdToplam)
+            );
+            $(api.column(5).footer()).html(
+                numFormat1(yakdemToplam/yakdemUsdToplam)
+            );
+            $(api.column(6).footer()).html(
+                '₺' + numFormat(viraToplam)
+            );
+            $(api.column(7).footer()).html(
+                '₺' + numFormat(epiasToplam)
+            );
+            $(api.column(8).footer()).html(
+                '₺' + numFormat(faturaFarkiTl)
+            );
+            $(api.column(9).footer()).html(
+                '$' + numFormat(faturaFarkiUsd)
+            );
+            $(api.column(10).footer()).html(
+                '$' + numFormat(karZararTop)
+            );
+        }
+    });
+    t.on('order.dt draw.dt', function () {
+        var PageInfo = $('#tablo').DataTable().page.info();
+        t.column(0, { page: 'current', order: 'applied' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1 + PageInfo.start;
+            t.cell(cell).invalidate('dom');
+        });
+    });
+</script>

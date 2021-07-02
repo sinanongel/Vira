@@ -180,9 +180,35 @@
     <Compile Include="Controllers\RaporAylikUretimController.cs" />
     <Compile Include="Controllers\RaporFaturaController.cs" />
     <Compile Include="Controllers\RaporTeiasVerisController.cs" />
+    <Compile Include="Controllers\RaporUretimAnalizController.cs" />
     <Compile Include="Controllers\RaporUretimController.cs" />
+    <Compile Include="Controllers\YekdemGirisController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202106250837274_mig_addtable_yekdem.cs" />
+    <Compile Include="Migrations\202106250837274_mig_addtable_yekdem.designer.cs">
+      <DependentUpon>202106250837274_mig_addtable_yekdem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202106260859318_mig_tableYekdem_remfield_addfield.cs" />
+    <Compile Include="Migrations\202106260859318_mig_tableYekdem_remfield_addfield.designer.cs">
+      <DependentUpon>202106260859318_mig_tableYekdem_remfield_addfield.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202106260905100_mig_tableYekdem_changeDonemTarih.cs" />
+    <Compile Include="Migrations\202106260905100_mig_tableYekdem_changeDonemTarih.designer.cs">
+      <DependentUpon>202106260905100_mig_tableYekdem_changeDonemTarih.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202106260917001_mig_tableYekdem_addfield.cs" />
+    <Compile Include="Migrations\202106260917001_mig_tableYekdem_addfield.designer.cs">
+      <DependentUpon>202106260917001_mig_tableYekdem_addfield.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202106280829073_mig_addfieldintableYekdem.cs" />
+    <Compile Include="Migrations\202106280829073_mig_addfieldintableYekdem.designer.cs">
+      <DependentUpon>202106280829073_mig_addfieldintableYekdem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202106280839539_mig_remfieldintableYekdem.cs" />
+    <Compile Include="Migrations\202106280839539_mig_remfieldintableYekdem.designer.cs">
+      <DependentUpon>202106280839539_mig_remfieldintableYekdem.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Ay.cs" />
@@ -205,6 +231,8 @@
     <Compile Include="Models\Siniflar\FaturaRapor.cs" />
     <Compile Include="Models\Siniflar\Miktar.cs" />
     <Compile Include="Models\Siniflar\TeiasVeris.cs" />
+    <Compile Include="Models\Siniflar\UretimAnaliz.cs" />
+    <Compile Include="Models\Yekdem.cs" />
     <Compile Include="Models\Yillar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Roller\KullaniciRol.cs" />
@@ -2299,6 +2327,12 @@
     <Content Include="Views\RaporFatura\RaporListeDetayli.cshtml" />
     <Content Include="Views\RaporFatura\RaporListeDetaysiz.cshtml" />
     <Content Include="Views\RaporFatura\ParametreListe.cshtml" />
+    <Content Include="Views\YekdemGiris\Index.cshtml" />
+    <Content Include="Views\YekdemGiris\YekdemEkle.cshtml" />
+    <Content Include="Views\YekdemGiris\YekdemGetir.cshtml" />
+    <Content Include="Views\RaporUretimAnaliz\Index.cshtml" />
+    <Content Include="Views\RaporUretimAnaliz\RaporListe.cshtml" />
+    <Content Include="Views\RaporUretimAnaliz\RaporYillarListe.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Dosya\" />
@@ -2315,6 +2349,26 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202106250837274_mig_addtable_yekdem.resx">
+      <DependentUpon>202106250837274_mig_addtable_yekdem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202106260859318_mig_tableYekdem_remfield_addfield.resx">
+      <DependentUpon>202106260859318_mig_tableYekdem_remfield_addfield.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202106260905100_mig_tableYekdem_changeDonemTarih.resx">
+      <DependentUpon>202106260905100_mig_tableYekdem_changeDonemTarih.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202106260917001_mig_tableYekdem_addfield.resx">
+      <DependentUpon>202106260917001_mig_tableYekdem_addfield.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202106280829073_mig_addfieldintableYekdem.resx">
+      <DependentUpon>202106280829073_mig_addfieldintableYekdem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202106280839539_mig_remfieldintableYekdem.resx">
+      <DependentUpon>202106280839539_mig_remfieldintableYekdem.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

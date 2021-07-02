@@ -1,0 +1,48 @@
+﻿@model Vira.Models.Yekdem
+
+<div class="card card-default">
+    <div class="card-header bg-dark">
+        <div class="row">
+            <h5 class="card-title mb-sm-1 col-md-11" style="color:white">
+                <strong>Yekdem Güncelleme</strong>
+            </h5>
+        </div>
+    </div>
+    <div class="container">
+        <form action="@Url.Action("YekdemGuncelle", "YekdemGiris")" method="post">
+            <hr />
+            @Html.HiddenFor(x => x.YekdemId)
+            <div class="form-horizontal">
+                <div class="container form-group-sm row">
+                    <label class="col-form-label col-md-3 text-right" style="color:red"><b>Dönem Tarihi</b></label>
+                    <div class="col-md-2">
+                        @Html.DropDownListFor(x => x.YillarId, (List<SelectListItem>)ViewBag.dYil, new { @class = "form-control", @style = "width:85px" })
+                    </div>
+                    <div class="col-md-7">
+                        @Html.DropDownListFor(x => x.AyId, (List<SelectListItem>)ViewBag.dAy, "- Seçiniz -", new { @class = "form-control", @style = "width:110px" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group row desc">
+                    <label class="col-form-label col-md-3 text-right" style="color:red"><b>Yekdem Tutarı</b></label>
+                    <div class="col-8">
+                        @Html.TextBoxFor(x => x.YekdemTutar, new { @class = "form-control", @style = "width:150px; text-align:right;", @maxlength = "100" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group row desc">
+                    <label class="col-form-label col-md-3 text-right" style="color:red"><b>Birim Fiyat Tutarı(USD)</b></label>
+                    <div class="col-8">
+                        @Html.TextBoxFor(x => x.BirimFiyatUsd, new { @class = "form-control", @style = "width:150px; text-align:right;", @maxlength = "100" })
+                    </div>
+                </div>
+                <br />
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Vazgeç</button>
+                    <button class="btn btn-info">Güncelle</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

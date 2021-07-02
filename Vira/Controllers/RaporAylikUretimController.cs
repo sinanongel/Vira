@@ -53,7 +53,6 @@ namespace Vira.Controllers
                 .Select(g => new { g.Key.Yil, YilCount = g.Count() })
                 .ToList();
 
-            var yil1 = yilListe[0].Yil;
 
             int kayitSayisi = miktarListe.Count();
             int eklenekKayit = 12 - kayitSayisi / 12;

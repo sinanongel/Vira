@@ -17,5 +17,7 @@ namespace Vira.Models
         public string AyAd { get; set; }
 
         public ICollection<Fatura> Faturas { get; set; }
+        public ICollection<Yekdem> Yekdems { get; set; }
+
     }
 }

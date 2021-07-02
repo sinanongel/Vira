@@ -14,7 +14,7 @@ namespace Vira.Controllers
         public ActionResult Index()
         {
             List<SelectListItem> donemYil = (from t in c.Yillars.ToList()
-                                             orderby t.YillarId descending
+                                             orderby t.Yil descending
                                              select new SelectListItem
                                              {
                                                  Text = t.Yil,

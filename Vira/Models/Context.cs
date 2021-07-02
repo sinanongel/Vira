@@ -22,6 +22,7 @@ namespace Vira.Models
         public DbSet<Kullanici> Kullanicis { get; set; }
         public DbSet<Ay> Ays { get; set; }
         public DbSet<Yillar> Yillars { get; set; }
+        public DbSet<Yekdem> Yekdems { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
