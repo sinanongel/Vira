@@ -173,6 +173,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AnaSayfaController.cs" />
     <Compile Include="Controllers\FaturaController.cs" />
+    <Compile Include="Controllers\HavuzOkumaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\KurumController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -182,6 +183,7 @@
     <Compile Include="Controllers\RaporTeiasVerisController.cs" />
     <Compile Include="Controllers\RaporUretimAnalizController.cs" />
     <Compile Include="Controllers\RaporUretimController.cs" />
+    <Compile Include="Controllers\SozlesmeController.cs" />
     <Compile Include="Controllers\YekdemGirisController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -210,6 +212,38 @@
     <Compile Include="Migrations\202106280839539_mig_remfieldintableYekdem.designer.cs">
       <DependentUpon>202106280839539_mig_remfieldintableYekdem.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202107021356021_migAddTablesSozlesme.cs" />
+    <Compile Include="Migrations\202107021356021_migAddTablesSozlesme.designer.cs">
+      <DependentUpon>202107021356021_migAddTablesSozlesme.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107030649444_changeTblSozlesme_1.cs" />
+    <Compile Include="Migrations\202107030649444_changeTblSozlesme_1.designer.cs">
+      <DependentUpon>202107030649444_changeTblSozlesme_1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107030657426_changeTblSozlesme_2.cs" />
+    <Compile Include="Migrations\202107030657426_changeTblSozlesme_2.designer.cs">
+      <DependentUpon>202107030657426_changeTblSozlesme_2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107030727083_changeTblSozlesme_3.cs" />
+    <Compile Include="Migrations\202107030727083_changeTblSozlesme_3.designer.cs">
+      <DependentUpon>202107030727083_changeTblSozlesme_3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107030848510_updateTblSozlesme_4.cs" />
+    <Compile Include="Migrations\202107030848510_updateTblSozlesme_4.designer.cs">
+      <DependentUpon>202107030848510_updateTblSozlesme_4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107050713433_mig_updateTblSozlesme_5.cs" />
+    <Compile Include="Migrations\202107050713433_mig_updateTblSozlesme_5.designer.cs">
+      <DependentUpon>202107050713433_mig_updateTblSozlesme_5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107050816181_mig_updateTblSozlesme_6.cs" />
+    <Compile Include="Migrations\202107050816181_mig_updateTblSozlesme_6.designer.cs">
+      <DependentUpon>202107050816181_mig_updateTblSozlesme_6.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107060658002_mig_changeFatura.cs" />
+    <Compile Include="Migrations\202107060658002_mig_changeFatura.designer.cs">
+      <DependentUpon>202107060658002_mig_changeFatura.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Ay.cs" />
     <Compile Include="Models\Birim.cs" />
@@ -219,6 +253,10 @@
     <Compile Include="Models\Doviz.cs" />
     <Compile Include="Models\Fatura.cs" />
     <Compile Include="Models\FaturaDetay.cs" />
+    <Compile Include="Models\HavaDurumu.cs" />
+    <Compile Include="Models\Havuz.cs" />
+    <Compile Include="Models\HavuzKot.cs" />
+    <Compile Include="Models\HavuzOkuma.cs" />
     <Compile Include="Models\Ilceler.cs" />
     <Compile Include="Models\Iller.cs" />
     <Compile Include="Models\Kdv.cs" />
@@ -232,6 +270,7 @@
     <Compile Include="Models\Siniflar\Miktar.cs" />
     <Compile Include="Models\Siniflar\TeiasVeris.cs" />
     <Compile Include="Models\Siniflar\UretimAnaliz.cs" />
+    <Compile Include="Models\Sozlesme.cs" />
     <Compile Include="Models\Yekdem.cs" />
     <Compile Include="Models\Yillar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -2333,6 +2372,10 @@
     <Content Include="Views\RaporUretimAnaliz\Index.cshtml" />
     <Content Include="Views\RaporUretimAnaliz\RaporListe.cshtml" />
     <Content Include="Views\RaporUretimAnaliz\RaporYillarListe.cshtml" />
+    <Content Include="Views\HavuzOkuma\Index.cshtml" />
+    <Content Include="Views\Sozlesme\Index.cshtml" />
+    <Content Include="Views\Sozlesme\SozlesmeEkle.cshtml" />
+    <Content Include="Views\Sozlesme\SozlesmeGetir.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Dosya\" />
@@ -2368,6 +2411,30 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202106280839539_mig_remfieldintableYekdem.resx">
       <DependentUpon>202106280839539_mig_remfieldintableYekdem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107021356021_migAddTablesSozlesme.resx">
+      <DependentUpon>202107021356021_migAddTablesSozlesme.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107030649444_changeTblSozlesme_1.resx">
+      <DependentUpon>202107030649444_changeTblSozlesme_1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107030657426_changeTblSozlesme_2.resx">
+      <DependentUpon>202107030657426_changeTblSozlesme_2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107030727083_changeTblSozlesme_3.resx">
+      <DependentUpon>202107030727083_changeTblSozlesme_3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107030848510_updateTblSozlesme_4.resx">
+      <DependentUpon>202107030848510_updateTblSozlesme_4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107050713433_mig_updateTblSozlesme_5.resx">
+      <DependentUpon>202107050713433_mig_updateTblSozlesme_5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107050816181_mig_updateTblSozlesme_6.resx">
+      <DependentUpon>202107050816181_mig_updateTblSozlesme_6.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107060658002_mig_changeFatura.resx">
+      <DependentUpon>202107060658002_mig_changeFatura.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

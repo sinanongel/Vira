@@ -1,0 +1,73 @@
+﻿@model Vira.Models.Sozlesme
+
+<div class="card card-default">
+    <div class="card-header bg-dark">
+        <div class="row">
+            <h5 class="card-title mb-sm-1 col-md-11" style="color:white">
+                <strong>Sözleşme Girişi</strong>
+            </h5>
+        </div>
+    </div>
+    <div class="container">
+        @using (Html.BeginForm("SozlesmeEkle", "Sozlesme", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <hr />
+            <div class="form-horizontal">
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-4 text-right" style="color:red"><b>İşveren</b></label>
+                    <div class="col-sm-8">
+                        @Html.DropDownListFor(x => x.IsverenKurumId, (List<SelectListItem>)ViewBag.iKrmListe, "- Seçiniz -", new { @class = "form-control", @style = "width:120px", @required = "" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-4 text-right" style="color:red"><b>Yüklenici</b></label>
+                    <div class="col-sm-8">
+                        @Html.DropDownListFor(x => x.YukleniciKurumId, (List<SelectListItem>)ViewBag.yKrmListe, "- Seçiniz -", new { @class = "form-control", @style = "width:120px", @required = "" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-4 text-right" style="color:red"><b>Sözleşme Konusu</b></label>
+                    <div class="col-sm-8">
+                        <input style="width:400px;" type="text" class="form-control" name="SozlesmeKonusu" maxlength="100" required oninvalid="this.setCustomValidity('Bu alan boş geçilemez!')" oninput="setCustomValidity('')" />
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-4 text-right" style="color:red"><b>Sözleşme Tarihi</b></label>
+                    <div class="col-sm-8">
+                        <input style="width:160px;" type="date" class="form-control" name="SozlesmeTarihi" />
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-4 text-right" ><b>Sözleşme Bedeli</b></label>
+                    <div class="col-md-8">
+                        <input class="form-control" style="width:150px; text-align:right;" name="SozlesmeBedeli" type="text" />
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-4 text-right"><b>Sözleşme Süresi</b></label>
+                    <div class="col-sm-8">
+                        <input style="width:100px;" type="text" class="form-control" name="SozlesmeSuresi" maxlength="4" />
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-4 text-right"><b>Sözleşme Yükle</b></label>
+                    <div class="col-sm-8">
+                        <input style="width:400px;" type="file" class="form-control-file border" name="Dosya" maxlength="50"  />
+                    </div>
+                </div>
+                <br />
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Vazgeç</button>
+                    <button class="btn btn-info">Ekle</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+

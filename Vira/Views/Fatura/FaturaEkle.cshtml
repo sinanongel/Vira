@@ -9,56 +9,64 @@
         </div>
     </div>
     <div class="container">
-        <form action="@Url.Action("FaturaEkle", "Fatura")" method="post">
-            <hr />
-            <div class="form-horizontal">
-                <div class="container form-group-sm row">
-                    <label class="col-form-label col-md-3 text-right" style="color:red"><b>Fatura No</b></label>
-                    <div class="col-md-9">
-                        <input style="width:170px;" type="text" class="form-control" name="FaturaNo" placeholder="Fatura No" maxlength="16" required oninvalid="this.setCustomValidity('Bu alan boş geçilemez!')" oninput="setCustomValidity('')" />
+            @using (Html.BeginForm("FaturaEkle", "Fatura", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            { 
+                <hr />
+                <div class="form-horizontal">
+                    <div class="container form-group-sm row">
+                        <label class="col-form-label col-md-3 text-right" style="color:red"><b>Fatura No</b></label>
+                        <div class="col-md-9">
+                            <input style="width:170px;" type="text" class="form-control" name="FaturaNo" placeholder="Fatura No" maxlength="16" required oninvalid="this.setCustomValidity('Bu alan boş geçilemez!')" oninput="setCustomValidity('')" />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="container form-group-sm row">
+                        <label class="col-form-label-sm col-md-3 text-right" style="color:red"><b>Fatura Tipi</b></label>
+                        <div class="col-md-2">
+                            @Html.DropDownListFor(x => x.FaturaTipi, (List<SelectListItem>)ViewBag.tiListe, "- Seçiniz -", new { @class = "form-control", @style = "width:120px", @required = "" })
+                        </div>
+                        <label class="col-form-label-sm col-md-3 text-right" style="color:red"><b>Fatura Türü</b></label>
+                        <div class="col-md-4">
+                            @Html.DropDownListFor(x => x.FaturaTuru, (List<SelectListItem>)ViewBag.tuListe, "- Seçiniz -", new { @class = "form-control", @style = "width:120px" })
+                        </div>
+                    </div>
+                    <br />
+                    <div class="container form-group-sm row">
+                        <label class="col-form-label col-md-3 text-right" style="color:red"><b>Fatura Tarihi</b></label>
+                        <div class="col-md-3">
+                            <input style="width:155px;" type="date" class="form-control" name="FaturaTarihi" />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="container form-group-sm row">
+                        <label class="col-form-label col-md-3 text-right" style="color:red"><b>Fatura Dönemi</b></label>
+                        <div class="col-md-2">
+                            @Html.DropDownListFor(x => x.YillarId, (List<SelectListItem>)ViewBag.dYil, new { @class = "form-control", @style = "width:85px" })
+                        </div>
+                        <div class="col-md-7">
+                            @Html.DropDownListFor(x => x.AyId, (List<SelectListItem>)ViewBag.dAy, "- Seçiniz -", new { @class = "form-control", @style = "width:110px" })
+                        </div>
+                    </div>
+                    <br />
+                    <div class="container form-group-sm row">
+                        <label class="col-form-label col-md-3 text-right" style="color:red"><b>Kurum</b></label>
+                        <div class="col-md-9">
+                            @Html.DropDownListFor(x => x.KurumId, (List<SelectListItem>)ViewBag.kList, "----------------------- Seçiniz ----------------------", new { @class = "form-control", @style = "width:400px", @required = "" })
+                        </div>
+                    </div>
+                    <br />
+                    <div class="container form-group-sm row">
+                        <label class="col-form-label col-md-3 text-right"><b>Fatura Yükle</b></label>
+                        <div class="col-sm-8">
+                            <input style="width:400px;" type="file" class="form-control-file border" name="Dosya" maxlength="50" />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Vazgeç</button>
+                        <button class="btn btn-info">Ekle</button>
                     </div>
                 </div>
-                <br />
-                <div class="container form-group-sm row">
-                    <label class="col-form-label-sm col-md-3 text-right" style="color:red"><b>Fatura Tipi</b></label>
-                    <div class="col-md-2">
-                        @Html.DropDownListFor(x => x.FaturaTipi, (List<SelectListItem>)ViewBag.tiListe, "- Seçiniz -", new { @class = "form-control", @style = "width:120px", @required = "" })
-                    </div>
-                    <label class="col-form-label-sm col-md-3 text-right" style="color:red"><b>Fatura Türü</b></label>
-                    <div class="col-md-4">
-                        @Html.DropDownListFor(x => x.FaturaTuru, (List<SelectListItem>)ViewBag.tuListe, "- Seçiniz -", new { @class = "form-control", @style = "width:120px" })
-                    </div>
-                </div>
-                <br />
-                <div class="container form-group-sm row">
-                    <label class="col-form-label col-md-3 text-right" style="color:red"><b>Fatura Tarihi</b></label>
-                    <div class="col-md-3">
-                        <input style="width:155px;" type="date" class="form-control" name="FaturaTarihi" />
-                    </div>
-                </div>
-                <br />
-                <div class="container form-group-sm row">
-                    <label class="col-form-label col-md-3 text-right" style="color:red"><b>Fatura Dönemi</b></label>
-                    <div class="col-md-2">
-                        @Html.DropDownListFor(x => x.YillarId, (List<SelectListItem>)ViewBag.dYil, new { @class = "form-control", @style = "width:85px" })
-                    </div>
-                    <div class="col-md-7">
-                        @Html.DropDownListFor(x => x.AyId, (List<SelectListItem>)ViewBag.dAy, "- Seçiniz -", new { @class = "form-control", @style = "width:110px" })
-                    </div>
-                </div>
-                <br />
-                <div class="container form-group-sm row">
-                    <label class="col-form-label col-md-3 text-right" style="color:red"><b>Kurum</b></label>
-                    <div class="col-md-9">
-                        @Html.DropDownListFor(x => x.KurumId, (List<SelectListItem>)ViewBag.kList, "----------------------- Seçiniz ----------------------", new { @class = "form-control", @style = "width:400px", @required = "" })
-                    </div>
-                </div>
-                <br />
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Vazgeç</button>
-                    <button class="btn btn-info">Ekle</button>
-                </div>
-            </div>
-        </form>
-    </div>
+            }
+        </div>
 </div>

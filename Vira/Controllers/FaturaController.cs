@@ -29,18 +29,18 @@ namespace Vira.Controllers
 
             List<SelectListItem> donemYil = (from t in c.Yillars.ToList()
                                              orderby t.Yil descending
-                                               select new SelectListItem
-                                               {
-                                                   Text = t.Yil,
-                                                   Value = t.YillarId.ToString()
-                                               }).ToList();
+                                             select new SelectListItem
+                                             {
+                                                 Text = t.Yil,
+                                                 Value = t.YillarId.ToString()
+                                             }).ToList();
 
             List<SelectListItem> donemAy = (from t in c.Ays.ToList()
-                                               select new SelectListItem
-                                               {
-                                                   Text = t.AyAd,
-                                                   Value = t.AyId.ToString()
-                                               }).ToList();
+                                            select new SelectListItem
+                                            {
+                                                Text = t.AyAd,
+                                                Value = t.AyId.ToString()
+                                            }).ToList();
 
             List<SelectListItem> tipListe = new List<SelectListItem>();
             tipListe.Add(new SelectListItem() { Text = "Alış" });
@@ -68,6 +68,28 @@ namespace Vira.Controllers
         [HttpPost]
         public ActionResult FaturaEkle(Fatura p)
         {
+            var ay = p.FaturaTarihi.ToString("MM");
+            var yil = p.FaturaTarihi.ToString("yyyy");
+
+            if (Request.Files.Count > 0)
+            {
+                string dosyaAdi = "";
+                if (dosyaAdi != "")
+                {
+                    if (p.FaturaTuru is null)
+                    {
+                        dosyaAdi = p.Kurum.KurumAdi + '_' + yil + '_' + ay;
+                    }
+                    else
+                    {
+                        dosyaAdi = p.Kurum.KurumAdi + '_' + p.FaturaTuru.ToUpper() + '_' + yil + '_' + ay;
+                    }
+                    string uzanti = Path.GetExtension(Request.Files[0].FileName);
+                    string yol = "~/App_Data/Dosya/" + dosyaAdi + uzanti;
+                    Request.Files[0].SaveAs(Server.MapPath(yol));
+                    p.Dosya = dosyaAdi + uzanti;
+                }
+            }
             c.Faturas.Add(p);
             c.SaveChanges();
 
@@ -120,7 +142,46 @@ namespace Vira.Controllers
         }
         public ActionResult FaturaGuncelle(Fatura p)
         {
-            var fat = c.Faturas.Find(p.FaturaId);           
+            var fatura = c.Sozlesmes.Find(p.FaturaId);
+
+            var ay = p.FaturaTarihi.ToString("MM");
+            var yil = p.FaturaTarihi.ToString("yyyy");
+
+            if (Request.Files.Count > 0)
+            {
+                //string faturaId = "";
+                string dosyaAdi = Path.GetFileName(Request.Files[0].FileName);
+                //if (dosyaAdi != "")
+                //{
+                //    faturaId = (c.Faturas.Where(x => x.Dosya == p.Dosya).Select(y => y.FaturaId).FirstOrDefault()).ToString();
+                //}
+                var KurumAd = c.Faturas.Where(x => x.FaturaId == p.FaturaId).Select(y => y.Kurum.KurumAdi).FirstOrDefault();
+
+                if (dosyaAdi != "" || p.Dosya == "")
+                {
+                    string silDosyaAdi = p.Dosya;
+                    string silDosyaYolu = Request.MapPath("~/App_Data/Dosya/" + silDosyaAdi);
+
+                    if (System.IO.File.Exists(silDosyaYolu))
+                    {
+                        System.IO.File.Delete(silDosyaYolu);
+                    }
+
+                    if (p.FaturaTuru is null)
+                    {
+                        dosyaAdi = KurumAd + '_' + yil + '_' + ay;
+                    }
+                    else
+                    {
+                        dosyaAdi = KurumAd + '_' + p.FaturaTuru.ToUpper() + '_' + yil + '_' + ay;
+                    }
+                    string uzanti = Path.GetExtension(Request.Files[0].FileName);
+                    string yol = "~/App_Data/Dosya/" + dosyaAdi + uzanti;
+                    Request.Files[0].SaveAs(Server.MapPath(yol));
+                    p.Dosya = dosyaAdi + uzanti;
+                }
+            }
+            var fat = c.Faturas.Find(p.FaturaId);
             fat.FaturaNo = p.FaturaNo;
             fat.FaturaTipi = p.FaturaTipi;
             fat.FaturaTuru = p.FaturaTuru;
@@ -128,6 +189,7 @@ namespace Vira.Controllers
             fat.KurumId = p.KurumId;
             fat.YillarId = p.YillarId;
             fat.AyId = p.AyId;
+            fat.Dosya = p.Dosya;
             c.SaveChanges();
 
             return RedirectToAction("Index");
@@ -219,7 +281,7 @@ namespace Vira.Controllers
                 FdTutar = Math.Round((FdBirimFiyatTl * p.FdMiktar), 2);
                 p.FdTutar = FdTutar;
             }
-            else if(p.FdBirimFiyat == 0)
+            else if (p.FdBirimFiyat == 0)
             {
                 FdBirimFiyatTl = Math.Round((p.FdTutar / p.FdMiktar), 8);
                 FdBirimFiyat = Math.Round((FdBirimFiyatTl / p.FdKur), 8);
@@ -347,32 +409,32 @@ namespace Vira.Controllers
         [HttpPost]
         public ActionResult DosyaYukle(Dosya p)
         {
-            var KurumAd = c.Faturas.Where(x => x.FaturaId == p.FaturaId).Select(y => y.Kurum.KurumAdi).FirstOrDefault();
-            var FaturaTuru = c.Faturas.Where(x => x.FaturaId == p.FaturaId).Select(y => y.FaturaTuru).FirstOrDefault();
-            DateTime FaturaTarihi = c.Faturas.Where(x => x.FaturaId == p.FaturaId).Select(y => y.FaturaTarihi).FirstOrDefault();
+            //var KurumAd = c.Faturas.Where(x => x.DosyaId == p.DosyaId).Select(y => y.Kurum.KurumAdi).FirstOrDefault();
+            //var FaturaTuru = c.Faturas.Where(x => x.DosyaId == p.DosyaId).Select(y => y.FaturaTuru).FirstOrDefault();
+            //DateTime FaturaTarihi = c.Faturas.Where(x => x.DosyaId == p.DosyaId).Select(y => y.FaturaTarihi).FirstOrDefault();
             string dosyaAdi;
 
-            var ay = FaturaTarihi.ToString("MM");
-            var yil = FaturaTarihi.ToString("yyyy");
+            //var ay = FaturaTarihi.ToString("MM");
+            //var yil = FaturaTarihi.ToString("yyyy");
             ;
             if (Request.Files.Count > 0)
             {
                 //string dosyaAdi = Guid.NewGuid().ToString("D");
                 //string dosyaAdi = dosyaAd.Replace('-', '_');
                 //string dosyaAdi = Path.GetFileName(Request.Files[0].FileName);
-                if (FaturaTuru is null)
-                {
-                    dosyaAdi = KurumAd + '_' + yil + '_' + ay;
-                }
-                else
-                {
-                    dosyaAdi = KurumAd + '_' + FaturaTuru.ToUpper() + '_' + yil + '_' + ay;
-                }
+                //if (FaturaTuru is null)
+                //{
+                //    dosyaAdi = KurumAd + '_' + yil + '_' + ay;
+                //}
+                //else
+                //{
+                //    dosyaAdi = KurumAd + '_' + FaturaTuru.ToUpper() + '_' + yil + '_' + ay;
+                //}
                 string uzanti = Path.GetExtension(Request.Files[0].FileName);
-                string yol = "~/App_Data/Dosya/" + dosyaAdi + uzanti;
-                Request.Files[0].SaveAs(Server.MapPath(yol));
-                p.DosyaYolu = "/App_Data/Dosya/";
-                p.DosyaAdi = dosyaAdi + uzanti;
+                //string yol = "~/App_Data/Dosya/" + dosyaAdi + uzanti;
+                //Request.Files[0].SaveAs(Server.MapPath(yol));
+                //p.DosyaYolu = "/App_Data/Dosya/";
+                //p.DosyaAdi = dosyaAdi + uzanti;
             }
             c.Dosyas.Add(p);
             c.SaveChanges();
@@ -382,7 +444,7 @@ namespace Vira.Controllers
         [HttpPost]
         public JsonResult DosyaListe(int id)
         {
-            List<Dosya> dosyaList = c.Dosyas.Where(i => i.FaturaId == id).OrderBy(i => i.DosyaYolu).ToList();
+            List<Dosya> dosyaList = c.Dosyas.Where(i => i.DosyaId == id).OrderBy(i => i.DosyaYolu).ToList();
 
             List<SelectListItem> dListe = (from i in dosyaList
                                            select new SelectListItem
@@ -396,7 +458,7 @@ namespace Vira.Controllers
         [HttpPost]
         public ActionResult ModalDosyaListe(int id)
         {
-            var liste = c.Dosyas.OrderBy(f => f.DosyaId).Where(x => x.FaturaId == id).ToList();
+            var liste = c.Dosyas.OrderBy(f => f.DosyaId).Where(x => x.DosyaId == id).ToList();
 
             return PartialView("DosyaListele", liste);
         }
@@ -406,19 +468,12 @@ namespace Vira.Controllers
         }
         public FileResult DosyaAc(string dosya)
         {
-            //var cd = new ContentDispositionHeaderValue("attachment")
-            //{
-            //    FileNameStar = dosya
-            //};
-            //Response.Headers.Add(HeaderNames.ContentDisposition, cd.ToString());
-
-
-            Response.AppendHeader("Content-Disposition", "inline; filename" + dosya + ";");
-
-            string yol = "~/App_Data/Dosya/";
-
-            //string yol = AppDomain.CurrentDomain.DynamicDirectory;
-            return File(yol + dosya, System.Net.Mime.MediaTypeNames.Application.Pdf, dosya);
+            //dosya = dosya.Replace(",", ""); 
+            //Response.AppendHeader("Content-Disposition", "inline; filename=" + dosya);
+            
+            string yol = Server.MapPath("~/App_Data/Dosya/") + dosya;
+            byte[] bytes = System.IO.File.ReadAllBytes(yol);
+            return File(bytes, "Application/pdf", dosya);
         }
         [HttpPost]
         public JsonResult BirimGetir(int MalHizmetId)

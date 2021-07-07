@@ -1,0 +1,82 @@
+﻿@model Vira.Models.Sozlesme
+
+<div class="card card-default">
+    <div class="card-header bg-dark">
+        <div class="row">
+            <h5 class="card-title mb-sm-1 col-md-11" style="color:white">
+                <strong>Sözleşme Güncelleme</strong>
+            </h5>
+        </div>
+    </div>
+    <div class="container">
+        @using (Html.BeginForm("SozlesmeGuncelle", "Sozlesme", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <hr />
+            @Html.HiddenFor(x => x.SozlesmeId)
+            <div class="form-horizontal">
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-4 text-right"><b>İşveren</b></label>
+                    <div class="col-8">
+                        @Html.DropDownListFor(x => x.IsverenKurumId, (List<SelectListItem>)ViewBag.iKrmListe, new { @class = "form-control", @style = "width:100px" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-4 text-right" style="color:red"><b>Yüklenici</b></label>
+                    <div class="col-8">
+                        @Html.DropDownListFor(x => x.YukleniciKurumId, (List<SelectListItem>)ViewBag.yKrmListe, new { @class = "form-control", @style = "width:100px" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-4 text-right" style="color:red"><b>Sözleşme Konusu</b></label>
+                    <div class="col-8">
+                        @Html.TextBoxFor(x => x.SozlesmeKonusu, new { @class = "form-control", @style = "width:400px", @maxlength = "100" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-4 text-right" style="color:red"><b>Sözleşme Tarihi</b></label>
+                    <div class="col-8">
+                        @Html.TextBoxFor(x => x.SozlesmeTarihi, "{0:yyyy-MM-dd}", new { @class = "form-control", @style = "width:160px;", @type = "date" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-4 text-right" style="color:red"><b>Sözleşme Bedeli</b></label>
+                    <div class="col-8">
+                        @Html.TextBoxFor(x => x.SozlesmeBedeli, new { @class = "form-control", @style = "width:110px; text-align:right;", @maxlength = "10" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-4 text-right" style="color:red"><b>Sözleşme Süresi</b></label>
+                    <div class="col-8">
+                        @Html.TextBoxFor(x => x.SozlesmeSuresi, new { @class = "form-control", @style = "width:110px; text-align:right;", @maxlength = "10" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-4 text-right"><b>Sözleşme</b></label>
+                    <div class="col-sm-8">
+                        @Html.TextBoxFor(x => x.Dosya, new { @class = "form-control", @style = "width:450px; font-size:10px; border:hidden; color:blue;", @readonly = true })
+                    </div>
+                </div>
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-4 text-right"><b>Sözleşme Yükle</b></label>
+                    <div class="col-sm-8">
+                        <input style="width:400px;" type="file" class="form-control-file border" name="Dosya" maxlength="50" />
+                    </div>
+                </div>
+                <br />
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Vazgeç</button>
+                    <button class="btn btn-success">Güncelle</button>
+                </div>
+            </div>
+        }
+        @*<form action="@Url.Action("SozlesmeGuncelle", "Sozlesme")" method="post">
+            </form>*@
+    </div>
+</div>
+

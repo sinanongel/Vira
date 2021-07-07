@@ -29,6 +29,10 @@ namespace Vira.Models
         public string FaturaTuru { get; set; }
         public bool FaturaOdemeDurumu { get; set; }
 
+        [Column(TypeName = "Varchar")]
+        [StringLength(100)]
+        public string Dosya { get; set; }
+
         public int KurumId { get; set; }
         public virtual Kurum Kurum { get; set; }
         public int AyId { get; set; }
@@ -37,6 +41,5 @@ namespace Vira.Models
         public virtual Yillar Yillar { get; set; }
 
         public ICollection<FaturaDetay> FaturaDetays { get; set; }
-        public ICollection<Dosya> Dosyas { get; set; }
     }
 }

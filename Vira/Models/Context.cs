@@ -23,11 +23,20 @@ namespace Vira.Models
         public DbSet<Ay> Ays { get; set; }
         public DbSet<Yillar> Yillars { get; set; }
         public DbSet<Yekdem> Yekdems { get; set; }
+        public DbSet<Sozlesme> Sozlesmes { get; set; }
+
+        //public DbSet<HavuzKot> HavuzKots { get; set; }
+        //public DbSet<Havuz> Havuzs { get; set; }
+        //public DbSet<HavaDurumu> HavaDurumus { get; set; }
+        //public DbSet<HavuzOkuma> HavuzOkumas { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<FaturaDetay>().Property(x => x.FdBirimFiyat).HasPrecision(18, 8);
             modelBuilder.Entity<FaturaDetay>().Property(x => x.FdBirimFiyatTl).HasPrecision(18, 8);
+
+            modelBuilder.Entity<Sozlesme>().HasRequired(m => m.YukleniciKurum).WithMany(m => m.YukleniciKurumSozlesmes).HasForeignKey(m => m.YukleniciKurumId);
+            modelBuilder.Entity<Sozlesme>().HasRequired(m => m.IsverenKurum).WithMany(m => m.IsverenKurumSozlesmes).HasForeignKey(m => m.IsverenKurumId);
         }
     }
 }

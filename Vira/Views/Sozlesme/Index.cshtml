@@ -1,0 +1,164 @@
+﻿@using Vira.Models
+@model List<Sozlesme>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+<br />
+
+@if (TempData["sozlesmeEkle"] != null)
+{
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script>
+        swal("Tebrikler!", "Başarılı bir şekilde eklendi!", "success");
+    </script>
+}
+@if (TempData["sozlesmeGuncelle"] != null)
+{
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script>
+        swal("Tebrikler!", "Başarılı bir şekilde güncelleme yapıldı!", "success");
+    </script>
+}
+
+<link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="//code.jquery.com/jquery-1.12.4.js"></script>
+<script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+
+<div class="card card-default">
+    <div class="card-header">
+        <div class="row">
+            <h5 class="card-title mb-sm-1 col-md-11">
+                <strong>Sözleşme İşlemleri</strong>
+            </h5>
+            <a href="#" class="btn btn-primary ekle col-md-1" data-target="@Url.Action("ModalAc", "Sozlesme")">Yeni Kayıt</a>
+        </div>
+    </div>
+
+    <!--Proje Listesi-->
+    <div style="margin-left:1%; margin-right:1%">
+        <br />
+        <table id="liste" class="table table-bordered table-hover table-sm display" style="margin-top:20px;">
+            <thead>
+                <tr>
+                    <th style="width:5%"><small><strong>#</strong></small></th>
+                    <th style="width:10%"><small><strong>İşveren (Taraf 1)</strong></small></th>
+                    <th style="width:10%"><small><strong>Yüklenici (Taraf 2)</strong></small></th>
+                    <th style="width:30%"><small><strong>Sözleşme Konusu</strong></small></th>
+                    <th style="width:5%"><small><strong>Sözleşme Tarihi</strong></small></th>
+                    <th style="width:5%"><small><strong>Sözleşme Süresi</strong></small></th>
+                    <th style="width:10%"><small><strong>Sözleşme Bedeli</strong></small></th>
+                    <th style="width:1%"></th>
+                    <th style="width:1%"></th>
+                </tr>
+            </thead>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><small>@item.SozlesmeId</small></td>
+                    <td title="@item.IsverenKurum.KurumUnvani"><small>@item.IsverenKurum.KurumAdi</small></td>
+                    <td title="@item.YukleniciKurum.KurumUnvani"><small>@item.YukleniciKurum.KurumAdi</small></td>
+                    <td><small>@item.SozlesmeKonusu</small></td>
+                    <td><small>@item.SozlesmeTarihi.ToString("dd.MM.yyyy")</small></td>
+                    <td style="text-align:right"><small>@item.SozlesmeSuresi</small></td>
+                    <td style="text-align:right"><small>@string.Format("{0:c}", @item.SozlesmeBedeli)</small></td>
+                    <td><a href="#" class="btn btn-sm btn-success guncelle" data-target="@Url.Action("SozlesmeGetir", "Sozlesme")/@item.SozlesmeId">Güncelle</a></td>
+                    <td><a href="@Url.Action("DosyaIndir", "Sozlesme")/@item.SozlesmeId" class="btn btn-primary btn-sm" title="Dosya İndir"><span class="fa fa-file-download"></span></a></td>
+                </tr>
+            }
+        </table>
+    </div>
+
+    <div class="container">
+        <!--Proje Ekle Modal -->
+        <div class="modal fade" id="myModalE" role="dialog">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <!--Proje Güncelle Modal -->
+        <div class="modal fade" id="myModalG" role="dialog">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <!--Bilgi Modal -->
+        <div class="modal fade" id="myModalD" role="dialog">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(function () {
+        $("body").on("click", ".ekle", function () {
+            var url = $(this).data("target");
+            $.post(url, function (data) { })
+                .done(function (data) {
+                    $("#myModalE .modal-body").html(data);
+                    $("#myModalE").modal("show");
+                })
+                .fail(function () {
+                    $("#myModalE .modal-body").text("Hata!!");
+                    $("#myModalE").modal("show");
+                })
+        });
+    });
+    $(function () {
+        $("body").on("click", ".guncelle", function () {
+            var url = $(this).data("target");
+            $.post(url, function (data) { })
+                .done(function (data) {
+                    $("#myModalG .modal-body").html(data);
+                    $("#myModalG").modal("show");
+                })
+                .fail(function () {
+                    $("#myModalG .modal-body").text("Hata!!");
+                    $("#myModalG").modal("show");
+                })
+        });
+    });
+    $(function () {
+        $("body").on("click", ".dosya", function () {
+            var url = $(this).data("target");
+            $.post(url, function (data) { })
+                .done(function (data) {
+                    $("#myModalD .modal-body").html(data);
+                    $("#myModalD").modal("show");
+                })
+                .fail(function () {
+                    $("#myModalD .modal-body").text("Hata!!");
+                    $("#myModalD").modal("show");
+                })
+        });
+    });
+    $('#liste').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Turkish.json"
+        },
+        "order": [[0, "desc"]]
+    });
+</script>
+
+

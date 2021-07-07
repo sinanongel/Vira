@@ -1,0 +1,144 @@
+﻿<!--@using Vira.Models
+@model List<HavuzOkuma>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+<br />
+
+<link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="//code.jquery.com/jquery-1.12.4.js"></script>
+<script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+
+<div class="card card-default">
+    <div class="card-header">
+        <div class="row">
+            <h5 class="card-title mb-sm-1 col-md-11">
+                <strong>Havuz Okuma İşlemleri</strong>
+            </h5>
+            <a href="#" class="btn btn-primary ekle col-md-1" data-target="@Url.Action("ModalAc", "HavuzOkuma")">Yeni Kayıt</a>
+        </div>
+    </div>-->
+
+    <!--Proje Listesi-->
+    <!--<div style="margin-left:1%; margin-right:1%">
+        <br />
+        <table id="liste" class="table table-bordered table-hover table-sm display" style="margin-top:20px;">
+            <thead>
+                <tr>
+                    <th style="width:3%"><small><strong>#</strong></small></th>
+                    <th style="width:7%"><small><strong>Havuz Adı</strong></small></th>
+                    <th style="width:10%"><small><strong>Okuma Tarihi</strong></small></th>
+                    <th style="width:6%"><small><strong>Hava Durumu</strong></small></th>
+                    <th style="width:10%"><small><strong>Sıra No</strong></small></th>
+                    <th style="width:50%"><small><strong>Eski Kot</strong></small></th>
+                    <th style="width:6%"><small><strong>Yeni Kot</strong></small></th>
+                    <th style="width:10%"><small><strong>Değişiklik Miktarı(mm)</strong></small></th>
+                    <th style="width:5%"></th>
+                </tr>
+            </thead>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><small>@item.HavuzOkumaId</small></td>
+                    <td><small>@item.Havuz.HavuzAdi</small></td>
+                    <td><small>@item.OkumaTarihi</small></td>
+                    <td><small>@item.HavaDurumu.Durum</small></td>
+                    <td><small>@item.HavuzKot.NoktaNo</small></td>
+                    <td><small>@item.HavuzKot.KotDegeri</small></td>
+                    <td><small>@k.KurumEPosta</small></td>
+                    <td><a href="#" class="btn btn-sm btn-success guncelle" data-target="@Url.Action("KurumGetir", "Kurum")/@k.KurumId">Güncelle</a></td>
+                </tr>
+            }
+        </table>
+    </div>
+
+    <div class="container">-->
+        <!--Proje Ekle Modal -->
+        <!--<div class="modal fade" id="myModalE" role="dialog">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">-->
+        <!--Proje Güncelle Modal -->
+        <!--<div class="modal fade" id="myModalG" role="dialog">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">-->
+        <!--Proje Bilgi Modal -->
+        <!--<div class="modal fade" id="myModalB" role="dialog">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(function () {
+        $("body").on("click", ".ekle", function () {
+            var url = $(this).data("target");
+            $.post(url, function (data) { })
+                .done(function (data) {
+                    $("#myModalE .modal-body").html(data);
+                    $("#myModalE").modal("show");
+                })
+                .fail(function () {
+                    $("#myModalE .modal-body").text("Hata!!");
+                    $("#myModalE").modal("show");
+                })
+        });
+    });
+    $(function () {
+        $("body").on("click", ".guncelle", function () {
+            var url = $(this).data("target");
+            $.post(url, function (data) { })
+                .done(function (data) {
+                    $("#myModalG .modal-body").html(data);
+                    $("#myModalG").modal("show");
+                })
+                .fail(function () {
+                    $("#myModalG .modal-body").text("Hata!!");
+                    $("#myModalG").modal("show");
+                })
+        });
+    });
+    $(function () {
+        $("body").on("click", ".bilgi", function () {
+            var url = $(this).data("target");
+            $.post(url, function (data) { })
+                .done(function (data) {
+                    $("#myModalB .modal-body").html(data);
+                    $("#myModalB").modal("show");
+                })
+                .fail(function () {
+                    $("#myModalB .modal-body").text("Hata!!");
+                    $("#myModalB").modal("show");
+                })
+        });
+    });
+    $('#liste').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Turkish.json"
+        }
+    });
+</script>-->
+

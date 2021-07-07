@@ -46,5 +46,7 @@ namespace Vira.Models
         public virtual Ilceler Ilceler { get; set; }
 
         public ICollection<Fatura> Faturas { get; set; }
+        public ICollection<Sozlesme> YukleniciKurumSozlesmes { get; set; }
+        public ICollection<Sozlesme> IsverenKurumSozlesmes { get; set; }
     }
 }

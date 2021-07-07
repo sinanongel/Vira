@@ -22,7 +22,5 @@ namespace Vira.Models
 
         public int DosyaTuruId { get; set; }
         public virtual DosyaTuru DosyaTuru { get; set; }
-        public int FaturaId { get; set; }
-        public virtual Fatura Fatura { get; set; }
     }
 }
