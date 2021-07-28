@@ -1,42 +1,35 @@
-﻿@model Vira.Models.Kurum
+﻿@model Vira.Models.Firma
 
 <div class="card card-default">
     <div class="card-header bg-dark">
         <div class="row">
             <h5 class="card-title mb-sm-1 col-md-11" style="color:white">
-                <strong>Kurum Girişi</strong>
+                <strong>Firma Girişi</strong>
             </h5>
         </div>
     </div>
     <div class="container">
-        <form action="@Url.Action("KurumEkle", "Kurum")" method="post">
+        <form action="@Url.Action("FirmaEkle", "Firma")" method="post">
             <hr />
             <div class="form-horizontal">
                 <div class="container form-group-sm row">
-                    <label class="col-form-label-sm col-md-3 text-right" style="color:red"><b>Kurum Kısa Adı</b></label>
+                    <label class="col-form-label-sm col-md-3 text-right" style="color:red"><b>Firma Kısa Adı</b></label>
                     <div class="col-sm-9">
-                        <input style="width:100px;" type="text" class="form-control" name="KurumAdi" maxlength="20" />
+                        <input style="width:100px;" type="text" class="form-control" name="FirmaAdi" maxlength="20" required oninvalid="this.setCustomValidity('Bu alan boş geçilemez!')" oninput="setCustomValidity('')" />
                     </div>
                 </div>
                 <br />
                 <div class="container form-group-sm row">
-                    <label class="col-form-label-sm col-md-3 text-right" style="color:red"><b>Kurum Ünvanı</b></label>
+                    <label class="col-form-label-sm col-md-3 text-right" style="color:red"><b>Firma Ünvanı</b></label>
                     <div class="col-sm-9">
-                        <input style="width:400px;" type="text" class="form-control" name="KurumUnvani" maxlength="100" required oninvalid="this.setCustomValidity('Bu alan boş geçilemez!')" oninput="setCustomValidity('')" />
-                    </div>
-                </div>
-                <br />
-                <div class="container form-group-sm row">
-                    <label class="col-form-label-sm col-md-3 text-right"><b>İlgili Kişi</b></label>
-                    <div class="col-sm-9">
-                        <input style="width:300px;" type="text" class="form-control" name="KurumIlgiliKisi" maxlength="30" />
+                        <input style="width:400px;" type="text" class="form-control" name="FirmaUnvani" maxlength="100" required oninvalid="this.setCustomValidity('Bu alan boş geçilemez!')" oninput="setCustomValidity('')" />
                     </div>
                 </div>
                 <br />
                 <div class="container form-group-sm row">
                     <label class="col-form-label-sm col-md-3 text-right" style="color:red"><b>Adres</b></label>
                     <div class="col-sm-9">
-                        <input style="width:400px;" type="text" class="form-control" name="KurumAdres" maxlength="100" required oninvalid="this.setCustomValidity('Bu alan boş geçilemez!')" oninput="setCustomValidity('')" />
+                        <input style="width:400px;" type="text" class="form-control" name="FirmaAdresi" maxlength="100" required oninvalid="this.setCustomValidity('Bu alan boş geçilemez!')" oninput="setCustomValidity('')" />
                     </div>
                 </div>
                 <br />
@@ -53,18 +46,7 @@
                 <div class="container form-group-sm row">
                     <label class="col-form-label-sm col-md-3 text-right"><b>Telefon</b></label>
                     <div class="col-sm-2">
-                        <input style="width:150px;" type="text" class="form-control" name="KurumTelefon" maxlength="11" />
-                    </div>
-                    <label class="col-form-label-sm col-md-3 text-right"><b>Gsm</b></label>
-                    <div class="col-sm-3">
-                        <input style="width:150px;" type="text" class="form-control" name="KurumGsm" maxlength="11" />
-                    </div>
-                </div>
-                <br />
-                <div class="container form-group-sm row">
-                    <label class="col-form-label-sm col-md-3 text-right"><b>E-Posta</b></label>
-                    <div class="col-sm-9">
-                        <input style="width:300px;" type="text" class="form-control" name="KurumEPosta" maxlength="50" />
+                        <input style="width:150px;" type="text" class="form-control" name="FirmaTelefon" maxlength="11" />
                     </div>
                 </div>
                 <br />
@@ -83,7 +65,7 @@
             var IlceL = $('#IlcelerId');
             IlceL.empty();
             $.ajax({
-                url: '@Url.Action("IlceListe","Kurum")',
+                url: '@Url.Action("IlceListe", "Firma")',
                 type: 'POST',
                 dataType: 'json',
                 data: { 'IlId': IlId },
@@ -96,3 +78,4 @@
         });
     });
 </script>
+

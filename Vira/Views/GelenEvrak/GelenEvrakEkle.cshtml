@@ -1,0 +1,105 @@
+﻿@model Vira.Models.GelenEvrak
+
+<div class="card card-default">
+    <div class="card-header bg-dark">
+        <div class="row">
+            <h5 class="card-title mb-sm-1 col-md-11" style="color:white">
+                <strong>Gelen Evrak Girişi</strong>
+            </h5>
+        </div>
+    </div>
+    <div class="container">
+        @using (Html.BeginForm("GelenEvrakEkle", "GelenEvrak", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <hr />
+            <div class="form-horizontal">
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-2 text-right" style="color:red"><b>Firma</b></label>
+                    <div class="col-sm-10">
+                        @Html.DropDownListFor(x => x.FirmaId, (List<SelectListItem>)ViewBag.fListe, "- Seçiniz -", new { @class = "form-control", @style = "width:120px", @required = "" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-2 text-right" style="color:red"><b>Evrak Sayı</b></label>
+                    <div class="col-sm-10">
+                        <input style="width:200px;" type="text" class="form-control" name="GelenEvrakSayi" maxlength="50" required oninvalid="this.setCustomValidity('Bu alan boş geçilemez!')" oninput="setCustomValidity('')" />
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-2 text-right" style="color:red"><b>Evrak Tarihi</b></label>
+                    <div class="col-sm-2">
+                        <input style="width:160px;" type="date" class="form-control" name="GelenEvrakTarih" />
+                    </div>
+                    <label class="col-form-label-sm col-md-2 text-right" style="color:red"><b>Tebligat Tarihi</b></label>
+                    <div class="col-sm-6">
+                        <input style="width:160px;" type="date" class="form-control" name="TebligatTarihi" />
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-2 text-right" style="color:red"><b>Geldiği Yer</b></label>
+                    <div class="col-sm-3">
+                        @Html.DropDownListFor(x => x.KurumId, (List<SelectListItem>)ViewBag.kListe, "--------------- Seçiniz ---------------", new { @class = "form-control", @style = "width:300px", @required = "" })
+                    </div>
+                    <label class="col-form-label-sm col-md-2 text-right"><b>Alt Birim</b></label>
+                    <div class="col-sm-5">
+                        @Html.DropDownListFor(x => x.AltBirimId, Enumerable.Empty<SelectListItem>(), new { @class = "form-control", @style = "width:350px" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-2 text-right" style="color:red"><b>Konu Başlığı</b></label>
+                    <div class="col-sm-1">
+                        @Html.DropDownListFor(x => x.KonuBasligiId, (List<SelectListItem>)ViewBag.bListe, "- Seçiniz -", new { @class = "form-control", @style = "width:120px", @required = "" })
+                    </div>
+                    <label class="col-form-label-sm col-md-2 text-right" style="color:red"><b>Konu</b></label>
+                    <div class="col-sm-7">
+                        <input style="width:500px;" type="text" class="form-control" name="GelenEvrakKonu" maxlength="500" required oninvalid="this.setCustomValidity('Bu alan boş geçilemez!')" oninput="setCustomValidity('')" />
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-2 text-right"><b>İlgi</b></label>
+                    <div class="col-sm-10">
+                        <input style="width:600px;" type="text" class="form-control" name="IlgiEvrak" maxlength="500" />
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-2 text-right"><b>Evrak Yükle</b></label>
+                    <div class="col-sm-10">
+                        <input style="width:500px;" type="file" class="form-control-file border" name="GelenEvrakdosya" maxlength="50" />
+                    </div>
+                </div>
+                <br />
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Vazgeç</button>
+                    <button class="btn btn-info">Ekle</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#KurumId').change(function () {
+            var KurumId = $(this).val();
+            var AltBirimL = $('#AltBirimId');
+            AltBirimL.empty();
+            $.ajax({
+                url: '@Url.Action("AltBirimListe", "GelenEvrak")',
+                type: 'POST',
+                dataType: 'json',
+                data: { 'KurumId': KurumId },
+                success: function (data) {
+                    AltBirimL.append('<option>------------------- Seçiniz -------------------</option>');
+                    $.each(data, function (index, option) {
+                        AltBirimL.append('<option value=' + option.Value + '>' + option.Text + '</option>');
+                    });
+                }
+            });
+        });
+    });
+</script>

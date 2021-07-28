@@ -1,0 +1,56 @@
+﻿@using Vira.Models
+@model List<EvrakEk>
+
+<div class="card card-default">
+    <div class="card-header bg-dark">
+        <div class="row">
+            <h5 class="card-title mb-sm-1 col-md-11" style="color:white">
+                <strong>Dosya Eki Listesi</strong>
+            </h5>
+        </div>
+    </div>
+
+    <div style="margin-left:1%; margin-right:1%">
+        <table id="ekListe" class="table table-bordered table-hover table-sm" style="margin-top:20px">
+            <thead>
+                <tr>
+                    <th><small><strong>#</strong></small></th>
+                    <th style="width:500px"><small><strong>Ek Adı</strong></small></th>
+                    <th></th>
+                </tr>
+            </thead>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="align-middle" style="font-size:12px;"></td>
+                    <td><small>@item.EvrakEkAdi</small></td>
+                    <td><a href="@Url.Action("EkSil", "GidenEvrak")/@item.EvrakEkId" class="btn btn-danger btn-sm">Sil</a></td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    var t = $('#ekListe').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Turkish.json"
+        },
+        "paging": false,
+        "searching": false,
+        "info": false,
+        "columnDefs": [{
+            "searchable": false,
+            "orderable": false,
+            "targets": 0,
+        }],
+        "order": [[1, 'asc']]
+    });
+    t.on('draw.dt', function () {
+        var PageInfo = $('#ekListe').DataTable().page.info();
+        t.column(0, { page: 'current' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1 + PageInfo.start;
+        });
+    });
+</script>

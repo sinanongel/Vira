@@ -27,7 +27,7 @@
             <thead>
                 <tr>
                     <th style="width:3%"><small><strong>#</strong></small></th>
-                    <th style="width:7%"><small><strong>Kurum Adı</strong></small></th>
+                    <th style="width:20%"><small><strong>Kurum Adı</strong></small></th>
                     <th style="width:10%"><small><strong>İlgili Kişi</strong></small></th>
                     <th style="width:50%"><small><strong>Adres</strong></small></th>
                     <th style="width:6%"><small><strong>Telefon</strong></small></th>
@@ -40,7 +40,7 @@
             {
                 <tr>
                     <td><small>@k.KurumId</small></td>
-                    <td title="@k.KurumUnvani"><small>@k.KurumAdi</small></td>
+                    <td><small>@k.KurumUnvani</small></td>
                     <td><small>@k.KurumIlgiliKisi</small></td>
                     <td><small>@k.KurumAdres @k.Ilceler.IlceAdi/@k.Iller.Sehir</small></td>
                     <td><small>@k.KurumTelefon</small></td>
@@ -67,18 +67,6 @@
     <div class="container">
         <!--Proje Güncelle Modal -->
         <div class="modal fade" id="myModalG" role="dialog">
-            <div class="modal-dialog modal-lg modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-body">
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container">
-        <!--Proje Bilgi Modal -->
-        <div class="modal fade" id="myModalB" role="dialog">
             <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-body">
@@ -117,20 +105,6 @@
                 .fail(function () {
                     $("#myModalG .modal-body").text("Hata!!");
                     $("#myModalG").modal("show");
-                })
-        });
-    });
-    $(function () {
-        $("body").on("click", ".bilgi", function () {
-            var url = $(this).data("target");
-            $.post(url, function (data) { })
-                .done(function (data) {
-                    $("#myModalB .modal-body").html(data);
-                    $("#myModalB").modal("show");
-                })
-                .fail(function () {
-                    $("#myModalB .modal-body").text("Hata!!");
-                    $("#myModalB").modal("show");
                 })
         });
     });

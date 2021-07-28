@@ -1,5 +1,5 @@
 ﻿@using Vira.Models
-@model List<MalHizmet>
+@model List<Firma>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
@@ -14,9 +14,9 @@
     <div class="card-header">
         <div class="row">
             <h5 class="card-title mb-sm-1 col-md-11">
-                <strong>Mal/Hizmet İşlemleri</strong>
+                <strong>Firma İşlemleri</strong>
             </h5>
-            <a href="#" class="btn btn-primary ekle col-md-1" data-target="@Url.Action("ModalAc", "MalHizmet")">Yeni Kayıt</a>
+            <a href="#" class="btn btn-primary ekle col-md-1" data-target="@Url.Action("ModalAc", "Firma")">Yeni Kayıt</a>
         </div>
     </div>
 
@@ -27,22 +27,20 @@
             <thead>
                 <tr>
                     <th style="width:3%"><small><strong>#</strong></small></th>
-                    <th style="width:5%"><small><strong>Stok Kodu</strong></small></th>
-                    <th style="width:40%"><small><strong>Mal/Hizmet Adı</strong></small></th>
-                    <th style="width:5%"><small><strong>Birim</strong></small></th>
-                    <th style="width:5%"><small><strong>Türü</strong></small></th>
+                    <th style="width:30%"><small><strong>Firma Adı</strong></small></th>
+                    <th style="width:50%"><small><strong>Adres</strong></small></th>
+                    <th style="width:6%"><small><strong>Telefon</strong></small></th>
                     <th style="width:5%"></th>
                 </tr>
             </thead>
-            @foreach (var m in Model)
+            @foreach (var item in Model)
             {
                 <tr>
-                    <td><small>@m.MalHizmetId</small></td>
-                    <td><small>@m.StokKod</small></td>
-                    <td><small>@m.MalHizmetAdi</small></td>
-                    <td><small>@m.Birim.BirimAdi</small></td>
-                    <td><small>@m.MalHizmetTuru</small></td>
-                    <td><a href="#" class="btn btn-sm btn-success guncelle" data-target="@Url.Action("MalHizmetGetir", "MalHizmet")/@m.MalHizmetId">Güncelle</a></td>
+                    <td><small>@item.FirmaId</small></td>
+                    <td title="@item.FirmaUnvani"><small>@item.FirmaAdi</small></td>
+                    <td><small>@item.FirmaAdresi @item.Ilceler.IlceAdi/@item.Iller.Sehir</small></td>
+                    <td><small>@item.FirmaTelefon</small></td>
+                    <td><a href="#" class="btn btn-sm btn-success guncelle" data-target="@Url.Action("FirmaGetir", "Firma")/@item.FirmaId">Güncelle</a></td>
                 </tr>
             }
         </table>
@@ -72,8 +70,6 @@
             </div>
         </div>
     </div>
-</div>
-
 
 <script type="text/javascript">
     $(function () {
@@ -110,4 +106,5 @@
         }
     });
 </script>
+
 

@@ -1,5 +1,5 @@
 ﻿@using Vira.Models
-@model List<MalHizmet>
+@model List<AltBirim>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
@@ -14,9 +14,9 @@
     <div class="card-header">
         <div class="row">
             <h5 class="card-title mb-sm-1 col-md-11">
-                <strong>Mal/Hizmet İşlemleri</strong>
+                <strong>Alt Birim İşlemleri</strong>
             </h5>
-            <a href="#" class="btn btn-primary ekle col-md-1" data-target="@Url.Action("ModalAc", "MalHizmet")">Yeni Kayıt</a>
+            <a href="#" class="btn btn-primary ekle col-md-1" data-target="@Url.Action("ModalAc", "AltBirim")">Yeni Kayıt</a>
         </div>
     </div>
 
@@ -27,22 +27,18 @@
             <thead>
                 <tr>
                     <th style="width:3%"><small><strong>#</strong></small></th>
-                    <th style="width:5%"><small><strong>Stok Kodu</strong></small></th>
-                    <th style="width:40%"><small><strong>Mal/Hizmet Adı</strong></small></th>
-                    <th style="width:5%"><small><strong>Birim</strong></small></th>
-                    <th style="width:5%"><small><strong>Türü</strong></small></th>
-                    <th style="width:5%"></th>
+                    <th style="width:40%"><small><strong>Kurum</strong></small></th>
+                    <th style="width:40%"><small><strong>Alt Birim Adı</strong></small></th>
+                    <th style="width:3%"></th>
                 </tr>
             </thead>
-            @foreach (var m in Model)
+            @foreach (var item in Model)
             {
                 <tr>
-                    <td><small>@m.MalHizmetId</small></td>
-                    <td><small>@m.StokKod</small></td>
-                    <td><small>@m.MalHizmetAdi</small></td>
-                    <td><small>@m.Birim.BirimAdi</small></td>
-                    <td><small>@m.MalHizmetTuru</small></td>
-                    <td><a href="#" class="btn btn-sm btn-success guncelle" data-target="@Url.Action("MalHizmetGetir", "MalHizmet")/@m.MalHizmetId">Güncelle</a></td>
+                    <td><small>@item.AltBirimId</small></td>
+                    <td><small>@item.Kurum.KurumUnvani</small></td>
+                    <td><small>@item.AltBirimAdi</small></td>
+                    <td><a href="#" class="btn btn-sm btn-success guncelle" data-target="@Url.Action("AltBirimGetir", "AltBirim")/@item.AltBirimId">Güncelle</a></td>
                 </tr>
             }
         </table>
@@ -110,4 +106,5 @@
         }
     });
 </script>
+
 

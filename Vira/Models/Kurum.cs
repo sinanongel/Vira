@@ -48,5 +48,8 @@ namespace Vira.Models
         public ICollection<Fatura> Faturas { get; set; }
         public ICollection<Sozlesme> YukleniciKurumSozlesmes { get; set; }
         public ICollection<Sozlesme> IsverenKurumSozlesmes { get; set; }
+        public ICollection<AltBirim> AltBirims { get; set; }
+        public ICollection<GelenEvrak> GelenEvraks { get; set; }
+        public ICollection<GidenEvrak> GidenEvraks { get; set; }
     }
 }

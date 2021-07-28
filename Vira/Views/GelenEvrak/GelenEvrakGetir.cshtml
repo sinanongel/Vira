@@ -1,0 +1,112 @@
+﻿@model Vira.Models.GelenEvrak
+
+<div class="card card-default">
+    <div class="card-header bg-dark">
+        <div class="row">
+            <h5 class="card-title mb-sm-1 col-md-11" style="color:white">
+                <strong>Gelen Evrak Güncelleme</strong>
+            </h5>
+        </div>
+    </div>
+    <div class="container">
+        @using (Html.BeginForm("GelenEvrakGuncelle", "GelenEvrak", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <hr />
+            @Html.HiddenFor(x => x.GelenEvrakId)
+            <div class="form-horizontal">
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-2 text-right" style="color:red"><b>Firma</b></label>
+                    <div class="col-sm-10">
+                        @Html.DropDownListFor(x => x.FirmaId, (List<SelectListItem>)ViewBag.fListe, "- Seçiniz -", new { @class = "form-control", @style = "width:120px", @required = "" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-2 text-right" style="color:red"><b>Evrak Sayı</b></label>
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(x => x.GelenEvrakSayi, new { @class = "form-control", @style = "width:200px; ", @maxlength = "50" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-2 text-right" style="color:red"><b>Evrak Tarihi</b></label>
+                    <div class="col-sm-2">
+                        @Html.TextBoxFor(x => x.GelenEvrakTarih, "{0:yyyy-MM-dd}", new { @class = "form-control", @style = "width:160px;", @type = "date" })
+                    </div>
+                    <label class="col-form-label-sm col-md-2 text-right" style="color:red"><b>Tebligat Tarihi</b></label>
+                    <div class="col-sm-6">
+                        @Html.TextBoxFor(x => x.TebligatTarihi, "{0:yyyy-MM-dd}", new { @class = "form-control", @style = "width:160px;", @type = "date" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-2 text-right" style="color:red"><b>Geldiği Yer</b></label>
+                    <div class="col-sm-3">
+                        @Html.DropDownListFor(x => x.KurumId, (List<SelectListItem>)ViewBag.kListe, new { @class = "form-control", @style = "width:300px", @required = "" })
+                    </div>
+                    <label class="col-form-label-sm col-md-2 text-right" style="color:red"><b>Alt Birim</b></label>
+                    <div class="col-sm-5">
+                        @Html.DropDownListFor(x => x.AltBirimId, (List<SelectListItem>)ViewBag.abListe, new { @class = "form-control", @style = "width:350px", @required = "" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-2 text-right" style="color:red"><b>Konu Başlığı</b></label>
+                    <div class="col-sm-1">
+                        @Html.DropDownListFor(x => x.KonuBasligiId, (List<SelectListItem>)ViewBag.bListe, new { @class = "form-control", @style = "width:120px", @required = "" })
+                    </div>
+                    <label class="col-form-label-sm col-md-2 text-right" style="color:red"><b>Konu</b></label>
+                    <div class="col-sm-7">
+                        @Html.TextBoxFor(x => x.GelenEvrakKonu, new { @class = "form-control", @style = "width:500px; ", @maxlength = "500" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-2 text-right"><b>İlgi</b></label>
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(x => x.IlgiEvrak, new { @class = "form-control", @style = "width:600px; ", @maxlength = "500" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-2 text-right"><b>Evrak</b></label>
+                    <div class="form-control col-sm-8" style = "width:450px; font-size:12px; border:hidden; color:blue;">
+                        @ViewBag.dosya
+                    </div>
+                </div>
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-2 text-right"><b>Evrak Yükle</b></label>
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(x => x.GelenEvrakdosya, new { @class = "form-control-file border", @type="file", @style = "width:500px;" })
+                    </div>
+                </div>
+                <br />
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Vazgeç</button>
+                    <button class="btn btn-success">Güncelle</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#KurumId').change(function () {
+            var KurumId = $(this).val();
+            var AltBirimL = $('#AltBirimId');
+            AltBirimL.empty();
+            $.ajax({
+                url: '@Url.Action("AltBirimListe", "GelenEvrak")',
+                type: 'POST',
+                dataType: 'json',
+                data: { 'KurumId': KurumId },
+                success: function (data) {
+                    AltBirimL.append('<option>------------------- Seçiniz -------------------</option>');
+                    $.each(data, function (index, option) {
+                        AltBirimL.append('<option value=' + option.Value + '>' + option.Text + '</option>');
+                    });
+                }
+            });
+        });
+    });
+</script>

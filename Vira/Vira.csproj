@@ -171,8 +171,12 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AltBirimController.cs" />
     <Compile Include="Controllers\AnaSayfaController.cs" />
     <Compile Include="Controllers\FaturaController.cs" />
+    <Compile Include="Controllers\FirmaController.cs" />
+    <Compile Include="Controllers\GelenEvrakController.cs" />
+    <Compile Include="Controllers\GidenEvrakController.cs" />
     <Compile Include="Controllers\HavuzOkumaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\KurumController.cs" />
@@ -244,15 +248,64 @@
     <Compile Include="Migrations\202107060658002_mig_changeFatura.designer.cs">
       <DependentUpon>202107060658002_mig_changeFatura.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202107120730400_mig_addTables.cs" />
+    <Compile Include="Migrations\202107120730400_mig_addTables.designer.cs">
+      <DependentUpon>202107120730400_mig_addTables.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107120835580_mig_addColumn_tblfirma.cs" />
+    <Compile Include="Migrations\202107120835580_mig_addColumn_tblfirma.designer.cs">
+      <DependentUpon>202107120835580_mig_addColumn_tblfirma.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107121346342_mig_addColumn_tblEvrakEk.cs" />
+    <Compile Include="Migrations\202107121346342_mig_addColumn_tblEvrakEk.designer.cs">
+      <DependentUpon>202107121346342_mig_addColumn_tblEvrakEk.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107130824276_mig_addColumnGelenGidenEv.cs" />
+    <Compile Include="Migrations\202107130824276_mig_addColumnGelenGidenEv.designer.cs">
+      <DependentUpon>202107130824276_mig_addColumnGelenGidenEv.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107161059296_addColumnGelenGidenEv2.cs" />
+    <Compile Include="Migrations\202107161059296_addColumnGelenGidenEv2.designer.cs">
+      <DependentUpon>202107161059296_addColumnGelenGidenEv2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107270740220_mig_changeColumnName_gidEvrak.cs" />
+    <Compile Include="Migrations\202107270740220_mig_changeColumnName_gidEvrak.designer.cs">
+      <DependentUpon>202107270740220_mig_changeColumnName_gidEvrak.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107270821255_mig_changeColumnName_ilgievrak.cs" />
+    <Compile Include="Migrations\202107270821255_mig_changeColumnName_ilgievrak.designer.cs">
+      <DependentUpon>202107270821255_mig_changeColumnName_ilgievrak.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107271024153_mig_changeColumnName_gegievrak.cs" />
+    <Compile Include="Migrations\202107271024153_mig_changeColumnName_gegievrak.designer.cs">
+      <DependentUpon>202107271024153_mig_changeColumnName_gegievrak.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107271026131_mig_changeColumnName_gievrak.cs" />
+    <Compile Include="Migrations\202107271026131_mig_changeColumnName_gievrak.designer.cs">
+      <DependentUpon>202107271026131_mig_changeColumnName_gievrak.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107271034049_mig_changeColumnName_gievrak1.cs" />
+    <Compile Include="Migrations\202107271034049_mig_changeColumnName_gievrak1.designer.cs">
+      <DependentUpon>202107271034049_mig_changeColumnName_gievrak1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107271359113_mig_changeColumnSize_evrakekadi.cs" />
+    <Compile Include="Migrations\202107271359113_mig_changeColumnSize_evrakekadi.designer.cs">
+      <DependentUpon>202107271359113_mig_changeColumnSize_evrakekadi.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\AltBirim.cs" />
     <Compile Include="Models\Ay.cs" />
     <Compile Include="Models\Birim.cs" />
     <Compile Include="Models\Context.cs" />
     <Compile Include="Models\Dosya.cs" />
     <Compile Include="Models\DosyaTuru.cs" />
     <Compile Include="Models\Doviz.cs" />
+    <Compile Include="Models\EvrakEk.cs" />
     <Compile Include="Models\Fatura.cs" />
     <Compile Include="Models\FaturaDetay.cs" />
+    <Compile Include="Models\Firma.cs" />
+    <Compile Include="Models\GelenEvrak.cs" />
+    <Compile Include="Models\GidenEvrak.cs" />
     <Compile Include="Models\HavaDurumu.cs" />
     <Compile Include="Models\Havuz.cs" />
     <Compile Include="Models\HavuzKot.cs" />
@@ -260,6 +313,7 @@
     <Compile Include="Models\Ilceler.cs" />
     <Compile Include="Models\Iller.cs" />
     <Compile Include="Models\Kdv.cs" />
+    <Compile Include="Models\KonuBasligi.cs" />
     <Compile Include="Models\Kullanici.cs" />
     <Compile Include="Models\Kurum.cs" />
     <Compile Include="Models\MalHizmet.cs" />
@@ -2376,6 +2430,22 @@
     <Content Include="Views\Sozlesme\Index.cshtml" />
     <Content Include="Views\Sozlesme\SozlesmeEkle.cshtml" />
     <Content Include="Views\Sozlesme\SozlesmeGetir.cshtml" />
+    <Content Include="Views\AltBirim\Index.cshtml" />
+    <Content Include="Views\AltBirim\AltBirimEkle.cshtml" />
+    <Content Include="Views\AltBirim\AltBirimGetir.cshtml" />
+    <Content Include="Views\Firma\Index.cshtml" />
+    <Content Include="Views\Firma\FirmaEkle.cshtml" />
+    <Content Include="Views\Firma\FirmaGetir.cshtml" />
+    <Content Include="Views\GelenEvrak\Index.cshtml" />
+    <Content Include="Views\GelenEvrak\GelenEvrakEkle.cshtml" />
+    <Content Include="Views\GelenEvrak\DosyaEki.cshtml" />
+    <Content Include="Views\GelenEvrak\EkListele.cshtml" />
+    <Content Include="Views\GelenEvrak\GelenEvrakGetir.cshtml" />
+    <Content Include="Views\GidenEvrak\Index.cshtml" />
+    <Content Include="Views\GidenEvrak\GidenEvrakEkle.cshtml" />
+    <Content Include="Views\GidenEvrak\DosyaEki.cshtml" />
+    <Content Include="Views\GidenEvrak\EkListele.cshtml" />
+    <Content Include="Views\GidenEvrak\GidenEvrakGetir.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Dosya\" />
@@ -2435,6 +2505,39 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202107060658002_mig_changeFatura.resx">
       <DependentUpon>202107060658002_mig_changeFatura.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107120730400_mig_addTables.resx">
+      <DependentUpon>202107120730400_mig_addTables.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107120835580_mig_addColumn_tblfirma.resx">
+      <DependentUpon>202107120835580_mig_addColumn_tblfirma.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107121346342_mig_addColumn_tblEvrakEk.resx">
+      <DependentUpon>202107121346342_mig_addColumn_tblEvrakEk.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107130824276_mig_addColumnGelenGidenEv.resx">
+      <DependentUpon>202107130824276_mig_addColumnGelenGidenEv.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107161059296_addColumnGelenGidenEv2.resx">
+      <DependentUpon>202107161059296_addColumnGelenGidenEv2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107270740220_mig_changeColumnName_gidEvrak.resx">
+      <DependentUpon>202107270740220_mig_changeColumnName_gidEvrak.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107270821255_mig_changeColumnName_ilgievrak.resx">
+      <DependentUpon>202107270821255_mig_changeColumnName_ilgievrak.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107271024153_mig_changeColumnName_gegievrak.resx">
+      <DependentUpon>202107271024153_mig_changeColumnName_gegievrak.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107271026131_mig_changeColumnName_gievrak.resx">
+      <DependentUpon>202107271026131_mig_changeColumnName_gievrak.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107271034049_mig_changeColumnName_gievrak1.resx">
+      <DependentUpon>202107271034049_mig_changeColumnName_gievrak1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107271359113_mig_changeColumnSize_evrakekadi.resx">
+      <DependentUpon>202107271359113_mig_changeColumnSize_evrakekadi.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

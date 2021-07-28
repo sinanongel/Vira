@@ -20,5 +20,6 @@ namespace Vira.Models
         public virtual Iller Iller { get; set; }
 
         public ICollection<Kurum> Kurums { get; set; }
+        public ICollection<Firma> Firmas { get; set; }
     }
 }

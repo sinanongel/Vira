@@ -1,0 +1,38 @@
+﻿@model Vira.Models.AltBirim
+
+<div class="card card-default">
+    <div class="card-header bg-dark">
+        <div class="row">
+            <h5 class="card-title mb-sm-1 col-md-11" style="color:white">
+                <strong>Alt Birim Güncelleme</strong>
+            </h5>
+        </div>
+    </div>
+    <div class="container">
+        <form action="@Url.Action("AltBirimGuncelle", "AltBirim")" method="post">
+            <hr />
+            @Html.HiddenFor(x => x.AltBirimId)
+            <div class="form-horizontal">
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-4 text-right"><b>Stok Kodu</b></label>
+                    <div class="col-8">
+                        @Html.DropDownListFor(x => x.KurumId, (List<SelectListItem>)ViewBag.kListe, new { @class = "form-control", @style = "width:350px" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-4 text-right" style="color:red"><b>Mal/Hizmet Adı</b></label>
+                    <div class="col-8">
+                        @Html.TextBoxFor(x => x.AltBirimAdi, new { @class = "form-control", @style = "width:300px", @maxlength = "200" })
+                    </div>
+                </div>
+                <br />
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Vazgeç</button>
+                    <button class="btn btn-success">Güncelle</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

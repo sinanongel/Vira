@@ -24,6 +24,12 @@ namespace Vira.Models
         public DbSet<Yillar> Yillars { get; set; }
         public DbSet<Yekdem> Yekdems { get; set; }
         public DbSet<Sozlesme> Sozlesmes { get; set; }
+        public DbSet<AltBirim> AltBirims { get; set; }
+        public DbSet<KonuBasligi> KonuBasligis { get; set; }
+        public DbSet<Firma> Firmas { get; set; }
+        public DbSet<GelenEvrak> GelenEvraks { get; set; }
+        public DbSet<GidenEvrak> GidenEvraks { get; set; }
+        public DbSet<EvrakEk> EvrakEks { get; set; }
 
         //public DbSet<HavuzKot> HavuzKots { get; set; }
         //public DbSet<Havuz> Havuzs { get; set; }

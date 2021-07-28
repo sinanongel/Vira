@@ -1,0 +1,37 @@
+﻿@model Vira.Models.AltBirim
+
+<div class="card card-default">
+    <div class="card-header bg-dark">
+        <div class="row">
+            <h5 class="card-title mb-sm-1 col-md-11" style="color:white">
+                <strong>Alt Birim Girişi</strong>
+            </h5>
+        </div>
+    </div>
+    <div class="container">
+        <form action="@Url.Action("AltBirimEkle", "AltBirim")" method="post">
+            <hr />
+            <div class="form-horizontal">
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-4 text-right" style="color:red"><b>Birim</b></label>
+                    <div class="col-sm-8">
+                        @Html.DropDownListFor(x => x.KurumId, (List<SelectListItem>)ViewBag.kListe, "------------------ Seçiniz -------------------", new { @class = "form-control", @style = "width:350px", @required = "" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-4 text-right" style="color:red"><b>Alt Birim Adı</b></label>
+                    <div class="col-sm-8">
+                        <input style="width:300px;" type="text" class="form-control" name="AltBirimAdi" maxlength="200" required oninvalid="this.setCustomValidity('Bu alan boş geçilemez!')" oninput="setCustomValidity('')" />
+                    </div>
+                </div>
+                <br />
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Vazgeç</button>
+                    <button class="btn btn-info">Ekle</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

@@ -1,0 +1,119 @@
+﻿@using Vira.Models
+@model List<EvrakEk>
+
+<div class="card card-default">
+    <div class="card-header bg-dark">
+        <div class="row">
+            <h5 class="card-title mb-sm-1 col-md-11" style="color:white">
+                <strong>Dosya Listesi</strong>
+            </h5>
+        </div>
+    </div>
+
+    <div style="margin-left:1%; margin-right:1%">
+
+        <table id="ekListe" class="table table-bordered table-hover table-sm" style="margin-top:20px">
+            <thead>
+                <tr>
+                    <th><small><strong>#</strong></small></th>
+                    <th style="width:500px"><small><strong>Ek Adı</strong></small></th>
+                    <th></th>
+                </tr>
+            </thead>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="align-middle" style="font-size:12px;"></td>
+                    @*<td><small><input type="text" class="form-control" name="EvrakEkAdi" maxlength="500" value="@item.EvrakEkAdi" /></small></td>*@
+                    <td><small>@item.EvrakEkAdi</small></td>
+                    <td><a href="@Url.Action("EkSil", "GelenEvrak")/@item.EvrakEkId" class="btn btn-danger btn-sm">Sil</a></td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var t = $('#ekListe').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Turkish.json"
+        },
+        "paging": false,
+        "searching": false,
+        "info": false,
+        "columnDefs": [{
+            "searchable": false,
+            "orderable": false,
+            "targets": 0,
+        }],
+        "order": [[1, 'asc']]
+    });
+    t.on('draw.dt', function () {
+        var PageInfo = $('#ekListe').DataTable().page.info();
+        t.column(0, { page: 'current' }).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1 + PageInfo.start;
+        });
+    });
+
+    @*$('#frm-example').on('submit', function (e) {
+        // Prevent actual form submission
+        e.preventDefault();
+
+        // Serialize form data
+        var data = table.$('input').serializeArray();
+
+        // Submit form data via Ajax
+        $.ajax({
+            url: "@Url.Action("EkGuncelle", "GelenEvrak")",
+            data: data,
+            success: function (data) {
+                console.log('Server response', data);
+            }
+        });
+
+        // FOR DEMONSTRATION ONLY
+        // The code below is not needed in production
+
+        // Output form data to a console
+        //$('#example-console-form').text(data);
+    });*@
+
+    @*function but(data) {
+        return $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'POST',
+            url: "@Url.Action("EkGuncelle", "GelenEvrak")",
+            data: data,
+            success: function (result) {
+                //alert(result);
+                location.reload();
+            },
+            error: function () {
+                alert("Error!")
+            }
+        });
+    }
+
+    $('#but').click(function () {
+        //var data = t.$('input').serialize();
+        //alert(data);
+        var orderArr = [];
+        //orderArr.length = 1;
+        $.each($("#ekListe tbody tr td"), function () {
+            orderArr.push({
+                EvrakEkAdi: $(this).find('input:eq(1)').val()
+            });
+        });
+        var data = JSON.stringify({
+            GelenEvrakId: 5,
+            Ekler: orderArr
+        });
+        $.when(but(data)).then(function (response) {
+            console.log(response);
+        }).fail(function (err) {
+            console.log(err);
+        });
+    });*@
+
+</script>
