@@ -59,47 +59,54 @@
             </thead>
             @foreach (var item in Model)
             {
-                <tr>
-                    <td class="align-middle" style="font-size:12px;"></td>
-                    <td><small>@item.GelenEvrakSayi</small></td>
-                    <td><small>@item.GelenEvrakTarih.ToString("dd.MM.yyyy")</small></td>
-                    <td><small>@item.TebligatTarihi.ToString("dd.MM.yyyy")</small></td>
-                    <td><small>@item.Kurum.KurumUnvani / @item.AltBirim.AltBirimAdi</small></td>
-                    <td><small>@item.KonuBasligi.BaslikAdi</small></td>
-                    <td><small>@item.GelenEvrakKonu</small></td>
-                    <td><small>@item.IlgiEvrak</small></td>
-                    @if (item.EkAdet is null)
-                    {
-                        <td></td>
-                    }
-                    else
-                    {
-                        <td>
-                            <a href="#" class="btn btn-info btn-sm ekListe" data-target="@Url.Action("ModalEkListe", "GelenEvrak")/@item.GelenEvrakId">
-                                <span class="badge badge-light">@item.EkAdet</span>Adet
-                            </a>
-                        </td>
-                    }
-                    <td><a href="#" class="btn btn-sm btn-success guncelle" data-target="@Url.Action("GelenEvrakGetir", "GelenEvrak")/@item.GelenEvrakId">Güncelle</a></td>
-                    <td>
-                        <a href="#" class="btn btn-primary btn-sm ek" data-target="@Url.Action("DosyaEki", "GelenEvrak")/@item.GelenEvrakId" title="Ek Girişi">
-                            <span class="fa fa-paperclip"></span>
-                        </a>
-                    </td>
-                    @if (item.GelenEvrakdosya is null)
-                    {
-                        <td></td>
-                    }
-                    else
-                    {
-                        <td>
-                            <a href="@Url.Action("DosyaIndir", "GelenEvrak")/@item.GelenEvrakId" class="btn btn-primary btn-sm" title="Dosya İndir">
-                                <span class="fa fa-file-download"></span>
-                            </a>
-                        </td>
-                    }
+        <tr>
+            <td class="align-middle" style="font-size:12px;"></td>
+            <td><small>@item.GelenEvrakSayi</small></td>
+            <td><small>@item.GelenEvrakTarih.ToString("dd.MM.yyyy")</small></td>
+            <td><small>@item.TebligatTarihi.ToString("dd.MM.yyyy")</small></td>
+            @if (item.AltBirimId is null)
+            {
+                <td><small>@item.Kurum.KurumUnvani / </small></td>
+            }
+            else
+            {
+                <td><small>@item.Kurum.KurumUnvani / @item.AltBirim.AltBirimAdi</small></td>
+            }
+            <td><small>@item.KonuBasligi.BaslikAdi</small></td>
+            <td><small>@item.GelenEvrakKonu</small></td>
+            <td><small>@item.IlgiEvrak</small></td>
+            @if (item.EkAdet is null)
+            {
+                <td></td>
+            }
+            else
+            {
+                <td>
+                    <a href="#" class="btn btn-info btn-sm ekListe" data-target="@Url.Action("ModalEkListe", "GelenEvrak")/@item.GelenEvrakId">
+                        <span class="badge badge-light">@item.EkAdet</span>Adet
+                    </a>
+                </td>
+            }
+            <td><a href="#" class="btn btn-sm btn-success guncelle" data-target="@Url.Action("GelenEvrakGetir", "GelenEvrak")/@item.GelenEvrakId">Güncelle</a></td>
+            <td>
+                <a href="#" class="btn btn-primary btn-sm ek" data-target="@Url.Action("DosyaEki", "GelenEvrak")/@item.GelenEvrakId" title="Ek Girişi">
+                    <span class="fa fa-paperclip"></span>
+                </a>
+            </td>
+            @if (item.GelenEvrakdosya is null)
+            {
+                <td></td>
+            }
+            else
+            {
+                <td>
+                    <a href="@Url.Action("DosyaIndir", "GelenEvrak")/@item.GelenEvrakId" class="btn btn-primary btn-sm" title="Dosya İndir">
+                        <span class="fa fa-file-download"></span>
+                    </a>
+                </td>
+            }
 
-                </tr>
+        </tr>
             }
         </table>
     </div>

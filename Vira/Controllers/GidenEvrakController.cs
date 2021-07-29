@@ -201,5 +201,13 @@ namespace Vira.Controllers
 
             return RedirectToAction("Index");
         }
+        public FileResult DosyaIndir(int id)
+        {
+            string dosya = c.GidenEvraks.Where(x => x.GidenEvrakId == id).Select(y => y.GidenEvrakdosya).FirstOrDefault();
+
+            string yol = "D://Dosya/GidenEvrak/" + dosya;
+            byte[] bytes = System.IO.File.ReadAllBytes(yol);
+            return File(bytes, "Application/octet-stream", dosya);
+        }
     }
 }
