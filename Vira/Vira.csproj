@@ -173,10 +173,12 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AltBirimController.cs" />
     <Compile Include="Controllers\AnaSayfaController.cs" />
+    <Compile Include="Controllers\AraclarController.cs" />
     <Compile Include="Controllers\FaturaController.cs" />
     <Compile Include="Controllers\FirmaController.cs" />
     <Compile Include="Controllers\GelenEvrakController.cs" />
     <Compile Include="Controllers\GidenEvrakController.cs" />
+    <Compile Include="Controllers\GrafikYakitTakipController.cs" />
     <Compile Include="Controllers\HavuzOkumaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\KurumController.cs" />
@@ -187,7 +189,9 @@
     <Compile Include="Controllers\RaporTeiasVerisController.cs" />
     <Compile Include="Controllers\RaporUretimAnalizController.cs" />
     <Compile Include="Controllers\RaporUretimController.cs" />
+    <Compile Include="Controllers\RaporYakitTakipController.cs" />
     <Compile Include="Controllers\SozlesmeController.cs" />
+    <Compile Include="Controllers\YakitTakipController.cs" />
     <Compile Include="Controllers\YekdemGirisController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -292,8 +296,42 @@
     <Compile Include="Migrations\202107271359113_mig_changeColumnSize_evrakekadi.designer.cs">
       <DependentUpon>202107271359113_mig_changeColumnSize_evrakekadi.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202107291316214_mig_addTablo_araclar.cs" />
+    <Compile Include="Migrations\202107291316214_mig_addTablo_araclar.designer.cs">
+      <DependentUpon>202107291316214_mig_addTablo_araclar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107291345048_mig_addcolon_araclar_plaka.cs" />
+    <Compile Include="Migrations\202107291345048_mig_addcolon_araclar_plaka.designer.cs">
+      <DependentUpon>202107291345048_mig_addcolon_araclar_plaka.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107300635261_mig_addtable_araccinsi.cs" />
+    <Compile Include="Migrations\202107300635261_mig_addtable_araccinsi.designer.cs">
+      <DependentUpon>202107300635261_mig_addtable_araccinsi.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107300738583_mig_changeLength_kullanimYer.cs" />
+    <Compile Include="Migrations\202107300738583_mig_changeLength_kullanimYer.designer.cs">
+      <DependentUpon>202107300738583_mig_changeLength_kullanimYer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107301131180_mig_addtable_yakittakip.cs" />
+    <Compile Include="Migrations\202107301131180_mig_addtable_yakittakip.designer.cs">
+      <DependentUpon>202107301131180_mig_addtable_yakittakip.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107301209527_mig_addcolumn_yakittakip_ot.cs" />
+    <Compile Include="Migrations\202107301209527_mig_addcolumn_yakittakip_ot.designer.cs">
+      <DependentUpon>202107301209527_mig_addcolumn_yakittakip_ot.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107301222180_mig_changecolumnProp_decimal.cs" />
+    <Compile Include="Migrations\202107301222180_mig_changecolumnProp_decimal.designer.cs">
+      <DependentUpon>202107301222180_mig_changecolumnProp_decimal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202108020629375_mig_addColumn_oncekikayitid.cs" />
+    <Compile Include="Migrations\202108020629375_mig_addColumn_oncekikayitid.designer.cs">
+      <DependentUpon>202108020629375_mig_addColumn_oncekikayitid.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AltBirim.cs" />
+    <Compile Include="Models\AracCinsi.cs" />
+    <Compile Include="Models\Araclar.cs" />
     <Compile Include="Models\Ay.cs" />
     <Compile Include="Models\Birim.cs" />
     <Compile Include="Models\Context.cs" />
@@ -324,7 +362,9 @@
     <Compile Include="Models\Siniflar\Miktar.cs" />
     <Compile Include="Models\Siniflar\TeiasVeris.cs" />
     <Compile Include="Models\Siniflar\UretimAnaliz.cs" />
+    <Compile Include="Models\Siniflar\YakitAnaliz.cs" />
     <Compile Include="Models\Sozlesme.cs" />
+    <Compile Include="Models\YakitTakip.cs" />
     <Compile Include="Models\Yekdem.cs" />
     <Compile Include="Models\Yillar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -2446,6 +2486,15 @@
     <Content Include="Views\GidenEvrak\DosyaEki.cshtml" />
     <Content Include="Views\GidenEvrak\EkListele.cshtml" />
     <Content Include="Views\GidenEvrak\GidenEvrakGetir.cshtml" />
+    <Content Include="Views\Araclar\Index.cshtml" />
+    <Content Include="Views\Araclar\AracEkle.cshtml" />
+    <Content Include="Views\Araclar\AracGetir.cshtml" />
+    <Content Include="Views\YakitTakip\Index.cshtml" />
+    <Content Include="Views\YakitTakip\YakitTakipEkle.cshtml" />
+    <Content Include="Views\YakitTakip\YakitTakipGetir.cshtml" />
+    <Content Include="Views\RaporYakitTakip\Index.cshtml" />
+    <Content Include="Views\RaporYakitTakip\RaporListe.cshtml" />
+    <Content Include="Views\GrafikYakitTakip\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Dosya\" />
@@ -2538,6 +2587,30 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202107271359113_mig_changeColumnSize_evrakekadi.resx">
       <DependentUpon>202107271359113_mig_changeColumnSize_evrakekadi.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107291316214_mig_addTablo_araclar.resx">
+      <DependentUpon>202107291316214_mig_addTablo_araclar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107291345048_mig_addcolon_araclar_plaka.resx">
+      <DependentUpon>202107291345048_mig_addcolon_araclar_plaka.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107300635261_mig_addtable_araccinsi.resx">
+      <DependentUpon>202107300635261_mig_addtable_araccinsi.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107300738583_mig_changeLength_kullanimYer.resx">
+      <DependentUpon>202107300738583_mig_changeLength_kullanimYer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107301131180_mig_addtable_yakittakip.resx">
+      <DependentUpon>202107301131180_mig_addtable_yakittakip.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107301209527_mig_addcolumn_yakittakip_ot.resx">
+      <DependentUpon>202107301209527_mig_addcolumn_yakittakip_ot.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107301222180_mig_changecolumnProp_decimal.resx">
+      <DependentUpon>202107301222180_mig_changecolumnProp_decimal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202108020629375_mig_addColumn_oncekikayitid.resx">
+      <DependentUpon>202108020629375_mig_addColumn_oncekikayitid.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

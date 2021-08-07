@@ -20,7 +20,7 @@
         </div>
     </div>
 
-    <!--Proje Listesi-->
+    <!--Firma Listesi-->
     <div style="margin-left:1%; margin-right:1%">
         <br />
         <table id="liste" class="table table-bordered table-hover table-sm display" style="margin-top:20px;">
@@ -47,7 +47,7 @@
     </div>
 
     <div class="container">
-        <!--Proje Ekle Modal -->
+        <!--Firma Ekle Modal -->
         <div class="modal fade" id="myModalE" role="dialog">
             <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content">
@@ -59,7 +59,7 @@
         </div>
     </div>
     <div class="container">
-        <!--Proje Güncelle Modal -->
+        <!--Firma Güncelle Modal -->
         <div class="modal fade" id="myModalG" role="dialog">
             <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content">
@@ -71,40 +71,40 @@
         </div>
     </div>
 
-<script type="text/javascript">
-    $(function () {
-        $("body").on("click", ".ekle", function () {
-            var url = $(this).data("target");
-            $.post(url, function (data) { })
-                .done(function (data) {
-                    $("#myModalE .modal-body").html(data);
-                    $("#myModalE").modal("show");
-                })
-                .fail(function () {
-                    $("#myModalE .modal-body").text("Hata!!");
-                    $("#myModalE").modal("show");
-                })
+    <script type="text/javascript">
+        $(function () {
+            $("body").on("click", ".ekle", function () {
+                var url = $(this).data("target");
+                $.post(url, function (data) { })
+                    .done(function (data) {
+                        $("#myModalE .modal-body").html(data);
+                        $("#myModalE").modal("show");
+                    })
+                    .fail(function () {
+                        $("#myModalE .modal-body").text("Hata!!");
+                        $("#myModalE").modal("show");
+                    })
+            });
         });
-    });
-    $(function () {
-        $("body").on("click", ".guncelle", function () {
-            var url = $(this).data("target");
-            $.post(url, function (data) { })
-                .done(function (data) {
-                    $("#myModalG .modal-body").html(data);
-                    $("#myModalG").modal("show");
-                })
-                .fail(function () {
-                    $("#myModalG .modal-body").text("Hata!!");
-                    $("#myModalG").modal("show");
-                })
+        $(function () {
+            $("body").on("click", ".guncelle", function () {
+                var url = $(this).data("target");
+                $.post(url, function (data) { })
+                    .done(function (data) {
+                        $("#myModalG .modal-body").html(data);
+                        $("#myModalG").modal("show");
+                    })
+                    .fail(function () {
+                        $("#myModalG .modal-body").text("Hata!!");
+                        $("#myModalG").modal("show");
+                    })
+            });
         });
-    });
-    $('#liste').DataTable({
-        "language": {
-            "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Turkish.json"
-        }
-    });
-</script>
+        $('#liste').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Turkish.json"
+            }
+        });
+    </script>
 
 

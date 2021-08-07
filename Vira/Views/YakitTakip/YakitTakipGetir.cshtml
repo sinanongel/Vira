@@ -1,0 +1,54 @@
+﻿@model Vira.Models.YakitTakip
+
+<div class="card card-default">
+    <div class="card-header bg-dark">
+        <div class="row">
+            <h5 class="card-title mb-sm-1 col-md-11" style="color:white">
+                <strong>Sözleşme Güncelleme</strong>
+            </h5>
+        </div>
+    </div>
+    <div class="container">
+        @using (Html.BeginForm("YakitTakipGuncelle", "YakitTakip", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <hr />
+            @Html.HiddenFor(x => x.YakitTakipId)
+            <div class="form-horizontal">
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-5 text-right" style="color:red"><b>Araç/Makine Plaka</b></label>
+                    <div class="col-7">
+                        @Html.DropDownListFor(x => x.AraclarId, (List<SelectListItem>)ViewBag.aListe, new { @class = "form-control", @style = "width:150px" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-5 text-right" style="color:red"><b>Yakıt Alım Tarihi</b></label>
+                    <div class="col-7">
+                        @Html.TextBoxFor(x => x.YakitAlimTarihi, "{0:yyyy-MM-dd}", new { @class = "form-control", @style = "width:160px;", @type = "date" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-5 text-right" style="color:red"><b>Alım Miktarı(lt)</b></label>
+                    <div class="col-7">
+                        @Html.TextBoxFor(x => x.YakitAlimMiktari, new { @class = "form-control", @style = "width:100px; text-align:right;" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-5 text-right" style="color:red"><b>Başlangıç Km</b></label>
+                    <div class="col-7">
+                        @Html.TextBoxFor(x => x.BaslangicKm, new { @class = "form-control", @style = "width:100px; text-align:right;" })
+                    </div>
+                </div>
+                <br />
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Vazgeç</button>
+                    <button class="btn btn-success">Güncelle</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+

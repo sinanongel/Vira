@@ -77,6 +77,10 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-sitemap"></i></div>
                                 Alt Birim
                             </a>
+                            <a class="nav-link" href="@Url.Action("Index", "Araclar")">
+                                <div class="sb-nav-link-icon"><i class="fas fa-car"></i></div>
+                                Araç
+                            </a>
                             <div class="sb-sidenav-menu-heading">İşlemler</div>
                             <a class="nav-link" href="@Url.Action("Index", "YekdemGiris")">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
@@ -90,6 +94,10 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Sözleşmeler
                             </a>
+                            <a class="nav-link" href="@Url.Action("Index", "YakitTakip")">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Yakit Takip
+                            </a>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-file-alt"></i></div>
                                 Evrak
@@ -102,12 +110,12 @@
                                 </nav>
                             </div>
                             <div class="sb-sidenav-menu-heading">Raporlar & Grafikler</div>
-                            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                                 Raporlar
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
-                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+                            <div class="collapse" id="collapsePages" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="@Url.Action("ParametreListe", "RaporFatura")">Fatura Raporu</a>
                                     <a class="nav-link" href="@Url.Action("Index", "RaporAylikUretim")">Aylık Uretim</a>
@@ -115,9 +123,11 @@
                                     <a class="nav-link" href="@Url.Action("Index", "RaporUretim")">Üretim Raporu</a>
                                     <a class="nav-link" href="@Url.Action("Index", "RaporUretimAnaliz")">Aylık Üretim Analiz</a>
                                     <a class="nav-link" href="@Url.Action("RaporYillarListe", "RaporUretimAnaliz")">Yıllık Üretim Analiz</a>
+                                    <a class="nav-link" href="@Url.Action("Index", "RaporYakitTakip")">Yıllık Yakıt Analiz</a>
+                                    <a class="nav-link" href="@Url.Action("Index", "GrafikYakitTakip")">Yıllık Yakıt Analiz Grafiği</a>
                                 </nav>
                             </div>
-                            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                            @*<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Grafikler
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
@@ -127,7 +137,7 @@
                                     <a class="nav-link" href="@Url.Action("Grafik", "RaporAylikUretim")">Aylık Uretim</a>
                                     <a class="nav-link" href="layout-sidenav-light.html">?</a>
                                 </nav>
-                            </div>
+                            </div>*@
                         }
                     </div>
                 </div>

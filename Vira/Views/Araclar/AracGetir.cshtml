@@ -1,0 +1,66 @@
+﻿@model Vira.Models.Araclar
+
+<div class="card card-default">
+    <div class="card-header bg-dark">
+        <div class="row">
+            <h5 class="card-title mb-sm-1 col-md-11" style="color:white">
+                <strong>Mal/Hizmet Güncelleme</strong>
+            </h5>
+        </div>
+    </div>
+    <div class="container">
+        <form action="@Url.Action("AracGuncelle", "Araclar")" method="post">
+            <hr />
+            @Html.HiddenFor(x => x.AraclarId)
+        <div class="form-horizontal">
+            <div class="container form-group-sm row">
+                <label class="col-form-label-sm col-md-4 text-right" style="color:red"><b>Stok Kodu</b></label>
+                <div class="col-8">
+                    @Html.DropDownListFor(x => x.AracCinsiId, (List<SelectListItem>)ViewBag.acListe, "--- Seçiniz ---", new { @class = "form-control", @style = "width:150px" })
+                </div>
+            </div>
+            <br />
+            <div class="container form-group-sm row">
+                <label class="col-form-label-sm col-md-4 text-right" style="color:red"><b>Araç/Makine Marka</b></label>
+                <div class="col-8">
+                    @Html.TextBoxFor(x => x.AracMarka, new { @class = "form-control", @style = "width:180px", @maxlength = "15" })
+                </div>
+            </div>
+            <br />
+            <div class="container form-group-sm row">
+                <label class="col-form-label-sm col-md-4 text-right" style="color:red"><b>Araç/Makine Model</b></label>
+                <div class="col-8">
+                    @Html.TextBoxFor(x => x.AracModel, new { @class = "form-control", @style = "width:270px", @maxlength = "25" })
+                </div>
+            </div>
+            <br />
+            <div class="container form-group-sm row">
+                <label class="col-form-label-sm col-md-4 text-right" style="color:red"><b>Araç/Makine Plakası</b></label>
+                <div class="col-8">
+                    @Html.TextBoxFor(x => x.AracPlakasi, new { @class = "form-control", @style = "width:130px", @maxlength = "10" })
+                </div>
+            </div>
+            <br />
+            <div class="container form-group-sm row">
+                <label class="col-form-label-sm col-md-4 text-right" style="color:red"><b>Mal/Hizmet Grubu</b></label>
+                <div class="col-8">
+                    @Html.DropDownListFor(x => x.CalismaSekli, (List<SelectListItem>)ViewBag.csListe, new { @class = "form-control", @style = "width:120px" })
+                </div>
+            </div>
+            <br />
+            <div class="container form-group-sm row">
+                <label class="col-form-label-sm col-md-4 text-right" style="color:red"><b>Araç/Makine Plakası</b></label>
+                <div class="col-8">
+                    @Html.TextBoxFor(x => x.KullanimYeri, new { @class = "form-control", @style = "width:300px", @maxlength = "50" })
+                </div>
+            </div>
+            <br />
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Vazgeç</button>
+                <button class="btn btn-success">Güncelle</button>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+

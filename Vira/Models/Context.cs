@@ -30,6 +30,9 @@ namespace Vira.Models
         public DbSet<GelenEvrak> GelenEvraks { get; set; }
         public DbSet<GidenEvrak> GidenEvraks { get; set; }
         public DbSet<EvrakEk> EvrakEks { get; set; }
+        public DbSet<Araclar> Araclars { get; set; }
+        public DbSet<AracCinsi> AracCinsis { get; set; }
+        public DbSet<YakitTakip> YakitTakips { get; set; }
 
         //public DbSet<HavuzKot> HavuzKots { get; set; }
         //public DbSet<Havuz> Havuzs { get; set; }
@@ -40,6 +43,11 @@ namespace Vira.Models
         {
             modelBuilder.Entity<FaturaDetay>().Property(x => x.FdBirimFiyat).HasPrecision(18, 8);
             modelBuilder.Entity<FaturaDetay>().Property(x => x.FdBirimFiyatTl).HasPrecision(18, 8);
+
+            modelBuilder.Entity<YakitTakip>().Property(x => x.BaslangicKm).HasPrecision(18, 1);
+            modelBuilder.Entity<YakitTakip>().Property(x => x.BitisKm).HasPrecision(18, 1);
+            modelBuilder.Entity<YakitTakip>().Property(x => x.GidilenKm).HasPrecision(18, 1);
+            modelBuilder.Entity<YakitTakip>().Property(x => x.OrtalamaTuketim).HasPrecision(18, 4);
 
             modelBuilder.Entity<Sozlesme>().HasRequired(m => m.YukleniciKurum).WithMany(m => m.YukleniciKurumSozlesmes).HasForeignKey(m => m.YukleniciKurumId);
             modelBuilder.Entity<Sozlesme>().HasRequired(m => m.IsverenKurum).WithMany(m => m.IsverenKurumSozlesmes).HasForeignKey(m => m.IsverenKurumId);

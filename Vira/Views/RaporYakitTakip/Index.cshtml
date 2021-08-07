@@ -1,0 +1,33 @@
+﻿@model Vira.Models.Siniflar.YakitAnaliz
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<br />
+<div class="card mb-4">
+    <div class="card-header"><i class="fas fa-table mr-1"></i>Yakıt Analiz Raporu</div>
+    <div class="card-body">
+        <div>
+            <form action="@Url.Action("Index", "RaporYakitTakip")" method="post">
+                <div class="form-horizontal">
+                    <div class="container form-group-sm row">
+                        <label class="col-form-label-sm col-1"><b>Yıl</b></label>
+                        <div class="col-2">
+                            @Html.DropDownListFor(x => x.Yil, (List<SelectListItem>)ViewBag.yYil, "- Seçiniz -", new { @class = "form-control", @style = "width:120px;" })
+                        </div>
+                        <label class="col-form-label-sm col-2"><b>Araç Plaka</b></label>
+                        <div class="col-2">
+                            @Html.DropDownListFor(x => x.AracId, (List<SelectListItem>)ViewBag.aPlaka, "Seçiniz", new { @class = "form-control", @style = "width:150px" })
+                        </div>
+                        <div class="col-1">
+                            <button id="liste" style="width:100px;" class="btn btn-success">Listele</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <hr />
+        @Html.Action("RaporListe", "RaporYakitTakip")
+    </div>
+</div>

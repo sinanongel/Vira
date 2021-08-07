@@ -1,0 +1,150 @@
+﻿@using Vira.Models
+@model List<YakitTakip>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+<br />
+
+<link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="//code.jquery.com/jquery-1.12.4.js"></script>
+<script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.25/sorting/datetime-moment.js"></script>
+
+<div class="card card-default">
+    <div class="card-header">
+        <div class="row">
+            <h5 class="card-title mb-sm-1 col-md-11">
+                <strong>Yakıt Takip İşlemleri</strong>
+            </h5>
+            <a href="#" class="btn btn-primary ekle col-md-1" data-target="@Url.Action("ModalAc", "YakitTakip")">Yeni Kayıt</a>
+        </div>
+    </div>
+
+    <!--Proje Listesi-->
+    <div style="margin-left:1%; margin-right:1%">
+        <br />
+        <table id="liste" class="table table-bordered table-hover table-sm display" style="margin-top:20px;">
+            <thead>
+                <tr>
+                    <th style="width:3%"><small><strong>#</strong></small></th>
+                    <th style="width:10%"><small><strong>Araç/Makine Plaka</strong></small></th>
+                    <th style="width:10%"><small><strong>Yakıt Alım Tarihi</strong></small></th>
+                    <th style="width:10%"><small><strong>Alım Miktarı(lt)</strong></small></th>
+                    <th style="width:10%"><small><strong>Başlangıç Km</strong></small></th>
+                    <th style="width:10%"><small><strong>Bitiş Km</strong></small></th>
+                    <th style="width:10%"><small><strong>Gidilen Km</strong></small></th>
+                    <th style="width:10%"><small><strong>Ortalama Tüketim(km/lt)</strong></small></th>
+                    <th style="width:5%"></th>
+                </tr>
+            </thead>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="align-middle" style="font-size:12px;"></td>
+                    <td><small>@item.Araclar.AracPlakasi</small></td>
+                    <td><small>@item.YakitAlimTarihi.ToString("dd.MM.yyyy")</small></td>
+                    <td style="text-align:right"><small>@item.YakitAlimMiktari</small></td>
+                    <td style="text-align:right"><small>@item.BaslangicKm</small></td>
+                    <td style="text-align:right"><small>@item.BitisKm</small></td>
+                    <td style="text-align:right"><small>@item.GidilenKm</small></td>
+                    <td style="text-align:right"><small>@item.OrtalamaTuketim</small></td>
+                    <td><a href="#" class="btn btn-sm btn-success guncelle" data-target="@Url.Action("YakitTakipGetir", "YakitTakip")/@item.YakitTakipId">Güncelle</a></td>
+                </tr>
+            }
+        </table>
+    </div>
+
+    <div class="container">
+        <!--Proje Ekle Modal -->
+        <div class="modal fade" id="myModalE" role="dialog">
+            <div class="modal-dialog modal modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <!--Proje Güncelle Modal -->
+        <div class="modal fade" id="myModalG" role="dialog">
+            <div class="modal-dialog modal modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(function () {
+            $("body").on("click", ".ekle", function () {
+                var url = $(this).data("target");
+                $.post(url, function (data) { })
+                    .done(function (data) {
+                        $("#myModalE .modal-body").html(data);
+                        $("#myModalE").modal("show");
+                    })
+                    .fail(function () {
+                        $("#myModalE .modal-body").text("Hata!!");
+                        $("#myModalE").modal("show");
+                    })
+            });
+        });
+        $(function () {
+            $("body").on("click", ".guncelle", function () {
+                var url = $(this).data("target");
+                $.post(url, function (data) { })
+                    .done(function (data) {
+                        $("#myModalG .modal-body").html(data);
+                        $("#myModalG").modal("show");
+                    })
+                    .fail(function () {
+                        $("#myModalG .modal-body").text("Hata!!");
+                        $("#myModalG").modal("show");
+                    })
+            });
+        });
+
+        //$(document).ready(function () {
+        //    $.fn.dataTable.moment('DD.MM.YYYY');
+
+        //    $('#liste').DataTable({
+        //        "language": {
+        //            "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Turkish.json"
+        //        },
+        //        "order": [2, 'desc']
+        //    });
+        //});
+
+        $(document).ready(function () {
+            $.fn.dataTable.moment('DD.MM.YYYY');
+
+            var t = $('#liste').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Turkish.json"
+                },
+                "columnDefs": [{
+                    "searchable": false,
+                    "orderable": false,
+                    "targets": 0,
+                }],
+                "order": [[2, 'desc']]
+            });
+            t.on('draw.dt', function () {
+                var PageInfo = $('#liste').DataTable().page.info();
+                t.column(0, { page: 'current' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1 + PageInfo.start;
+                });
+            });
+        });
+    </script>
+
+
+
+

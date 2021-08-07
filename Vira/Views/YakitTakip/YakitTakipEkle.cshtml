@@ -1,0 +1,52 @@
+﻿@model Vira.Models.YakitTakip
+
+<div class="card card-default">
+    <div class="card-header bg-dark">
+        <div class="row">
+            <h5 class="card-title mb-sm-1 col-md-11" style="color:white">
+                <strong>Araç/Makine Girişi</strong>
+            </h5>
+        </div>
+    </div>
+    <div class="container">
+        <form action="@Url.Action("YakitTakipEkle", "YakitTakip")" method="post">
+            <hr />
+            <div class="form-horizontal">
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-5 text-right" style="color:red"><b>Araç/Makine Plaka</b></label>
+                    <div class="col-sm-7">
+                        @Html.DropDownListFor(x => x.AraclarId, (List<SelectListItem>)ViewBag.aListe, "--- Seçiniz ---", new { @class = "form-control", @style = "width:150px", @required = "" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-5 text-right" style="color:red"><b>Yakıt Alım Tarihi</b></label>
+                    <div class="col-sm-7">
+                        <input style="width:160px;" type="date" class="form-control" name="YakitAlimTarihi" />
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-5 text-right" style="color:red"><b>Alım Miktarı(lt)</b></label>
+                    <div class="col-md-7">
+                        <input type="text" name="YakitAlimMiktari" class="form-control" style="width:100px; text-align:right" required oninvalid="this.setCustomValidity('Bu alan boş geçilemez!')" oninput="setCustomValidity('')" />
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-5 text-right" style="color:red"><b>Başlangıç Km</b></label>
+                    <div class="col-md-7">
+                        <input type="text" name="BaslangicKm" class="form-control" style="width:100px; text-align:right" required oninvalid="this.setCustomValidity('Bu alan boş geçilemez!')" oninput="setCustomValidity('')" />
+                    </div>
+                </div>
+                <br />
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Vazgeç</button>
+                    <button class="btn btn-info">Ekle</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+

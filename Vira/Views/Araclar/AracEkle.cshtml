@@ -1,0 +1,65 @@
+﻿@model Vira.Models.Araclar
+
+<div class="card card-default">
+    <div class="card-header bg-dark">
+        <div class="row">
+            <h5 class="card-title mb-sm-1 col-md-11" style="color:white">
+                <strong>Araç/Makine Girişi</strong>
+            </h5>
+        </div>
+    </div>
+    <div class="container">
+        <form action="@Url.Action("AracEkle", "Araclar")" method="post">
+            <hr />
+            <div class="form-horizontal">
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-4 text-right" style="color:red"><b>Araç/Makine Cinsi</b></label>
+                    <div class="col-sm-8">
+                        @Html.DropDownListFor(x => x.AracCinsiId, (List<SelectListItem>)ViewBag.acListe, "--- Seçiniz ---", new { @class = "form-control", @style = "width:150px", @required = "" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-4 text-right" style="color:red"><b>Araç/Makine Marka</b></label>
+                    <div class="col-sm-8">
+                        <input style="width:180px;" type="text" class="form-control" name="AracMarka" maxlength="15" required oninvalid="this.setCustomValidity('Bu alan boş geçilemez!')" oninput="setCustomValidity('')" />
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-4 text-right" style="color:red"><b>Araç/Makine Model</b></label>
+                    <div class="col-sm-8">
+                        <input style="width:270px;" type="text" class="form-control" name="AracModel" maxlength="25" required oninvalid="this.setCustomValidity('Bu alan boş geçilemez!')" oninput="setCustomValidity('')" />
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-4 text-right" style="color:red"><b>Araç/Makine Plakası</b></label>
+                    <div class="col-sm-8">
+                        <input style="width:130px;" type="text" class="form-control" name="AracPlakasi" maxlength="10" required oninvalid="this.setCustomValidity('Bu alan boş geçilemez!')" oninput="setCustomValidity('')" />
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-4 text-right" style="color:red"><b>Çalışma Şekli</b></label>
+                    <div class="col-sm-8">
+                        @Html.DropDownListFor(x => x.CalismaSekli, (List<SelectListItem>)ViewBag.csListe, "- Seçiniz -", new { @class = "form-control", @style = "width:120px", @required = "" })
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-4 text-right" style="color:red"><b>Kullanım Yeri</b></label>
+                    <div class="col-sm-8">
+                        <input style="width:300px;" type="text" class="form-control" name="KullanimYeri" maxlength="50" required oninvalid="this.setCustomValidity('Bu alan boş geçilemez!')" oninput="setCustomValidity('')" />
+                    </div>
+                </div>
+                <br />
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Vazgeç</button>
+                    <button class="btn btn-info">Ekle</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

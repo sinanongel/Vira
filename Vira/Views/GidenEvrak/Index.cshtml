@@ -26,6 +26,9 @@
 <link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
 <script src="//code.jquery.com/jquery-1.12.4.js"></script>
 <script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.25/sorting/datetime-moment.js"></script>
+
 
 <div class="card card-default">
     <div class="card-header">
@@ -219,21 +222,26 @@
                 })
         });
     });
-    var t = $('#liste').DataTable({
-        "language": {
-            "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Turkish.json"
-        },
-        "columnDefs": [{
-            "searchable": false,
-            "orderable": false,
-            "targets": 0,
-        }],
-        "order": [[1, 'asc']]
-    });
-    t.on('draw.dt', function () {
-        var PageInfo = $('#liste').DataTable().page.info();
-        t.column(0, { page: 'current' }).nodes().each(function (cell, i) {
-            cell.innerHTML = i + 1 + PageInfo.start;
+
+    $(document).ready(function () {
+        $.fn.dataTable.moment('DD.MM.YYYY');
+
+        var t = $('#liste').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Turkish.json"
+            },
+            "columnDefs": [{
+                "searchable": false,
+                "orderable": false,
+                "targets": 0,
+            }],
+            "order": [[2, 'desc']]
+        });
+        t.on('draw.dt', function () {
+            var PageInfo = $('#liste').DataTable().page.info();
+            t.column(0, { page: 'current' }).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1 + PageInfo.start;
+            });
         });
     });
 </script>

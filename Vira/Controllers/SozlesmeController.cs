@@ -15,7 +15,6 @@ namespace Vira.Controllers
         public ActionResult Index()
         {
             var liste = c.Sozlesmes.ToList();
-            //ViewBag.Mesaj = TempData["Mesaj"] as string;
             return View(liste);
         }
         public ActionResult ModalAc()
