@@ -197,9 +197,13 @@ namespace Vira.Controllers
                 {
                     return View("GelenEvrakGuncelle", p);
                 }
-                else if (gelEvrak.GelenEvrakdosya != null && p.GelenEvrakdosya != null) // dosya varsa ve yeni dosya ile değiştirilecekse
+                else if (gelEvrak.GelenEvrakdosya != null && p.GelenEvrakdosya != null && gelEvrak.GelenEvrakdosya != p.GelenEvrakdosya) // dosya varsa ve yeni dosya ile değiştirilecekse
                 {
-                    System.IO.File.Delete("D://Dosya/GelenEvrak/" + gelEvrak.GelenEvrakdosya); //önceki siliniyor
+                    var dosyaSayi = c.GelenEvraks.Where(x => x.GelenEvrakdosya == gelEvrak.GelenEvrakdosya).Count();
+                    if (dosyaSayi == 1)
+                    {
+                        System.IO.File.Delete("D://Dosya/GelenEvrak/" + gelEvrak.GelenEvrakdosya); //önceki siliniyor
+                    }                    
                     string dosyaAdi = Path.GetFileName(Request.Files[0].FileName);
                     string yol = "D://Dosya/GelenEvrak/" + dosyaAdi;
                     Request.Files[0].SaveAs(yol);

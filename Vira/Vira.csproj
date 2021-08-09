@@ -643,11 +643,13 @@
     <Content Include="Scripts\DataTables\responsive.jqueryui.min.js" />
     <Content Include="Scripts\DataTables\responsive.semanticui.js" />
     <Content Include="Scripts\DataTables\responsive.semanticui.min.js" />
+    <Content Include="Scripts\datetime-moment.js" />
     <Content Include="Scripts\fontawesome.js" />
     <Content Include="Scripts\fontawesome.min.js" />
     <Content Include="Scripts\jquery-1.11.1.min.js" />
     <Content Include="Scripts\jsapi.js" />
     <Content Include="Scripts\jszip.min.js" />
+    <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\pdfmake.min.js" />
     <Content Include="Scripts\regular.js" />
     <Content Include="Scripts\regular.min.js" />

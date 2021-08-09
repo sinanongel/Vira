@@ -9,8 +9,9 @@
 <link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
 <script src="//code.jquery.com/jquery-1.12.4.js"></script>
 <script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
-<script src="https://cdn.datatables.net/plug-ins/1.10.25/sorting/datetime-moment.js"></script>
+
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/datetime-moment.js"></script>
 
 <div class="card card-default">
     <div class="card-header">
@@ -110,17 +111,6 @@
                     })
             });
         });
-
-        //$(document).ready(function () {
-        //    $.fn.dataTable.moment('DD.MM.YYYY');
-
-        //    $('#liste').DataTable({
-        //        "language": {
-        //            "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Turkish.json"
-        //        },
-        //        "order": [2, 'desc']
-        //    });
-        //});
 
         $(document).ready(function () {
             $.fn.dataTable.moment('DD.MM.YYYY');

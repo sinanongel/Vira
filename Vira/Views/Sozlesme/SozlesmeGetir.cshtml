@@ -58,8 +58,15 @@
                 <br />
                 <div class="container form-group-sm row">
                     <label class="col-form-label-sm col-md-4 text-right"><b>Sözleşme</b></label>
-                    <div class="col-sm-8">
-                        @Html.TextBoxFor(x => x.Dosya, new { @class = "form-control", @style = "width:450px; font-size:10px; border:hidden; color:blue;", @readonly = true })
+                    <div class="col-sm-8" style="font-size:17px;">
+                        @if (ViewBag.dosya !=null && ViewBag.dosya.Length > 60)
+                        {
+                            <span title="@ViewBag.dosya" class="badge badge-info">@ViewBag.dosya.Substring(0, 60)...</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-info">@ViewBag.dosya</span>
+                        }
                     </div>
                 </div>
                 <div class="container form-group-sm row">

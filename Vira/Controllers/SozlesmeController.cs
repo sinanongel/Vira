@@ -50,8 +50,10 @@ namespace Vira.Controllers
                 string dosyaAdi = Path.GetFileName(Request.Files[0].FileName);
                 if (dosyaAdi != "")
                 {
-                    string yol = "~/App_Data/Dosya/" + dosyaAdi;
-                    Request.Files[0].SaveAs(Server.MapPath(yol));
+                    string yol = "D://Dosya/Sozlesmeler/" + dosyaAdi;
+                    Request.Files[0].SaveAs(yol);
+                    //string yol = "~/App_Data/Dosya/" + dosyaAdi;
+                    //Request.Files[0].SaveAs(Server.MapPath(yol));
                     p.Dosya = dosyaAdi;
                 }
             }
@@ -78,6 +80,8 @@ namespace Vira.Controllers
                                                             Value = k.KurumId.ToString()
                                                         }).ToList();
             ViewBag.yKrmListe = yukleniciKurumListe;
+            var dosyaAdi = c.Sozlesmes.Where(x => x.SozlesmeId == id).Select(y => y.Dosya).FirstOrDefault();
+            ViewBag.dosya = dosyaAdi;
             var sozlesme = c.Sozlesmes.Find(id);
 
             return PartialView("SozlesmeGetir", sozlesme);
@@ -88,23 +92,30 @@ namespace Vira.Controllers
 
             if (Request.Files.Count > 0)
             {
-                string dosyaAdi = Path.GetFileName(Request.Files[0].FileName);
-                var id = c.Sozlesmes.Where(x => x.Dosya == dosyaAdi).Select(y => y.SozlesmeId).FirstOrDefault();
-                if (dosyaAdi != "" && id == p.SozlesmeId)
+                if (!ModelState.IsValid)
                 {
-                    string silDosyaAdi = p.Dosya;
-                    string silDosyaYolu = Request.MapPath("~/App_Data/Dosya/" + silDosyaAdi);
-                    if (System.IO.File.Exists(silDosyaYolu))
-                    {
-                        System.IO.File.Delete(silDosyaYolu);
-                    }
-                    string yol = "~/App_Data/Dosya/" + dosyaAdi;
-                    Request.Files[0].SaveAs(Server.MapPath(yol));
-                    p.Dosya = dosyaAdi;
+                    return View("SozlesmeGuncelle", p);
                 }
-                else if (id != p.SozlesmeId)
+                else if (sozlesme.Dosya != null && p.Dosya != null && sozlesme.Dosya != p.Dosya) // dosya varsa ve yeni dosya ile değiştirilecekse
                 {
-                    //ViewBag.Mesaj = "Bu dosya daha önce " + id + "'li sözleşme için yüklenmiş!";
+                    var dosyaSayi = c.Sozlesmes.Where(x => x.Dosya == sozlesme.Dosya).Count();
+                    if (dosyaSayi == 1)
+                    {
+                        System.IO.File.Delete("D://Dosya/Sozlesmeler/" + sozlesme.Dosya); //önceki siliniyor
+                    }                        
+                    string dosyaAdi = Path.GetFileName(Request.Files[0].FileName);
+                    string yol = "D://Dosya/Sozlesmeler/" + dosyaAdi;
+                    Request.Files[0].SaveAs(yol);
+                    p.Dosya = dosyaAdi;
+                    sozlesme.Dosya = p.Dosya;
+                }
+                else if (sozlesme.Dosya == null && p.Dosya != null) // var olan kayıta ilk dosya ekleme
+                {
+                    string dosyaAdi = Path.GetFileName(Request.Files[0].FileName);
+                    string yol = "D://Dosya/Sozlesmeler/" + dosyaAdi;
+                    Request.Files[0].SaveAs(yol);
+                    p.Dosya = dosyaAdi;
+                    sozlesme.Dosya = p.Dosya;
                 }
             }
             sozlesme.IsverenKurumId = p.IsverenKurumId;
@@ -113,7 +124,6 @@ namespace Vira.Controllers
             sozlesme.SozlesmeTarihi = p.SozlesmeTarihi;
             sozlesme.SozlesmeBedeli = p.SozlesmeBedeli;
             sozlesme.SozlesmeSuresi = p.SozlesmeSuresi;
-            sozlesme.Dosya = p.Dosya;
             TempData["sozlesmeGuncelle"] = "";
             c.SaveChanges();
 
@@ -125,7 +135,8 @@ namespace Vira.Controllers
 
             //dosya = dosya.Replace(",", "");
 
-            string yol = Server.MapPath("~/App_Data/Dosya/") + dosya;
+            //string yol = Server.MapPath("~/App_Data/Dosya/") + dosya;
+            string yol = "D://Dosya/Sozlesmeler/" + dosya;
             byte[] bytes = System.IO.File.ReadAllBytes(yol);
             return File(bytes, "Application/octet-stream", dosya);
         }

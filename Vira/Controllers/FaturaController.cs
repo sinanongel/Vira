@@ -70,23 +70,25 @@ namespace Vira.Controllers
         {
             var ay = p.FaturaTarihi.ToString("MM");
             var yil = p.FaturaTarihi.ToString("yyyy");
+            var KurumAd = c.Kurums.Where(x => x.KurumId == p.KurumId).Select(y => y.KurumAdi).FirstOrDefault();
 
             if (Request.Files.Count > 0)
             {
-                string dosyaAdi = "";
+                string dosyaAdi = Path.GetFileName(Request.Files[0].FileName);
                 if (dosyaAdi != "")
                 {
                     if (p.FaturaTuru is null)
                     {
-                        dosyaAdi = p.Kurum.KurumAdi + '_' + yil + '_' + ay;
+                        dosyaAdi = KurumAd + '_' + yil + '_' + ay;
                     }
                     else
                     {
-                        dosyaAdi = p.Kurum.KurumAdi + '_' + p.FaturaTuru.ToUpper() + '_' + yil + '_' + ay;
+                        dosyaAdi = KurumAd + '_' + p.FaturaTuru.ToUpper() + '_' + yil + '_' + ay;
                     }
                     string uzanti = Path.GetExtension(Request.Files[0].FileName);
-                    string yol = "~/App_Data/Dosya/" + dosyaAdi + uzanti;
-                    Request.Files[0].SaveAs(Server.MapPath(yol));
+                    //Request.Files[0].SaveAs(Server.MapPath(yol));
+                    string yol = "D://Dosya/Faturalar/" + dosyaAdi + uzanti;
+                    Request.Files[0].SaveAs(yol);
                     p.Dosya = dosyaAdi + uzanti;
                 }
             }
@@ -132,41 +134,41 @@ namespace Vira.Controllers
             turListe.Add(new SelectListItem() { Text = "Veriş" });
             turListe.Add(new SelectListItem() { Text = "Ceza" });
 
+            var dosyaAdi = c.Faturas.Where(x => x.FaturaId == id).Select(y => y.Dosya).FirstOrDefault();
+
             ViewBag.kList = kurumListe;
             ViewBag.tiListe = tipListe;
             ViewBag.tuListe = turListe;
             ViewBag.dYil = donemYil;
             ViewBag.dAy = donemAy;
+            ViewBag.dosya = dosyaAdi;
 
             return PartialView("FaturaGetir", fatGet);
         }
         public ActionResult FaturaGuncelle(Fatura p)
         {
-            var fatura = c.Sozlesmes.Find(p.FaturaId);
+            var fatura = c.Faturas.Find(p.FaturaId);
 
             var ay = p.FaturaTarihi.ToString("MM");
             var yil = p.FaturaTarihi.ToString("yyyy");
 
             if (Request.Files.Count > 0)
             {
-                //string faturaId = "";
-                string dosyaAdi = Path.GetFileName(Request.Files[0].FileName);
-                //if (dosyaAdi != "")
-                //{
-                //    faturaId = (c.Faturas.Where(x => x.Dosya == p.Dosya).Select(y => y.FaturaId).FirstOrDefault()).ToString();
-                //}
                 var KurumAd = c.Faturas.Where(x => x.FaturaId == p.FaturaId).Select(y => y.Kurum.KurumAdi).FirstOrDefault();
 
-                if (dosyaAdi != "" || p.Dosya == "")
+                if (!ModelState.IsValid)
                 {
-                    string silDosyaAdi = p.Dosya;
-                    string silDosyaYolu = Request.MapPath("~/App_Data/Dosya/" + silDosyaAdi);
+                    return View("FaturaGuncelle", p);
+                }
+                else if (fatura.Dosya != null && p.Dosya != null && fatura.Dosya != p.Dosya) // dosya varsa ve yeni dosya ile değiştirilecekse
+                {
+                    var dosyaSayi = c.Sozlesmes.Where(x => x.Dosya == fatura.Dosya).Count();
+                    string dosyaAdi = "";
 
-                    if (System.IO.File.Exists(silDosyaYolu))
+                    if (dosyaSayi == 1)
                     {
-                        System.IO.File.Delete(silDosyaYolu);
+                        System.IO.File.Delete("D://Dosya/Faturalar/" + fatura.Dosya); //önceki siliniyor
                     }
-
                     if (p.FaturaTuru is null)
                     {
                         dosyaAdi = KurumAd + '_' + yil + '_' + ay;
@@ -176,20 +178,37 @@ namespace Vira.Controllers
                         dosyaAdi = KurumAd + '_' + p.FaturaTuru.ToUpper() + '_' + yil + '_' + ay;
                     }
                     string uzanti = Path.GetExtension(Request.Files[0].FileName);
-                    string yol = "~/App_Data/Dosya/" + dosyaAdi + uzanti;
-                    Request.Files[0].SaveAs(Server.MapPath(yol));
+                    string yol = "D://Dosya/Faturalar/" + dosyaAdi + uzanti;
+                    Request.Files[0].SaveAs(yol);
                     p.Dosya = dosyaAdi + uzanti;
+                    fatura.Dosya = p.Dosya;
+                }
+                else if (fatura.Dosya == null && p.Dosya != null) // var olan kayıta ilk dosya ekleme
+                {
+                    string dosyaAdi = "";
+                    if (p.FaturaTuru is null)
+                    {
+                        dosyaAdi = KurumAd + '_' + yil + '_' + ay;
+                    }
+                    else
+                    {
+                        dosyaAdi = KurumAd + '_' + p.FaturaTuru.ToUpper() + '_' + yil + '_' + ay;
+                    }
+                    string uzanti = Path.GetExtension(Request.Files[0].FileName);
+                    string yol = "D://Dosya/Faturalar/" + dosyaAdi + uzanti;
+                    Request.Files[0].SaveAs(yol);
+                    p.Dosya = dosyaAdi + uzanti;
+                    fatura.Dosya = p.Dosya;
                 }
             }
-            var fat = c.Faturas.Find(p.FaturaId);
-            fat.FaturaNo = p.FaturaNo;
-            fat.FaturaTipi = p.FaturaTipi;
-            fat.FaturaTuru = p.FaturaTuru;
-            fat.FaturaTarihi = p.FaturaTarihi;
-            fat.KurumId = p.KurumId;
-            fat.YillarId = p.YillarId;
-            fat.AyId = p.AyId;
-            fat.Dosya = p.Dosya;
+            fatura.FaturaNo = p.FaturaNo;
+            fatura.FaturaTipi = p.FaturaTipi;
+            fatura.FaturaTuru = p.FaturaTuru;
+            fatura.FaturaTarihi = p.FaturaTarihi;
+            fatura.KurumId = p.KurumId;
+            fatura.YillarId = p.YillarId;
+            fatura.AyId = p.AyId;
+            fatura.Dosya = p.Dosya;
             c.SaveChanges();
 
             return RedirectToAction("Index");
@@ -466,14 +485,15 @@ namespace Vira.Controllers
         {
             return PartialView("DosyaListele");
         }
-        public FileResult DosyaAc(string dosya)
+        public FileResult DosyaAc(int id)
         {
             //dosya = dosya.Replace(",", ""); 
             //Response.AppendHeader("Content-Disposition", "inline; filename=" + dosya);
-            
-            string yol = Server.MapPath("~/App_Data/Dosya/") + dosya;
+            string dosya = c.Faturas.Where(x => x.FaturaId == id).Select(y => y.Dosya).FirstOrDefault();
+
+            string yol = "D://Dosya/Faturalar/" + dosya;
             byte[] bytes = System.IO.File.ReadAllBytes(yol);
-            return File(bytes, "Application/pdf", dosya);
+            return File(bytes, "Application/octet-stream", dosya);
         }
         [HttpPost]
         public JsonResult BirimGetir(int MalHizmetId)

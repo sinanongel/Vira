@@ -24,10 +24,18 @@
 }
 
 <link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="~/Content/DataTables/css/buttons.dataTables.min.css" rel="stylesheet" />
+
 <script src="//code.jquery.com/jquery-1.12.4.js"></script>
 <script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
-<script src="https://cdn.datatables.net/plug-ins/1.10.25/sorting/datetime-moment.js"></script>
+<script src="~/Scripts/DataTables/dataTables.buttons.min.js"></script>
+<script src="~/Scripts/jszip.min.js"></script>
+<script src="~/Scripts/pdfmake.min.js"></script>
+<script src="~/Scripts/vfs_fonts.js"></script>
+<script src="~/Scripts/DataTables/buttons.html5.min.js"></script>
+
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/datetime-moment.js"></script>
 
 
 <div class="card card-default">
@@ -60,7 +68,7 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td><small>@item.SozlesmeId</small></td>
+                    <td class="align-middle" style="font-size:12px;"></td>
                     <td title="@item.IsverenKurum.KurumUnvani"><small>@item.IsverenKurum.KurumAdi</small></td>
                     <td title="@item.YukleniciKurum.KurumUnvani"><small>@item.YukleniciKurum.KurumAdi</small></td>
                     <td><small>@item.SozlesmeKonusu</small></td>
@@ -68,7 +76,14 @@
                     <td style="text-align:right"><small>@item.SozlesmeSuresi</small></td>
                     <td style="text-align:right"><small>@string.Format("{0:c}", @item.SozlesmeBedeli)</small></td>
                     <td><a href="#" class="btn btn-sm btn-success guncelle" data-target="@Url.Action("SozlesmeGetir", "Sozlesme")/@item.SozlesmeId">Güncelle</a></td>
-                    <td><a href="@Url.Action("DosyaIndir", "Sozlesme")/@item.SozlesmeId" class="btn btn-primary btn-sm" title="Dosya İndir"><span class="fa fa-file-download"></span></a></td>
+                    @if (item.Dosya is null)
+                    {
+                        <td></td>
+                    }
+                    else
+                    {
+                        <td><a href="@Url.Action("DosyaIndir", "Sozlesme")/@item.SozlesmeId" class="btn btn-primary btn-sm" title="Dosya İndir"><span class="fa fa-file-download"></span></a></td>
+                    }
                 </tr>
             }
         </table>
@@ -155,16 +170,51 @@
                     $("#myModalD").modal("show");
                 })
         });
-    });   
+    });
 
     $(document).ready(function () {
         $.fn.dataTable.moment('DD.MM.YYYY');
 
-        $('#liste').DataTable({
+        var t = $('#liste').DataTable({
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Turkish.json"
             },
-            "order": [4, 'desc']
+            "order": [4, 'desc'],
+            "dom": 'Bfrtip',
+            "buttons": [
+                {
+                    extend: 'excelHtml5',
+                    footer: true,
+                    title: 'SÖZLEŞME LİSTESİ',
+                    text: '<i class="fa fa-file-excel"></i>',
+                    titleAttr: 'EXCEL',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6],
+                        format: {
+                            body: function (data, row, column, node) {
+                                data = $('<p>' + data + '</p>').text();
+                                return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
+                            }
+                        }
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    title: 'SÖZLEŞME LİSTESİ',
+                    text: '<i class="fa fa-file-pdf"></i>',
+                    titleAttr: 'PDF',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6]
+                    }
+                }
+            ]
+        });
+        t.on('order.dt draw.dt', function () {
+            var PageInfo = $('#liste').DataTable().page.info();
+            t.column(0, { page: 'current', order: 'applied' }).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1 + PageInfo.start;
+                t.cell(cell).invalidate('dom');
+            });
         });
     });
 </script>

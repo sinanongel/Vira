@@ -4,11 +4,10 @@
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
-
-
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//code.jquery.com/jquery-1.12.4.js"></script>
 
 
 <script>
@@ -57,13 +56,13 @@
                 role: "annotation"
             }]);
         var columnChartOptions = {
-            title: "Üretim Grafiği",
+            title: "Yakıt Analiz Grafiği",
             //width: 200,
             height: 400,
             bar: { groupWidth: "50%" },
             hAxis:
             {
-                title: 'AyAd',
+                title: 'Aylar',
                 titleTextStyle: { color: '#333' },
                 slantedText: true,
             }
@@ -77,7 +76,7 @@
 
 <br />
 <div class="card mb-4">
-    <div class="card-header"><i class="fas fa-table mr-1"></i>Yakıt Analiz Raporu</div>
+    <div class="card-header"><i class="fas fa-chart-bar mr-1"></i>Yakıt Analiz Grafiği</div>
     <div class="card-body">
         <div>
             @*<form action="@Url.Action("Index", "RaporYakitTakip")" method="post">

@@ -70,8 +70,15 @@
                 <br />
                 <div class="container form-group-sm row">
                     <label class="col-form-label-sm col-md-2 text-right"><b>Evrak</b></label>
-                    <div class="form-control col-sm-8" style = "width:450px; font-size:12px; border:hidden; color:blue;">
-                        @ViewBag.dosya
+                    <div class="col-sm-8" style="font-size:17px;">
+                        @if (ViewBag.dosya.Length > 100)
+                        {
+                            <span title="@ViewBag.dosya" class="badge badge-info">@ViewBag.dosya.Substring(0, 100)...</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-info">@ViewBag.dosya</span>
+                        }
                     </div>
                 </div>
                 <div class="container form-group-sm row">

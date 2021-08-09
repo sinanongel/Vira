@@ -26,8 +26,9 @@
 <link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
 <script src="//code.jquery.com/jquery-1.12.4.js"></script>
 <script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
-<script src="https://cdn.datatables.net/plug-ins/1.10.25/sorting/datetime-moment.js"></script>
+
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/datetime-moment.js"></script>
 
 
 <div class="card card-default">
@@ -51,6 +52,7 @@
                     <th style="width:5%"><small><strong>Evrak Tarihi</strong></small></th>
                     <th style="width:5%"><small><strong>Tebligat Tarihi</strong></small></th>
                     <th style="width:20%"><small><strong>Geldiği Yer</strong></small></th>
+                    <th style="width:10%"><small><strong>Evrak Giriş Yeri</strong></small></th>
                     <th style="width:10%"><small><strong>Konu Başlığı</strong></small></th>
                     <th style="width:20%"><small><strong>Konu</strong></small></th>
                     <th style="width:20%"><small><strong>İlgi</strong></small></th>
@@ -75,6 +77,7 @@
                     {
                         <td><small>@item.Kurum.KurumUnvani / @item.AltBirim.AltBirimAdi</small></td>
                     }
+                    <td><small>@item.Firma.FirmaAdi</small></td>
                     <td><small>@item.KonuBasligi.BaslikAdi</small></td>
                     <td><small>@item.GelenEvrakKonu</small></td>
                     <td><small>@item.IlgiEvrak</small></td>
@@ -230,19 +233,26 @@
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Turkish.json"
             },
-            "columnDefs": [{
-                "searchable": false,
-                "orderable": false,
-                "targets": 0,
-            }],
+            //"columnDefs": [{
+            //    "searchable": false,
+            //    "orderable": false,
+            //    "targets": 0,
+            //}],
             "order": [[2, 'desc']]
         });
-        t.on('draw.dt', function () {
+        t.on('order.dt draw.dt', function () {
             var PageInfo = $('#liste').DataTable().page.info();
-            t.column(0, { page: 'current' }).nodes().each(function (cell, i) {
+            t.column(0, { page: 'current', order: 'applied' }).nodes().each(function (cell, i) {
                 cell.innerHTML = i + 1 + PageInfo.start;
+                t.cell(cell).invalidate('dom');
             });
         });
+        //t.on('draw.dt', function () {
+        //    var PageInfo = $('#liste').DataTable().page.info();
+        //    t.column(0, { page: 'current' }).nodes().each(function (cell, i) {
+        //        cell.innerHTML = i + 1 + PageInfo.start;
+        //    });
+        //});
     });
 
 </script>

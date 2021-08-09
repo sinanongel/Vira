@@ -35,13 +35,13 @@
                     <th style="width:4%"></th>
                     <th style="width:3%"></th>
                     <th style="width:2%"></th>
-                    <th style="width:2%"></th>
                 </tr>
             </thead>
             @foreach (var f in Model)
             {
                 <tr>
-                    <td><small>@f.FaturaId</small></td>
+                    <td class="align-middle" style="font-size:12px;"></td>
+                    @*<td><small>@f.FaturaId</small></td>*@
                     <td><small>@f.FaturaNo</small></td>
                     <td><small>@f.FaturaTipi</small></td>
                     <td><small>@f.FaturaTuru</small></td>
@@ -53,8 +53,14 @@
                     <td style="text-align:right"><small>@f.FaturaOdenecekTutar.ToString("N")</small></td>
                     <td><a href="#" class="btn btn-success btn-sm fGuncelle" data-target="@Url.Action("FaturaGetir", "Fatura")/@f.FaturaId">Güncelle</a></td>
                     <td><a href="@Url.Action("FaturaDetayIndex", "Fatura")/@f.FaturaId" class="btn btn-info btn-sm">Detay</a></td>
-                    <td><a href="#" class="btn btn-danger btn-sm dosya" data-target="@Url.Action("ModalDosya", "Fatura")/@f.FaturaId" title="Dosya Yükle"><span class="fa fa-file-upload"></span></a></td>
-                    <td><a href="#" class="btn btn-primary btn-sm dosyaAc" data-target="@Url.Action("ModalDosyaListe", "Fatura")/@f.FaturaId" title="Dosya İndir"><span class="fa fa-file-download"></span></a></td>
+                    @if (f.Dosya is null)
+                    {
+                        <td></td>
+                    }
+                    else
+                    {
+                        <td><a href="@Url.Action("DosyaAc", "Fatura")/@f.FaturaId" class="btn btn-primary btn-sm" title="Dosya İndir"><span class="fa fa-file-download"></span></a></td>
+                    }
                 </tr>
             }
         </table>
@@ -113,8 +119,9 @@
 <link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
 <script src="//code.jquery.com/jquery-1.12.4.js"></script>
 <script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
-<script src="https://cdn.datatables.net/plug-ins/1.10.25/sorting/datetime-moment.js"></script>
+
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/datetime-moment.js"></script>
 
 
 <script type="text/javascript">
@@ -196,18 +203,19 @@
     $(document).ready(function () {
         $.fn.dataTable.moment('DD.MM.YYYY');
 
-        $('#liste').DataTable({
+        var t = $('#liste').DataTable({
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Turkish.json"
             },
             "order": [4, 'desc']
         });
+        t.on('order.dt draw.dt', function () {
+            var PageInfo = $('#liste').DataTable().page.info();
+            t.column(0, { page: 'current', order: 'applied' }).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1 + PageInfo.start;
+                t.cell(cell).invalidate('dom');
+            });
+        });
     });
-    //$('#liste').DataTable({
-    //    "language": {
-    //        "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Turkish.json"
-    //    },
-    //    "order":[[0,"desc"]]
-    //});
 </script>
 
