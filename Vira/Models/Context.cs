@@ -33,6 +33,7 @@ namespace Vira.Models
         public DbSet<Araclar> Araclars { get; set; }
         public DbSet<AracCinsi> AracCinsis { get; set; }
         public DbSet<YakitTakip> YakitTakips { get; set; }
+        public DbSet<MalHizmetGrup> MalHizmetGrups { get; set; }
 
         //public DbSet<HavuzKot> HavuzKots { get; set; }
         //public DbSet<Havuz> Havuzs { get; set; }

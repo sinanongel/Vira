@@ -26,5 +26,10 @@ namespace Vira.Models
 
         public int BirimId { get; set; }
         public virtual Birim Birim { get; set; }
+
+        public int MalHizmetGrupId { get; set; }
+        public virtual MalHizmetGrup MalHizmetGrup { get; set; }
+
+        public ICollection<FaturaDetay> FaturaDetays { get; set; }
     }
 }

@@ -184,6 +184,7 @@
     <Compile Include="Controllers\KurumController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MalHizmetController.cs" />
+    <Compile Include="Controllers\MalHizmetGrupController.cs" />
     <Compile Include="Controllers\RaporAylikUretimController.cs" />
     <Compile Include="Controllers\RaporFaturaController.cs" />
     <Compile Include="Controllers\RaporTeiasVerisController.cs" />
@@ -328,6 +329,14 @@
     <Compile Include="Migrations\202108020629375_mig_addColumn_oncekikayitid.designer.cs">
       <DependentUpon>202108020629375_mig_addColumn_oncekikayitid.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202108130637333_add_tables_malhizmetgrup.cs" />
+    <Compile Include="Migrations\202108130637333_add_tables_malhizmetgrup.designer.cs">
+      <DependentUpon>202108130637333_add_tables_malhizmetgrup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202108180834053_change_malhizmet_malhizmetgrup.cs" />
+    <Compile Include="Migrations\202108180834053_change_malhizmet_malhizmetgrup.designer.cs">
+      <DependentUpon>202108180834053_change_malhizmet_malhizmetgrup.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AltBirim.cs" />
     <Compile Include="Models\AracCinsi.cs" />
@@ -355,6 +364,7 @@
     <Compile Include="Models\Kullanici.cs" />
     <Compile Include="Models\Kurum.cs" />
     <Compile Include="Models\MalHizmet.cs" />
+    <Compile Include="Models\MalHizmetGrup.cs" />
     <Compile Include="Models\Siniflar\AylikUretim.cs" />
     <Compile Include="Models\Siniflar\AylikUretimGrafik.cs" />
     <Compile Include="Models\Siniflar\AylikUretimListe.cs" />
@@ -2497,6 +2507,9 @@
     <Content Include="Views\RaporYakitTakip\Index.cshtml" />
     <Content Include="Views\RaporYakitTakip\RaporListe.cshtml" />
     <Content Include="Views\GrafikYakitTakip\Index.cshtml" />
+    <Content Include="Views\MalHizmetGrup\Index.cshtml" />
+    <Content Include="Views\MalHizmetGrup\MalHizmetGrupEkle.cshtml" />
+    <Content Include="Views\MalHizmetGrup\MalHizmetGrupGetir.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Dosya\" />
@@ -2613,6 +2626,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202108020629375_mig_addColumn_oncekikayitid.resx">
       <DependentUpon>202108020629375_mig_addColumn_oncekikayitid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202108130637333_add_tables_malhizmetgrup.resx">
+      <DependentUpon>202108130637333_add_tables_malhizmetgrup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202108180834053_change_malhizmet_malhizmetgrup.resx">
+      <DependentUpon>202108180834053_change_malhizmet_malhizmetgrup.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

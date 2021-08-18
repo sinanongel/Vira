@@ -13,9 +13,16 @@
             <hr />
             <div class="form-horizontal">
                 <div class="container form-group-sm row">
-                    <label class="col-form-label-sm col-md-4 text-right" ><b>Stok Kodu</b></label>
+                    <label class="col-form-label-sm col-md-4 text-right"><b>Stok Kodu</b></label>
                     <div class="col-sm-8">
-                        <input style="width:110px;" type="text" class="form-control" name="StokKod" maxlength="10"  />
+                        <input style="width:110px;" type="text" class="form-control" name="StokKod" maxlength="10" />
+                    </div>
+                </div>
+                <br />
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-4 text-right" style="color:red"><b>Mal/Hizmet Grup Adı</b></label>
+                    <div class="col-sm-8">
+                        @Html.DropDownListFor(x => x.MalHizmetGrupId, (List<SelectListItem>)ViewBag.mhgListe, "--------------- Seçiniz --------------", new { @class = "form-control", @style = "width:300px", @required = "" })
                     </div>
                 </div>
                 <br />

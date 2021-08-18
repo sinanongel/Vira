@@ -14,9 +14,16 @@
             @Html.HiddenFor(x => x.MalHizmetId)
         <div class="form-horizontal">
             <div class="container form-group-sm row">
-                <label class="col-form-label-sm col-md-4 text-right" ><b>Stok Kodu</b></label>
+                <label class="col-form-label-sm col-md-4 text-right"><b>Stok Kodu</b></label>
                 <div class="col-8">
                     @Html.TextBoxFor(x => x.StokKod, new { @class = "form-control", @style = "width:110px", @maxlength = "10" })
+                </div>
+            </div>
+            <br />
+            <div class="container form-group-sm row">
+                <label class="col-form-label-sm col-md-4 text-right" style="color:red"><b>Mal/Hizmet Grubu</b></label>
+                <div class="col-8">
+                    @Html.DropDownListFor(x => x.MalHizmetGrupId, (List<SelectListItem>)ViewBag.mhgListe, new { @class = "form-control", @style = "width:300px" })
                 </div>
             </div>
             <br />

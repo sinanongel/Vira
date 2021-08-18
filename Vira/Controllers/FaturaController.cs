@@ -263,18 +263,17 @@ namespace Vira.Controllers
                                                    Value = d.DovizId.ToString()
                                                }).ToList();
 
-            List<SelectListItem> mhListe = (from m in c.MalHizmets
-                                            where m.MalHizmetTuru == fatTipi
-                                            select new SelectListItem
-                                            {
-                                                Text = m.StokKod + " - " + m.MalHizmetAdi,
-                                                Value = m.MalHizmetId.ToString()
-                                            }).ToList();
+            List<SelectListItem> mhgListe = (from m in c.MalHizmetGrups
+                                             select new SelectListItem
+                                             {
+                                                 Text = m.MalHizmetGrupAdi,
+                                                 Value = m.MalHizmetGrupId.ToString()
+                                             }).ToList();
 
             ViewBag.bList = biListe;
             ViewBag.kList = kdvListe;
             ViewBag.dList = dovizListe;
-            ViewBag.mhList = mhListe;
+            ViewBag.mhgList = mhgListe;
             ViewBag.faturaId = id;
 
             return PartialView("FaturaDetayEkle");
@@ -292,7 +291,7 @@ namespace Vira.Controllers
             decimal FdTutar = 0;
             decimal KdvTutar = 0;
             decimal FdBirimFiyat = 0;
-            var faturaId = p.FaturaId;
+            var faturaId = p.FaturaId;            
 
             if (p.FdTutar == 0)
             {
@@ -328,8 +327,18 @@ namespace Vira.Controllers
         {
             var fatTipi = c.FaturaDetays.Where(x => x.FaturaDetayId == id).Select(y => y.Fatura.FaturaTipi).FirstOrDefault();
 
+            List<SelectListItem> mhgListe = (from m in c.MalHizmetGrups
+                                             select new SelectListItem
+                                             {
+                                                 Text = m.MalHizmetGrupAdi,
+                                                 Value = m.MalHizmetGrupId.ToString()
+                                             }).ToList();
+
+            var malHizmet = c.FaturaDetays.Where(x => x.FaturaDetayId == id).FirstOrDefault();
+            var malHizmetGrup = c.MalHizmets.Where(x => x.MalHizmetId == malHizmet.MalHizmetId).FirstOrDefault();
+
             List<SelectListItem> mhizListe = (from mh in c.MalHizmets.OrderBy(m => m.MalHizmetAdi).ToList()
-                                              where mh.MalHizmetTuru == fatTipi
+                                              where mh.MalHizmetTuru == fatTipi && mh.MalHizmetGrupId == malHizmetGrup.MalHizmetGrupId
                                               select new SelectListItem
                                               {
                                                   Text = mh.MalHizmetAdi,
@@ -357,6 +366,7 @@ namespace Vira.Controllers
                                                    Value = d.DovizId.ToString()
                                                }).ToList();
 
+            ViewBag.mhgList = mhgListe;
             ViewBag.mhList = mhizListe;
             ViewBag.bList = biListe;
             ViewBag.kList = kdvListe;
@@ -369,24 +379,39 @@ namespace Vira.Controllers
 
             return PartialView("FaturaDetayGetir", fdGet);
         }
-        public ActionResult FaturaDetayGuncelle(FaturaDetay p)
+        public ActionResult FaturaDetayGuncelle(FaturaDetay p, int hesaplama)
         {
             var KdvOran = c.Kdvs.Where(x => x.KdvId == p.KdvId).Select(y => y.KdvOrani).FirstOrDefault();
-            var FdBirimFiyatTl = Math.Round((p.FdBirimFiyat * p.FdKur), 8);
-            var FdTutar = Math.Round((FdBirimFiyatTl * p.FdMiktar), 2);
-            var KdvTutar = Math.Round((FdTutar * Convert.ToInt32(KdvOran) / 100), 2);
-
+            decimal FdBirimFiyatTl = 0;
+            decimal FdTutar = 0;
+            decimal KdvTutar = 0;
+            decimal FdBirimFiyat = 0;
             var fd = c.FaturaDetays.Find(p.FaturaDetayId);
+
+            if (hesaplama == 2)
+            {
+                FdBirimFiyatTl = Math.Round((p.FdBirimFiyat * p.FdKur), 8);
+                FdTutar = Math.Round((FdBirimFiyatTl * p.FdMiktar), 2);
+                fd.FdTutar = FdTutar;
+            }
+            else if (hesaplama == 3)
+            {
+                FdBirimFiyatTl = Math.Round((p.FdTutar / p.FdMiktar), 8);
+                FdBirimFiyat = Math.Round((FdBirimFiyatTl / p.FdKur), 2);
+                fd.FdBirimFiyat = FdBirimFiyat;
+                FdTutar = p.FdTutar;
+                fd.FdTutar = p.FdTutar;
+            }
+            KdvTutar = Math.Round((FdTutar * Convert.ToInt32(KdvOran) / 100), 2);
+
             fd.MalHizmetId = p.MalHizmetId;
             fd.FdMiktar = p.FdMiktar;
             fd.BirimId = p.BirimId;
-            fd.FdBirimFiyat = p.FdBirimFiyat;
             fd.DovizId = p.DovizId;
             fd.FdKur = p.FdKur;
             fd.FdBirimFiyatTl = FdBirimFiyatTl;
             fd.KdvId = p.KdvId;
             fd.KdvTutar = KdvTutar;
-            fd.FdTutar = FdTutar;
             c.SaveChanges();
 
             var FdTutarToplam = c.FaturaDetays.Where(x => x.FaturaId == fd.FaturaId).Sum(x => x.FdTutar);
@@ -403,92 +428,8 @@ namespace Vira.Controllers
 
             return RedirectToAction("FaturaDetayIndex", new { id = faturaId });
         }
-        [HttpPost]
-        public ActionResult ModalDosya(int id)
-        {
-            var FatId = c.Faturas.Where(i => i.FaturaId == id).Select(f => f.FaturaId).FirstOrDefault();
-
-            List<SelectListItem> dtListe = (from d in c.DosyaTurus.OrderBy(d => d.DosyaTuruId).ToList()
-                                            select new SelectListItem
-                                            {
-                                                Text = d.DosyaTuruAd,
-                                                Value = d.DosyaTuruId.ToString()
-                                            }).ToList();
-
-            ViewBag.dListe = dtListe;
-            ViewBag.fId = FatId;
-
-            return PartialView("DosyaYukle");
-        }
-        [HttpGet]
-        public ActionResult DosyaYukle()
-        {
-            return PartialView();
-        }
-        [HttpPost]
-        public ActionResult DosyaYukle(Dosya p)
-        {
-            //var KurumAd = c.Faturas.Where(x => x.DosyaId == p.DosyaId).Select(y => y.Kurum.KurumAdi).FirstOrDefault();
-            //var FaturaTuru = c.Faturas.Where(x => x.DosyaId == p.DosyaId).Select(y => y.FaturaTuru).FirstOrDefault();
-            //DateTime FaturaTarihi = c.Faturas.Where(x => x.DosyaId == p.DosyaId).Select(y => y.FaturaTarihi).FirstOrDefault();
-            string dosyaAdi;
-
-            //var ay = FaturaTarihi.ToString("MM");
-            //var yil = FaturaTarihi.ToString("yyyy");
-            ;
-            if (Request.Files.Count > 0)
-            {
-                //string dosyaAdi = Guid.NewGuid().ToString("D");
-                //string dosyaAdi = dosyaAd.Replace('-', '_');
-                //string dosyaAdi = Path.GetFileName(Request.Files[0].FileName);
-                //if (FaturaTuru is null)
-                //{
-                //    dosyaAdi = KurumAd + '_' + yil + '_' + ay;
-                //}
-                //else
-                //{
-                //    dosyaAdi = KurumAd + '_' + FaturaTuru.ToUpper() + '_' + yil + '_' + ay;
-                //}
-                string uzanti = Path.GetExtension(Request.Files[0].FileName);
-                //string yol = "~/App_Data/Dosya/" + dosyaAdi + uzanti;
-                //Request.Files[0].SaveAs(Server.MapPath(yol));
-                //p.DosyaYolu = "/App_Data/Dosya/";
-                //p.DosyaAdi = dosyaAdi + uzanti;
-            }
-            c.Dosyas.Add(p);
-            c.SaveChanges();
-
-            return RedirectToAction("Index");
-        }
-        [HttpPost]
-        public JsonResult DosyaListe(int id)
-        {
-            List<Dosya> dosyaList = c.Dosyas.Where(i => i.DosyaId == id).OrderBy(i => i.DosyaYolu).ToList();
-
-            List<SelectListItem> dListe = (from i in dosyaList
-                                           select new SelectListItem
-                                           {
-                                               Text = i.DosyaYolu,
-                                               Value = i.DosyaId.ToString()
-                                           }).ToList();
-
-            return Json(dListe, JsonRequestBehavior.AllowGet);
-        }
-        [HttpPost]
-        public ActionResult ModalDosyaListe(int id)
-        {
-            var liste = c.Dosyas.OrderBy(f => f.DosyaId).Where(x => x.DosyaId == id).ToList();
-
-            return PartialView("DosyaListele", liste);
-        }
-        public ActionResult DosyaListele()
-        {
-            return PartialView("DosyaListele");
-        }
         public FileResult DosyaAc(int id)
         {
-            //dosya = dosya.Replace(",", ""); 
-            //Response.AppendHeader("Content-Disposition", "inline; filename=" + dosya);
             string dosya = c.Faturas.Where(x => x.FaturaId == id).Select(y => y.Dosya).FirstOrDefault();
 
             string yol = "D://Dosya/Faturalar/" + dosya;
@@ -504,6 +445,22 @@ namespace Vira.Controllers
             var birim = new { birimId, birimAd };
 
             return Json(birim, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public JsonResult MalHizmetGetir(int MalHizmetGrupId, int FaturaId)
+        {
+            var fatTipi = c.Faturas.Where(x => x.FaturaId == FaturaId).Select(y => y.FaturaTipi).FirstOrDefault();
+            List<MalHizmet> malHizmetListe = c.MalHizmets.Where(i => i.MalHizmetGrupId == MalHizmetGrupId).OrderBy(i => i.MalHizmetAdi).ToList();
+
+            List<SelectListItem> mhListe = (from m in malHizmetListe
+                                            where m.MalHizmetTuru == fatTipi
+                                            select new SelectListItem
+                                            {
+                                                Text = m.MalHizmetAdi,
+                                                Value = m.MalHizmetId.ToString()
+                                            }).ToList();
+
+            return Json(mhListe, JsonRequestBehavior.AllowGet);
         }
     }
 }

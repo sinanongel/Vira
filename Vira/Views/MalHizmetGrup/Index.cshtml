@@ -1,10 +1,27 @@
 ﻿@using Vira.Models
-@model List<MalHizmet>
+@model List<MalHizmetGrup>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 <br />
+
+@if (TempData["Ekle"] != null)
+{
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script>
+        swal("Tebrikler!", "Başarılı bir şekilde eklendi!", "success");
+    </script>
+}
+@if (TempData["Guncelle"] != null)
+{
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script>
+        swal("Tebrikler!", "Başarılı bir şekilde güncelleme yapıldı!", "success");
+    </script>
+}
 
 <link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
 <script src="//code.jquery.com/jquery-1.12.4.js"></script>
@@ -14,9 +31,9 @@
     <div class="card-header">
         <div class="row">
             <h5 class="card-title mb-sm-1 col-md-11">
-                <strong>Mal/Hizmet İşlemleri</strong>
+                <strong>Mal/Hizmet Grup İşlemleri</strong>
             </h5>
-            <a href="#" class="btn btn-primary ekle col-md-1" data-target="@Url.Action("ModalAc", "MalHizmet")">Yeni Kayıt</a>
+            <a href="#" class="btn btn-primary ekle col-md-1" data-target="@Url.Action("ModalAc", "MalHizmetGrup")">Yeni Kayıt</a>
         </div>
     </div>
 
@@ -27,24 +44,16 @@
             <thead>
                 <tr>
                     <th style="width:3%"><small><strong>#</strong></small></th>
-                    <th style="width:5%"><small><strong>Stok Kodu</strong></small></th>
-                    <th style="width:40%"><small><strong>Mal/Hizmet Grup Adı</strong></small></th>
-                    <th style="width:40%"><small><strong>Mal/Hizmet Adı</strong></small></th>
-                    <th style="width:5%"><small><strong>Birim</strong></small></th>
-                    <th style="width:5%"><small><strong>Türü</strong></small></th>
-                    <th style="width:5%"></th>
+                    <th style="width:65%"><small><strong>Mal/Hizmet Grup Adı</strong></small></th>
+                    <th style="width:3%"></th>
                 </tr>
             </thead>
-            @foreach (var m in Model)
+            @foreach (var item in Model)
             {
                 <tr>
                     <td class="align-middle" style="font-size:12px;"></td>
-                    <td><small>@m.StokKod</small></td>
-                    <td><small>@m.MalHizmetGrup.MalHizmetGrupAdi</small></td>
-                    <td><small>@m.MalHizmetAdi</small></td>
-                    <td><small>@m.Birim.BirimAdi</small></td>
-                    <td><small>@m.MalHizmetTuru</small></td>
-                    <td><a href="#" class="btn btn-sm btn-success guncelle" data-target="@Url.Action("MalHizmetGetir", "MalHizmet")/@m.MalHizmetId">Güncelle</a></td>
+                    <td><small>@item.MalHizmetGrupAdi</small></td>
+                    <td><a href="#" class="btn btn-sm btn-success guncelle" data-target="@Url.Action("MalHizmetGrupGetir", "MalHizmetGrup")/@item.MalHizmetGrupId">Güncelle</a></td>
                 </tr>
             }
         </table>
@@ -106,17 +115,22 @@
                 })
         });
     });
-    var t = $('#liste').DataTable({
-        "language": {
-            "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Turkish.json"
-        }
-    });
-    t.on('order.dt draw.dt', function () {
-        var PageInfo = $('#liste').DataTable().page.info();
-        t.column(0, { page: 'current', order: 'applied' }).nodes().each(function (cell, i) {
-            cell.innerHTML = i + 1 + PageInfo.start;
-            t.cell(cell).invalidate('dom');
+
+    $(document).ready(function () {
+        var t = $('#liste').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Turkish.json"
+            },
+            "order": [0]
+        });
+        t.on('order.dt draw.dt', function () {
+            var PageInfo = $('#liste').DataTable().page.info();
+            t.column(0, { page: 'current', order: 'applied' }).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1 + PageInfo.start;
+                t.cell(cell).invalidate('dom');
+            });
         });
     });
 </script>
+
 

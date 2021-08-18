@@ -7,16 +7,15 @@ using System.Web;
 
 namespace Vira.Models
 {
-    public class Birim
+    public class MalHizmetGrup
     {
         [Key]
-        public int BirimId { get; set; }
+        public int MalHizmetGrupId { get; set; }
 
-        [Column(TypeName ="Varchar")]
-        [StringLength(10)]
-        public string BirimAdi { get; set; }
+        [Column(TypeName = "Varchar")]
+        [StringLength(50)]
+        public string MalHizmetGrupAdi { get; set; }
 
         public ICollection<MalHizmet> MalHizmets { get; set; }
-        public ICollection<FaturaDetay> FaturaDetays { get; set; }
     }
 }

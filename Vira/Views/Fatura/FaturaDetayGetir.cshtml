@@ -14,6 +14,12 @@
             <div class="form-horizontal">
                 @Html.HiddenFor(x => x.FaturaId, new { @value = ViewBag.faturaId })
                 @Html.HiddenFor(x => x.FaturaDetayId)
+                <div class="container form-group row">
+                    <label class="col-form-label col-md-3 text-right" style="color:red"><b>Mal/Hizmet Grup Adı</b></label>
+                    <div class="col-md-9">
+                        @Html.DropDownListFor(x => x.MalHizmet.MalHizmetGrupId, (List<SelectListItem>)ViewBag.mhgList, new { @class = "form-control", @style = "width:300px", @id = "MalHizmetGrupId" })
+                    </div>
+                </div>
                 <div class="container form-group-sm row">
                     <label class="col-form-label-sm col-md-3 text-right"><b>Mal/Hizmet Adı</b></label>
                     <div class="col-sm-9">
@@ -29,14 +35,38 @@
                     <div class="col-sm-7">
                         @Html.TextBoxFor(x => x.Birim.BirimAdi, new { @class = "form-control BirimAd border-0", @style = "width:85px; color:blue" })
                         @Html.TextBoxFor(x => x.BirimId, new { @class = "BirimId", @style = "width:85px; ", @type = "hidden" })
-                        @*@Html.DropDownListFor(x => x.BirimId, (List<SelectListItem>)ViewBag.bList, new { @class = "form-control", @style = "width:100px" })*@
                     </div>
                 </div>
                 <br />
-                <div class="container form-group-sm row">
+                <div class="container form-group row">
+                    <label class="col-form-label col-md-3 text-right" style="color:red"><b>Hesaplama Şekli</b></label>
+                    <div id="myRadioGroup" class="form-check">
+                        <div>
+                            <input class="form-check-input" type="radio" name="hesaplama" checked="checked" value="2" />
+                            <label class="form-check-label" for="inlineRadio1">Birim Fiyattan Toplamı Hesaplama</label>
+                        </div>
+                        <div>
+                            <input class="form-check-input" type="radio" name="hesaplama" value="3" />
+                            <label class="form-check-label" for="inlineRadio1">Toplamdan Birim Fiyatı Hesaplama</label>
+                        </div>
+                    </div>
+                </div>
+                <div id="Hesaplama2" class="container form-group-sm row desc">
                     <label class="col-form-label-sm col-md-3 text-right"><b>Birim Fiyat</b></label>
                     <div class="col-sm-2">
+                        <input hidden />
                         @Html.TextBoxFor(x => x.FdBirimFiyat, new { @class = "form-control FdBirimFiyat", @style = "width:150px; text-align:right;", onchange = "OnChangeEvent()", @name = "FdBirimFiyat", @id = "FdBirimFiyat" })
+                    </div>
+                    <label class="col-form-label-sm col-md-3 text-right"><b>Döviz Cinsi</b></label>
+                    <div class="col-sm-4">
+                        @Html.DropDownListFor(x => x.DovizId, (List<SelectListItem>)ViewBag.dList, new { @class = "form-control", @style = "width:90px" })
+                    </div>
+                </div>
+                <div id="Hesaplama3" class="container form-group-sm row desc" style="display: none;">
+                    <label class="col-form-label-sm col-md-3 text-right" style="color:red"><b>Tutar</b></label>
+                    <div class="col-md-2">
+                        <input hidden />
+                        @Html.TextBoxFor(x => x.FdTutar, new { @class = "form-control FdTutar", @style = "width:150px; text-align:right;", onchange = "OnChangeEvent()", @name = "FdBirimFiyat", @id = "FdTutar" })
                     </div>
                     <label class="col-form-label-sm col-md-3 text-right"><b>Döviz Cinsi</b></label>
                     <div class="col-sm-4">
@@ -66,6 +96,29 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        $('#MalHizmetGrupId').change(function () {
+            var MalHizmetGrupId = $(this).val();
+            var MalHizmetId = $('#MalHizmetId');
+            var FaturaId = @ViewBag.faturaId;
+            MalHizmetId.empty();
+            $.ajax({
+                url: '@Url.Action("MalHizmetGetir", "Fatura")',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    'MalHizmetGrupId': MalHizmetGrupId,
+                    'FaturaId': FaturaId
+                },
+                success: function (data) {
+                    MalHizmetId.append('<option>----------------------- Seçiniz -----------------------</option>');
+                    $.each(data, function (index, option) {
+                        MalHizmetId.append('<option value=' + option.Value + '>' + option.Text + '</option>');
+                    });
+                }
+            });
+        });
+    });
+    $(document).ready(function () {
         $('#MalHizmetId').change(function () {
             var MalHizmetId = $(this).val();
             var birimAd;
@@ -81,6 +134,13 @@
                     $(".BirimId").val(birimId);
                 }
             });
+        });
+
+        $("input[name$='hesaplama']").click(function () {
+            var test = $(this).val();
+
+            $("div.desc").hide();
+            $("#Hesaplama" + test).show();
         });
     });
 </script>

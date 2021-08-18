@@ -13,12 +13,19 @@ namespace Vira.Controllers
         Context c = new Context();
         public ActionResult Index()
         {
-            var liste = c.MalHizmets.ToList();
+            var liste = c.MalHizmets.OrderByDescending(x=>x.MalHizmetId).ToList();
             return View(liste);
         }
         [HttpPost]
         public ActionResult ModalAc()
         {
+            List<SelectListItem> malHizmetGrupListe = (from m in c.MalHizmetGrups.ToList()
+                                                       select new SelectListItem
+                                                       {
+                                                           Text = m.MalHizmetGrupAdi,
+                                                           Value = m.MalHizmetGrupId.ToString()
+                                                       }).ToList();
+
             List<SelectListItem> birimListe = (from b in c.Birims.ToList()
                                                select new SelectListItem
                                                {
@@ -31,6 +38,7 @@ namespace Vira.Controllers
             turListe.Add(new SelectListItem() { Text = "Satış" });
             turListe.Add(new SelectListItem() { Text = "İade" });
 
+            ViewBag.mhgListe = malHizmetGrupListe;
             ViewBag.brmListe = birimListe;
             ViewBag.tListe = turListe;
 
@@ -51,6 +59,13 @@ namespace Vira.Controllers
         }
         public ActionResult MalHizmetGetir(int id)
         {
+            List<SelectListItem> malHizmetGrupListe = (from m in c.MalHizmetGrups.ToList()
+                                                       select new SelectListItem
+                                                       {
+                                                           Text = m.MalHizmetGrupAdi,
+                                                           Value = m.MalHizmetGrupId.ToString()
+                                                       }).ToList();
+
             List<SelectListItem> birimListe = (from b in c.Birims.ToList()
                                                select new SelectListItem
                                                {
@@ -62,6 +77,7 @@ namespace Vira.Controllers
             turListe.Add(new SelectListItem() { Text = "Alış" });
             turListe.Add(new SelectListItem() { Text = "Satış" });
 
+            ViewBag.mhgListe = malHizmetGrupListe;
             ViewBag.brmListe = birimListe;
             ViewBag.tListe = turListe;
             var mlHiz = c.MalHizmets.Find(id);
@@ -72,6 +88,7 @@ namespace Vira.Controllers
         {
             var mlhmt = c.MalHizmets.Find(p.MalHizmetId);
             mlhmt.StokKod = p.StokKod;
+            mlhmt.MalHizmetGrupId = p.MalHizmetGrupId;
             mlhmt.MalHizmetAdi = p.MalHizmetAdi;
             mlhmt.MalHizmetTuru = p.MalHizmetTuru;
             mlhmt.BirimId = p.BirimId;

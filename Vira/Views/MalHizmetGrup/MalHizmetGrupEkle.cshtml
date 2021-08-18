@@ -1,0 +1,30 @@
+﻿@model Vira.Models.MalHizmetGrup
+
+<div class="card card-default">
+    <div class="card-header bg-dark">
+        <div class="row">
+            <h5 class="card-title mb-sm-1 col-md-11" style="color:white">
+                <strong>Mal/Hizmet Grubu Girişi</strong>
+            </h5>
+        </div>
+    </div>
+    <div class="container">
+        <form action="@Url.Action("MalHizmetGrupEkle", "MalHizmetGrup")" method="post">
+            <hr />
+            <div class="form-horizontal">
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-md-4 text-right" style="color:red"><b>Mal/Hizmet Grup Adı</b></label>
+                    <div class="col-sm-8">
+                        <input style="width:300px;" type="text" class="form-control" name="MalHizmetGrupAdi" maxlength="50" required oninvalid="this.setCustomValidity('Bu alan boş geçilemez!')" oninput="setCustomValidity('')" />
+                    </div>
+                </div>
+                <br />
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Vazgeç</button>
+                    <button class="btn btn-info">Ekle</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

@@ -14,9 +14,15 @@
             <div class="form-horizontal">
                 <input type="hidden" value="@ViewBag.faturaId" name="FaturaId" id="FaturaId" />
                 <div class="container form-group row">
+                    <label class="col-form-label col-md-3 text-right" style="color:red"><b>Mal/Hizmet Grup Adı</b></label>
+                    <div class="col-md-9">
+                        @Html.DropDownList("selection", (List<SelectListItem>)ViewBag.mhgList, "--------------- Seçiniz --------------", new { @class = "form-control", @style = "width:300px", @id = "MalHizmetGrupId" })
+                    </div>
+                </div>
+                <div class="container form-group row">
                     <label class="col-form-label col-md-3 text-right" style="color:red"><b>Mal/Hizmet Adı</b></label>
                     <div class="col-md-9">
-                        @Html.DropDownListFor(x => x.MalHizmetId, (List<SelectListItem>)ViewBag.mhList, "----------------------- Seçiniz ----------------------", new { @class = "form-control", @style = "width:400px" })
+                        @Html.DropDownListFor(x => x.MalHizmetId, Enumerable.Empty<SelectListItem>(), new { @class = "form-control", @style = "width:400px" })
                     </div>
                 </div>
                 <div class="container form-group row">
@@ -25,10 +31,8 @@
                         <input type="text" id="FdMiktar" name="FdMiktar" placeholder="Miktar" class="form-control FdMiktar" style="width:100px; text-align:right" required oninvalid="this.setCustomValidity('Bu alan boş geçilemez!')" oninput="setCustomValidity('')" />
                     </div>
                     <div class="col-md-7">
-                        @*<label class="form-control BirimId border-0" name="BirimId" />*@
                         <input class="form-control BirimAd border-0" style="color:blue" />
-                        <input type="hidden" class="BirimId" name="BirimId" id="BirimId" />
-                        @*@Html.DropDownListFor(x => x.BirimId, (List<SelectListItem>)ViewBag.bList, new { @class = "form-control", @style = "width:100px", @name = "BirimId", @id = "BirimId" })*@
+                        <input type="hidden" class="BirimId" name="BirimId" />
                     </div>
                 </div>
                 <div class="container form-group row">
@@ -84,6 +88,29 @@
 </div>
 
 <script type="text/javascript">
+    $(document).ready(function () {
+        $('#MalHizmetGrupId').change(function () {
+            var MalHizmetGrupId = $(this).val();
+            var MalHizmetId = $('#MalHizmetId');
+            var FaturaId = @ViewBag.faturaId;
+            MalHizmetId.empty();
+            $.ajax({
+                url: '@Url.Action("MalHizmetGetir", "Fatura")',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    'MalHizmetGrupId': MalHizmetGrupId,
+                    'FaturaId': FaturaId
+                },
+                success: function (data) {
+                    MalHizmetId.append('<option>----------------------- Seçiniz -----------------------</option>');
+                    $.each(data, function (index, option) {
+                        MalHizmetId.append('<option value=' + option.Value + '>' + option.Text + '</option>');
+                    });
+                }
+            });
+        });
+    });
     $(document).ready(function () {
         $('#MalHizmetId').change(function () {
             var MalHizmetId = $(this).val();
