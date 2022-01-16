@@ -3,7 +3,7 @@
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class change_malhizmet_malhizmetgrup : DbMigration
+    public partial class change_malhizmet_malhizmetgrup1 : DbMigration
     {
         public override void Up()
         {

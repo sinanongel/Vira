@@ -16,7 +16,10 @@
             <th style="width:5%"><small><strong>Fatura No</strong></small></th>
             <th style="width:5%"><small><strong>Dönem</strong></small></th>
             <th style="width:5%"><small><strong>Fatura Tarihi</strong></small></th>
-            <th style="width:5%"><small><strong>Birim Fiyat</strong></small></th>
+            <th style="width:5%"><small><strong>Birim Fiyat(Döviz)</strong></small></th>
+            <th style="width:5%"><small><strong>Para Birimi</strong></small></th>
+            <th style="width:5%"><small><strong>Döviz kuru</strong></small></th>
+            <th style="width:5%"><small><strong>Birim Fiyat(TL)</strong></small></th>
             <th style="width:5%"><small><strong>Miktar</strong></small></th>
             <th style="width:5%"><small><strong>Birim</strong></small></th>
             <th style="width:5%"><small><strong>Tutar</strong></small></th>
@@ -24,21 +27,40 @@
             <th style="width:5%"><small><strong>Kdv Dahil Toplam</strong></small></th>
         </tr>
     </thead>
-    @foreach (var f in Model)
-    {
+    <tbody>
+        @foreach (var f in Model)
+        {
+            <tr>
+                <td class="align-middle" style="font-size:12px;"></td>
+                <td><small>@f.Fatura.FaturaNo</small></td>
+                <td><small>@f.Fatura.Yillar.Yil - @f.Fatura.Ay.AyAd</small></td>
+                <td><small>@f.Fatura.FaturaTarihi.ToString("dd.MM.yyyy")</small></td>
+                <td style="text-align: right;"><small>@f.FdBirimFiyat.ToString("N")</small></td>
+                <td style="text-align: right;"><small>@f.Doviz.DovizCinsi</small></td>
+                <td style="text-align: right;"><small>@f.FdKur</small></td>
+                <td style="text-align: right;"><small>@string.Format("{0:c}", @f.FdBirimFiyatTl)</small></td>
+                <td style="text-align: right;"><small>@f.FdMiktar.ToString("N")</small></td>
+                <td><small>@f.Birim.BirimAdi</small></td>
+                <td style="text-align: right;"><small>@string.Format("{0:c}", @f.FdTutar)</small></td>
+                <td style="text-align: right;"><small>@string.Format("{0:c}", @f.KdvTutar)</small></td>
+                <td class="align-middle" style="text-align: right; font-size:12px;"></td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
         <tr>
-            <td class="align-middle" style="font-size:12px;"></td>
-            <td><small>@f.Fatura.FaturaNo</small></td>
-            <td><small>@f.Fatura.Yillar.Yil - @f.Fatura.Ay.AyAd</small></td>
-            <td><small>@f.Fatura.FaturaTarihi.ToString("dd.MM.yyyy")</small></td>
-            <td style="text-align: right;"><small>@f.FdBirimFiyatTl.ToString("N")</small></td>
-            <td style="text-align: right;"><small>@f.FdMiktar.ToString("N")</small></td>
-            <td><small>@f.Birim.BirimAdi</small></td>
-            <td style="text-align: right;"><small>@f.FdTutar.ToString("N")</small></td>
-            <td style="text-align: right;"><small>@f.KdvTutar.ToString("N")</small></td>
-            <td class="align-middle" style="text-align: right; font-size:12px;"></td>
+            <th colspan="4" style="text-align:right"></th>
+            <th style="text-align: right; font-size: 14px;"></th>
+            <th style="text-align: right; font-size: 14px;"></th>
+            <th style="text-align: right; font-size: 14px;"></th>
+            <th style="text-align: right; font-size: 14px;"></th>
+            <th style="text-align: right; font-size: 14px;"></th>
+            <th style="text-align: right; font-size: 14px;"></th>
+            <th style="text-align: right; font-size: 14px;"></th>
+            <th style="text-align: right; font-size: 14px;"></th>
+            <th style="text-align: right; font-size: 14px;"></th>
         </tr>
-    }
+    </tfoot>
 </table>
 
 <link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
@@ -55,6 +77,7 @@
 <script src="~/Scripts/DataTables/dataTables.fixedHeader.min.js"></script>
 
 <script type="text/javascript">
+    var numFormat = $.fn.dataTable.render.number('.', ',', 2).display;
     var t = $('#tablo').DataTable({
         "language": {
             "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Turkish.json"
@@ -70,8 +93,8 @@
             var total = 0;
             api.rows({ page: 'current', order: 'applied' }).every(function (rowIdx, tableLoop, rowLoop) {
                 var data = this.data();
-                total = (data[7].replace(/[^\d]/g, '') * 1 / 100) + (data[8].replace(/[^\d]/g, '') * 1 / 100);
-                data[9] = $.fn.dataTable.render.number('.', ',', 2).display(total);
+                total = (data[10].replace(/[^\d]/g, '') * 1 / 100) + (data[11].replace(/[^\d]/g, '') * 1 / 100);
+                data[12] = $.fn.dataTable.render.number('.', ',', 2).display('₺' + numFormat(total));
                 this.data(data);
             })
         },
@@ -109,7 +132,85 @@
                     columns: [':visible', ':visible']
                 }
             }
-        ]
+        ],
+        "footerCallback": function (row, data, start, end, display) {
+            var api = this.api(), data;
+            var satir = @ViewBag.Count;
+
+            // Remove the formatting to get integer data for summation
+            var intVal = function (i) {
+                return typeof i === 'string' ?
+                    i.replace(/[^+-\d]/g, '') * 1 / 100 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+
+            // Total over this page
+            birimFiyatDoviz = api
+                .column(4, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return (intVal(a) + intVal(b));
+                }, 0);
+
+            dovizKuru = api
+                .column(6, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+            birimFiyatTl = api
+                .column(7, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+            miktar = api
+                .column(8, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+            tutar = api
+                .column(10, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+            kdv = api
+                .column(11, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+            // Update footer
+            $(api.column(4).footer()).html(
+                numFormat(birimFiyatDoviz / satir) + "(O)"
+            );
+            $(api.column(6).footer()).html(
+                numFormat(dovizKuru / satir) + "(O)"
+            );
+            $(api.column(7).footer()).html(
+                numFormat(birimFiyatTl / satir) + "(O)"
+            );
+            $(api.column(8).footer()).html(
+                numFormat(miktar) + "(T)"
+            );
+            $(api.column(10).footer()).html(
+                '₺' + numFormat(tutar) + "(T)"
+            );
+            $(api.column(11).footer()).html(
+                '₺' + numFormat(kdv) + "(T)"
+            );
+            $(api.column(12).footer()).html(
+                '₺' + numFormat(tutar + kdv) + "(T)"
+            );
+        }
     });
     t.on('order.dt draw.dt', function () {
         var PageInfo = $('#tablo').DataTable().page.info();

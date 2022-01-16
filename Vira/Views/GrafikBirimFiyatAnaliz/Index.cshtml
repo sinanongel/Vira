@@ -1,0 +1,135 @@
+﻿@model Vira.Models.Siniflar.BirimFiyatAnaliz
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//code.jquery.com/jquery-1.12.4.js"></script>
+
+
+<script>
+     $(document).ready(function () {
+         $('#MalHizGrupId').change(function () {
+             var MalHizGrupId = $(this).val();
+             var MalHizmetL = $('#MalHizId');
+            MalHizmetL.empty();
+            $.ajax({
+                url: '@Url.Action("MalHizmetGetir", "GrafikBirimFiyatAnaliz")',
+                type: 'POST',
+                dataType: 'json',
+                data: { 'MalHizGrupId': MalHizGrupId },
+                success: function (data) {
+                    $.each(data, function (index, option) {
+                        MalHizmetL.append('<option value=' + option.Value + '>' + option.Text + '</option>');
+                    });
+                }
+            });
+        });
+     });
+
+    $(document).ready(function () {
+        $('#liste').click(function () {
+            var Yil = $("#Yil").val();
+            var MalHizId = $("#MalHizId").val();
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: '@Url.Action("VisualizeOrtalamaBirimFiyatResult", "GrafikBirimFiyatAnaliz")',
+                data: { 'Yil': Yil, 'MalHizId': MalHizId },
+                success: function (result) {
+                    google.charts.load('current', {
+                        'packages': ['corechart']
+                    });
+                    google.charts.setOnLoadCallback(function () {
+                        drawChart(result);
+                    });
+                }
+            });
+        });
+    });
+    function drawChart(result) {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Name');
+        data.addColumn('number', 'Birim Fiyat');
+        data.addColumn('number', 'Yıllık Ortalama Birim Fiyat');
+        var dataArray = [];
+        $.each(result, function (i, obj) {
+            dataArray.push([obj.FaturaTarihi, obj.BirimFiyat, obj.YillikOrtalamaBirimFiyat]);
+        });
+        data.addRows(dataArray);
+        var view = new google.visualization.DataView(data);
+        view.setColumns([0, 1,
+            {
+                calc: "stringify",
+                sourceColumn: 1,
+                type: "string",
+                role: "annotation"
+            }, 2,
+            {
+                calc: "stringify",
+                sourceColumn: 2,
+                type: "string",
+                role: "annotation"
+            }]);
+        var columnChartOptions = {
+            title: "Birim Fiyat Analiz Grafiği",
+            //width: 200,
+            height: 400,
+            bar: { groupWidth: "50%" },
+            hAxis:
+            {
+                title: 'Günler',
+                titleTextStyle: { color: '#333' },
+                slantedText: true,
+            }
+        };
+        var columnChart = new google.visualization.LineChart(document
+            .getElementById('columnchart_div'));
+        google.visualization.events.addListener(columnChart, 'ready', function () {
+            var exportData = columnChart.getImageURI();
+            $("#export").attr({ 'href': exportData, 'download': 'Birim Fiyat Analiz Grafiği' });
+        });
+        columnChart.draw(view, columnChartOptions);
+    }
+    window.onresize = drawChart;
+</script>
+
+<br />
+<div class="card lg">
+    <div class="card-header"><i class="fas fa-chart-bar mr-1"></i>Birim Fiyat Analiz Grafiği</div>
+    <div class="card-body">
+        <div>
+            <div class="form-horizontal">
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-2"><b>Yıl</b></label>
+                    <div class="col-2">
+                        @Html.DropDownListFor(x => x.Yil, (List<SelectListItem>)ViewBag.yYil, "Seçiniz", new { @class = "form-control-sm", @style = "width:90px;" })
+                    </div>
+                </div>
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-2"><b>Mal/Hizmet Grup</b></label>
+                    <div class="col-3">
+                        @Html.DropDownListFor(x => x.MalHizGrupId, (List<SelectListItem>)ViewBag.MalHizGrup, "----------- Seçiniz -----------", new { @class = "form-control-sm", @style = "width:220px" })
+                    </div>
+                    <label class="col-form-label-sm col-2"><b>Mal/Hizmet</b></label>
+                    <div class="col-3">
+                        @Html.DropDownListFor(x => x.MalHizId, Enumerable.Empty<SelectListItem>(), new { @class = "form-control-sm", @style = "width:300px" })
+                    </div>
+                </div>
+                <div class="container form-group-sm row">
+                    <div class="col-12">
+                        <a id="export" href="#" style="width:100px;" class="btn btn-sm btn-info float-right" download="FileName">Yazdır</a>
+                        <button id="liste" style="width:120px;" type="submit" class="btn btn-sm btn-success float-right">Grafik Göster</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div Style="font-family: Corbel; text-align:center; height:500px; " class="card-body ">
+            <div id="columnchart_div"></div>
+        </div>
+    </div>
+</div>

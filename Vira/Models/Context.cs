@@ -34,6 +34,7 @@ namespace Vira.Models
         public DbSet<AracCinsi> AracCinsis { get; set; }
         public DbSet<YakitTakip> YakitTakips { get; set; }
         public DbSet<MalHizmetGrup> MalHizmetGrups { get; set; }
+        public DbSet<SaatlikUretim> SaatlikUretims { get; set; }
 
         //public DbSet<HavuzKot> HavuzKots { get; set; }
         //public DbSet<Havuz> Havuzs { get; set; }
@@ -49,6 +50,32 @@ namespace Vira.Models
             modelBuilder.Entity<YakitTakip>().Property(x => x.BitisKm).HasPrecision(18, 1);
             modelBuilder.Entity<YakitTakip>().Property(x => x.GidilenKm).HasPrecision(18, 1);
             modelBuilder.Entity<YakitTakip>().Property(x => x.OrtalamaTuketim).HasPrecision(18, 4);
+
+            modelBuilder.Entity<SaatlikUretim>().Property(x => x.Sepam1IlkEndeks).HasPrecision(18, 1);
+            modelBuilder.Entity<SaatlikUretim>().Property(x => x.Sepam1SonEndeks).HasPrecision(18, 1);
+            modelBuilder.Entity<SaatlikUretim>().Property(x => x.Sepam1TopUretim).HasPrecision(18, 1);
+            modelBuilder.Entity<SaatlikUretim>().Property(x => x.Sepam2IlkEndeks).HasPrecision(18, 1);
+            modelBuilder.Entity<SaatlikUretim>().Property(x => x.Sepam2SonEndeks).HasPrecision(18, 1);
+            modelBuilder.Entity<SaatlikUretim>().Property(x => x.Sepam2TopUretim).HasPrecision(18, 1);
+            modelBuilder.Entity<SaatlikUretim>().Property(x => x.Tug1TopUretim).HasPrecision(18, 1);
+            modelBuilder.Entity<SaatlikUretim>().Property(x => x.Uni1IlkEndeks).HasPrecision(18, 1);
+            modelBuilder.Entity<SaatlikUretim>().Property(x => x.Uni1SonEndeks).HasPrecision(18, 1);
+            modelBuilder.Entity<SaatlikUretim>().Property(x => x.Uni1Uretim).HasPrecision(18, 1);
+            modelBuilder.Entity<SaatlikUretim>().Property(x => x.Uni2IlkEndeks).HasPrecision(18, 1);
+            modelBuilder.Entity<SaatlikUretim>().Property(x => x.Uni2SonEndeks).HasPrecision(18, 1);
+            modelBuilder.Entity<SaatlikUretim>().Property(x => x.Uni2Uretim).HasPrecision(18, 1);
+            modelBuilder.Entity<SaatlikUretim>().Property(x => x.Tug1TopUretim).HasPrecision(18, 1);
+            modelBuilder.Entity<SaatlikUretim>().Property(x => x.Tug2TopUretim).HasPrecision(18, 1);
+            modelBuilder.Entity<SaatlikUretim>().Property(x => x.AnlikMaksGuc).HasPrecision(18, 1);
+            modelBuilder.Entity<SaatlikUretim>().Property(x => x.OrtamSicakligi).HasPrecision(18, 1);
+            modelBuilder.Entity<SaatlikUretim>().Property(x => x.Uni1YatakSicY1).HasPrecision(18, 1);
+            modelBuilder.Entity<SaatlikUretim>().Property(x => x.Uni1YatakSicY2).HasPrecision(18, 1);
+            modelBuilder.Entity<SaatlikUretim>().Property(x => x.Uni1GenMakMSic).HasPrecision(18, 1);
+            modelBuilder.Entity<SaatlikUretim>().Property(x => x.Uni1GovRBasinci).HasPrecision(18, 1);
+            modelBuilder.Entity<SaatlikUretim>().Property(x => x.Uni2YatakSicY1).HasPrecision(18, 1);
+            modelBuilder.Entity<SaatlikUretim>().Property(x => x.Uni2YatakSicY2).HasPrecision(18, 1);
+            modelBuilder.Entity<SaatlikUretim>().Property(x => x.Uni2GenMakMSic).HasPrecision(18, 1);
+            modelBuilder.Entity<SaatlikUretim>().Property(x => x.Uni2GovRBasinci).HasPrecision(18, 1);
 
             modelBuilder.Entity<Sozlesme>().HasRequired(m => m.YukleniciKurum).WithMany(m => m.YukleniciKurumSozlesmes).HasForeignKey(m => m.YukleniciKurumId);
             modelBuilder.Entity<Sozlesme>().HasRequired(m => m.IsverenKurum).WithMany(m => m.IsverenKurumSozlesmes).HasForeignKey(m => m.IsverenKurumId);

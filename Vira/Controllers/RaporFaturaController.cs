@@ -21,7 +21,7 @@ namespace Vira.Controllers
         public DateTime basTarih;
         public DateTime bitTarih;
 
-        public ActionResult ParametreListe(string Detay)
+        public ActionResult ParametreListe(string Detay, FaturaRapor p)
         {
             List<SelectListItem> donemYil = (from t in c.Yillars.ToList()
                                              orderby t.Yil descending
@@ -41,23 +41,37 @@ namespace Vira.Controllers
                                             }).ToList();
             ViewBag.dAy = donemAy;
 
-            List<SelectListItem> kurum = (from t in c.Kurums.ToList()
-                                          orderby t.KurumId descending
+            List<Fatura> kurumList = c.Faturas.GroupBy(x => x.KurumId).Select(y => y.FirstOrDefault()).ToList();
+
+            List<SelectListItem> kurum = (from t in kurumList
+                                          orderby t.Kurum.KurumUnvani ascending
                                           select new SelectListItem
                                           {
-                                              Text = t.KurumAdi,
+                                              Text = t.Kurum.KurumUnvani,
                                               Value = t.KurumId.ToString()
-                                          }).ToList();
-            ViewBag.kListe = kurum;
+                                          }).ToList();            
+            ViewBag.kListe = kurum; 
+            
+            var fatTipi = c.FaturaDetays.Where(x => x.Fatura.KurumId == p.KurumId).Select(y => y.Fatura.FaturaTipi).FirstOrDefault();
+            var malHizmetId = c.FaturaDetays.Where(x => x.Fatura.KurumId == p.KurumId).Select(y => y.MalHizmetId).FirstOrDefault();
+            var malHizmetGrup = c.MalHizmets.Where(x => x.MalHizmetId == malHizmetId).Select(y => y.MalHizmetGrupId).FirstOrDefault();
 
-            List<SelectListItem> malHizmetL = (from t in c.MalHizmets.ToList()
-                                               orderby t.MalHizmetId descending
-                                               select new SelectListItem
-                                               {
-                                                   Text = t.MalHizmetAdi,
-                                                   Value = t.MalHizmetId.ToString()
-                                               }).ToList();
-            ViewBag.mhzListe = malHizmetL;
+            List<MalHizmet> malHizmetList = c.MalHizmets.Where(i => i.MalHizmetTuru == fatTipi).OrderBy(i => i.MalHizmetAdi).ToList();
+
+            List<SelectListItem> malHizmetListe = (from i in malHizmetList
+                                                   where i.MalHizmetGrupId == Convert.ToInt32(malHizmetGrup)
+                                                   select new SelectListItem
+                                                   {
+                                                       Text = i.MalHizmetAdi,
+                                                       Value = i.MalHizmetId.ToString()
+                                                   }).ToList();
+            
+            ViewBag.mhzListe = malHizmetListe;
+            
+            if(Detay is null)
+            {
+                Detay = "2";
+            }
             ViewBag.raporTur = Detay;
 
             return View();
@@ -65,51 +79,86 @@ namespace Vira.Controllers
 
         public PartialViewResult RaporListeDetayli(FaturaRapor p)
         {
-            if (p.BasYil != null && p.BasAy != null && p.BitYil != null && p.BitAy != null && p.KurumId != null && p.MalHizmet != null)
+            //if (p.BasYil != null && p.BasAy != null && p.BitYil != null && p.BitAy != null && p.KurumId != null && p.MalHizmet != null)
+            //{
+            //    var baYil = c.Yillars.Where(x => x.YillarId == p.BasYil).Select(y => y.Yil).FirstOrDefault();
+            //    var biYil = c.Yillars.Where(x => x.YillarId == p.BitYil).Select(y => y.Yil).FirstOrDefault();
+            //    basTarih = new DateTime(Convert.ToInt32(baYil), Convert.ToInt32(p.BasAy), 1);
+            //    bitTarih = new DateTime(Convert.ToInt32(biYil), Convert.ToInt32(p.BitAy), 1).AddMonths(1);
+
+            //    var baAy = c.Ays.Where(x => x.AyId == p.BasAy).Select(y => y.AyAd).FirstOrDefault();
+            //    var biAy = c.Ays.Where(x => x.AyId == p.BitAy).Select(y => y.AyAd).FirstOrDefault();
+            //    ViewBag.Donem = baYil + "/" + baAy + " - " + biYil + "/" + biAy;
+
+            //    var kurumAdi = c.Kurums.Where(x => x.KurumId == p.KurumId).Select(y => y.KurumAdi).FirstOrDefault();
+            //    ViewBag.KurumAdi = kurumAdi;
+
+            //    var malHizmet = c.MalHizmets.Where(x => x.MalHizmetId == p.MalHizmet).Select(y => y.MalHizmetAdi).FirstOrDefault();
+            //    ViewBag.MalHizmetAdi = malHizmet;
+            //}
+
+            if (p.BasTarih != null && p.BitTarih != null && p.KurumId != null && p.MalHizmet != null)
             {
-                var baYil = c.Yillars.Where(x => x.YillarId == p.BasYil).Select(y => y.Yil).FirstOrDefault();
-                var biYil = c.Yillars.Where(x => x.YillarId == p.BitYil).Select(y => y.Yil).FirstOrDefault();
-                basTarih = new DateTime(Convert.ToInt32(baYil), Convert.ToInt32(p.BasAy), 1);
-                bitTarih = new DateTime(Convert.ToInt32(biYil), Convert.ToInt32(p.BitAy), 1).AddMonths(1);
-
-                var baAy = c.Ays.Where(x => x.AyId == p.BasAy).Select(y => y.AyAd).FirstOrDefault();
-                var biAy = c.Ays.Where(x => x.AyId == p.BitAy).Select(y => y.AyAd).FirstOrDefault();
-                ViewBag.Donem = baYil + "/" + baAy + " - " + biYil + "/" + biAy;
-
                 var kurumAdi = c.Kurums.Where(x => x.KurumId == p.KurumId).Select(y => y.KurumAdi).FirstOrDefault();
-                ViewBag.KurumAdi = kurumAdi;
-
                 var malHizmet = c.MalHizmets.Where(x => x.MalHizmetId == p.MalHizmet).Select(y => y.MalHizmetAdi).FirstOrDefault();
+
+                ViewBag.KurumAdi = kurumAdi;
                 ViewBag.MalHizmetAdi = malHizmet;
+                ViewBag.BasTarih = p.BasTarih.ToString("d");
+                ViewBag.BitTarih = p.BitTarih.ToString("d");
+                ViewBag.Donem = p.BasTarih + " - " + p.BitTarih;
             }
 
             var liste = c.FaturaDetays
-                .Where(x => x.MalHizmetId == p.MalHizmet && x.Fatura.Kurum.KurumId == p.KurumId && x.Fatura.FaturaTarihi >= basTarih && x.Fatura.FaturaTarihi < bitTarih)
-                .OrderBy(y => new { y.Fatura.Yillar.YillarId, y.Fatura.Ay.AyId })
+                .Where(x => x.Fatura.FaturaTarihi >= p.BasTarih && x.Fatura.FaturaTarihi <= p.BitTarih &&  x.MalHizmetId == p.MalHizmet && x.Fatura.Kurum.KurumId == p.KurumId)
                 .ToList();
+
+            //var liste = c.faturadetays
+            //    .where(x => x.malhizmetıd == p.malhizmet && x.fatura.kurum.kurumıd == p.kurumıd && x.fatura.faturatarihi >= bastarih && x.fatura.faturatarihi < bittarih)
+            //    .orderby(y => new { y.fatura.yillar.yillarıd, y.fatura.ay.ayıd })
+            //    .tolist();
+
+            var count = liste.Count();
+            ViewBag.Count = count;
 
             return PartialView("RaporListeDetayli", liste);
         }
 
         public PartialViewResult RaporListeDetaysiz(FaturaRapor p)
         {
-            if (p.BasYil != null && p.BasAy != null && p.BitYil != null && p.BitAy != null && p.KurumId != null)
+            //if (p.BasYil != null && p.BasAy != null && p.BitYil != null && p.BitAy != null && p.KurumId != null)
+            //{
+            //    var baYil = c.Yillars.Where(x => x.YillarId == p.BasYil).Select(y => y.Yil).FirstOrDefault();
+            //    var biYil = c.Yillars.Where(x => x.YillarId == p.BitYil).Select(y => y.Yil).FirstOrDefault();
+            //    basTarih = new DateTime(Convert.ToInt32(baYil), Convert.ToInt32(p.BasAy), 1);
+            //    bitTarih = new DateTime(Convert.ToInt32(biYil), Convert.ToInt32(p.BitAy), 1).AddMonths(1);
+
+            //    var baAy = c.Ays.Where(x => x.AyId == p.BasAy).Select(y => y.AyAd).FirstOrDefault();
+            //    var biAy = c.Ays.Where(x => x.AyId == p.BitAy).Select(y => y.AyAd).FirstOrDefault();
+            //    ViewBag.Donem = baYil + "/" + baAy + " - " + biYil + "/" + biAy;
+
+            //    var kurumAdi = c.Kurums.Where(x => x.KurumId == p.KurumId).Select(y => y.KurumAdi).FirstOrDefault();
+            //    ViewBag.KurumAdi = kurumAdi;
+            //}
+            if (p.BasTarih != null && p.BitTarih != null && p.KurumId != null && p.MalHizmet != null)
             {
-                var baYil = c.Yillars.Where(x => x.YillarId == p.BasYil).Select(y => y.Yil).FirstOrDefault();
-                var biYil = c.Yillars.Where(x => x.YillarId == p.BitYil).Select(y => y.Yil).FirstOrDefault();
-                basTarih = new DateTime(Convert.ToInt32(baYil), Convert.ToInt32(p.BasAy), 1);
-                bitTarih = new DateTime(Convert.ToInt32(biYil), Convert.ToInt32(p.BitAy), 1).AddMonths(1);
-
-                var baAy = c.Ays.Where(x => x.AyId == p.BasAy).Select(y => y.AyAd).FirstOrDefault();
-                var biAy = c.Ays.Where(x => x.AyId == p.BitAy).Select(y => y.AyAd).FirstOrDefault();
-                ViewBag.Donem = baYil + "/" + baAy + " - " + biYil + "/" + biAy;
-
                 var kurumAdi = c.Kurums.Where(x => x.KurumId == p.KurumId).Select(y => y.KurumAdi).FirstOrDefault();
+                var malHizmet = c.MalHizmets.Where(x => x.MalHizmetId == p.MalHizmet).Select(y => y.MalHizmetAdi).FirstOrDefault();
+
                 ViewBag.KurumAdi = kurumAdi;
+                ViewBag.MalHizmetAdi = malHizmet;
+                ViewBag.BasTarih = p.BasTarih.ToString("d");
+                ViewBag.BitTarih = p.BitTarih.ToString("d");
+                ViewBag.Donem = p.BasTarih + " - " + p.BitTarih;
             }
 
+            //var liste = c.Faturas
+            //    .Where(x => x.KurumId == p.KurumId && x.FaturaTarihi >= basTarih && x.FaturaTarihi < bitTarih)
+            //    .OrderBy(y => new { y.YillarId, y.AyId })
+            //    .ToList();
+
             var liste = c.Faturas
-                .Where(x => x.KurumId == p.KurumId && x.FaturaTarihi >= basTarih && x.FaturaTarihi < bitTarih)
+                .Where(x => x.KurumId == p.KurumId && x.FaturaTarihi >= p.BasTarih && x.FaturaTarihi < p.BitTarih)
                 .OrderBy(y => new { y.YillarId, y.AyId })
                 .ToList();
 
@@ -120,14 +169,18 @@ namespace Vira.Controllers
         public JsonResult MalHizmetGetir(int KurumId)
         {
             var fatTipi = c.FaturaDetays.Where(x => x.Fatura.KurumId == KurumId).Select(y => y.Fatura.FaturaTipi).FirstOrDefault();
+            var malHizmetId = c.FaturaDetays.Where(x => x.Fatura.KurumId == KurumId).Select(y => y.MalHizmetId).FirstOrDefault();
+            var malHizmetGrup = c.MalHizmets.Where(x => x.MalHizmetId == malHizmetId).Select(y => y.MalHizmetGrupId).FirstOrDefault();
+
             List<MalHizmet> malHizmetList = c.MalHizmets.Where(i => i.MalHizmetTuru == fatTipi).OrderBy(i => i.MalHizmetAdi).ToList();
 
             List<SelectListItem> malHizmetListe = (from i in malHizmetList
-                                              select new SelectListItem
-                                              {
-                                                  Text = i.MalHizmetAdi,
-                                                  Value = i.MalHizmetId.ToString()
-                                              }).ToList();
+                                                   where i.MalHizmetGrupId == Convert.ToInt32(malHizmetGrup)
+                                                   select new SelectListItem
+                                                   {
+                                                       Text = i.MalHizmetAdi,
+                                                       Value = i.MalHizmetId.ToString()
+                                                   }).ToList();
 
             return Json(malHizmetListe, JsonRequestBehavior.AllowGet);
         }

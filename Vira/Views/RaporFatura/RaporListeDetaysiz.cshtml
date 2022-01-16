@@ -21,18 +21,28 @@
             <th style="width:5%"><small><strong>Kdv Dahil Toplam</strong></small></th>
         </tr>
     </thead>
-    @foreach (var f in Model)
-    {
+    <tbody>
+        @foreach (var f in Model)
+        {
+            <tr>
+                <td class="align-middle" style="font-size:12px;"></td>
+                <td><small>@f.FaturaNo</small></td>
+                <td><small>@f.Yillar.Yil - @f.Ay.AyAd</small></td>
+                <td><small>@f.FaturaTarihi.ToString("dd.MM.yyyy")</small></td>
+                <td style="text-align: right;"><small>@string.Format("{0:c}", @f.FaturaToplami)</small></td>
+                <td style="text-align: right;"><small>@string.Format("{0:c}", @f.FaturaKdvToplami)</small></td>
+                <td style="text-align: right;"><small>@string.Format("{0:c}", @f.FaturaOdenecekTutar)</small></td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
         <tr>
-            <td class="align-middle" style="font-size:12px;"></td>
-            <td><small>@f.FaturaNo</small></td>
-            <td><small>@f.Yillar.Yil - @f.Ay.AyAd</small></td>
-            <td><small>@f.FaturaTarihi.ToString("dd.MM.yyyy")</small></td>
-            <td style="text-align: right;"><small>@f.FaturaToplami.ToString("N")</small></td>
-            <td style="text-align: right;"><small>@f.FaturaKdvToplami.ToString("N")</small></td>
-            <td style="text-align: right;"><small>@f.FaturaOdenecekTutar.ToString("N")</small></td>
+            <th colspan="4" style="text-align:right">Toplam</th>
+            <th style="text-align: right; font-size: 14px;"></th>
+            <th style="text-align: right; font-size: 14px;"></th>
+            <th style="text-align: right; font-size: 14px;"></th>
         </tr>
-    }
+    </tfoot>
 </table>
 
 <link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
@@ -49,6 +59,7 @@
 <script src="~/Scripts/DataTables/dataTables.fixedHeader.min.js"></script>
 
 <script type="text/javascript">
+    var numFormat = $.fn.dataTable.render.number('.', ',', 2).display;
     var t = $('#tablo').DataTable({
         "language": {
             "url": "//cdn.datatables.net/plug-ins/1.10.12/i18n/Turkish.json"
@@ -92,7 +103,51 @@
                     columns: [':visible', ':visible']
                 }
             }
-        ]
+        ],
+        "footerCallback": function (row, data, start, end, display) {
+            var api = this.api(), data; 
+
+            // Remove the formatting to get integer data for summation
+            var intVal = function (i) {
+                return typeof i === 'string' ?
+                    i.replace(/[^+-\d]/g, '') * 1 / 100 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+
+            // Total over this page
+            tutar = api
+                .column(4, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+            kdv = api
+                .column(5, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+            toplam = api
+                .column(6, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+            // Update footer
+            $(api.column(4).footer()).html(
+                '₺' + numFormat(tutar)
+            );
+            $(api.column(5).footer()).html(
+                '₺' + numFormat(kdv)
+            );
+            $(api.column(6).footer()).html(
+                '₺' + numFormat(toplam)
+            );
+        }
     });
     t.on('order.dt draw.dt', function () {
         var PageInfo = $('#tablo').DataTable().page.info();

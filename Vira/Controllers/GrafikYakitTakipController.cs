@@ -56,7 +56,7 @@ namespace Vira.Controllers
                         KmBilgisi = z.Sum(t => t.GidilenKm),
                         AlimMiktari = z.Sum(m => m.YakitAlimMiktari)
                     })
-                    .ToList();
+                    .OrderBy(z => z.Ay).ToList();
 
                 var yilListe = c.YakitTakips
                     .Where(x => x.AraclarId == AracId && x.YakitAlimTarihi.Year == yaYil)

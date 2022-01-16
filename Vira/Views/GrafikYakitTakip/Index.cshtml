@@ -69,6 +69,10 @@
         };
         var columnChart = new google.visualization.LineChart(document
             .getElementById('columnchart_div'));
+        google.visualization.events.addListener(columnChart, 'ready', function () {
+            var exportData = columnChart.getImageURI();
+            $("#export").attr({ 'href': exportData, 'download': 'Yakıt Analiz Grafiği' });
+        });
         columnChart.draw(view, columnChartOptions);
     }
     window.onresize = drawChart;
@@ -84,15 +88,16 @@
             <div class="form-horizontal">
                 <div class="container form-group-sm row">
                     <label class="col-form-label-sm col-1"><b>Yıl</b></label>
-                    <div class="col-2">
-                        @Html.DropDownListFor(x => x.Yil, (List<SelectListItem>)ViewBag.yYil, "- Seçiniz -", new { @class = "form-control", @style = "width:120px;" })
+                    <div class="col-1">
+                        @Html.DropDownListFor(x => x.Yil, (List<SelectListItem>)ViewBag.yYil, "Seçiniz", new { @class = "form-control-sm", @style = "width:85px;" })
                     </div>
                     <label class="col-form-label-sm col-2"><b>Araç Plaka</b></label>
                     <div class="col-2">
-                        @Html.DropDownListFor(x => x.AracId, (List<SelectListItem>)ViewBag.aPlaka, "Seçiniz", new { @class = "form-control", @style = "width:150px" })
+                        @Html.DropDownListFor(x => x.AracId, (List<SelectListItem>)ViewBag.aPlaka, "Seçiniz", new { @class = "form-control-sm", @style = "width:150px" })
                     </div>
-                    <div class="col-1">
-                        <button id="liste" style="width:100px;" type="submit" class="btn btn-success">Listele</button>
+                    <div class="col-6">
+                        <button id="liste" style="width:150px;" type="submit" class="btn btn-sm btn-success">Grafik Göster</button>
+                        <a id="export" href="#" style="width:100px;" class="btn btn-sm btn-info" download="FileName">Yazdır</a>
                     </div>
                 </div>
             </div>
@@ -100,6 +105,7 @@
         <hr />
         <div Style="font-family: Corbel; text-align:center; height:500px; " class="card-body ">
             <div id="columnchart_div"></div>
+            </div>
         </div>
     </div>
 </div>

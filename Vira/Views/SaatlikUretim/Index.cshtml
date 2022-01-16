@@ -1,0 +1,34 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+<script src="//code.jquery.com/jquery-1.12.4.js"></script>
+<br />
+<div class="card mb-4">
+    <div class="card-header"><i class="fas fa-table mr-1"></i>Excel Yükleme</div>
+    <div class="card-body">
+        <div>
+            @using (Html.BeginForm("ExcelYukleme", "SaatlikUretim", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+            <div class="form-horizontal">
+                <div class="container form-group-sm row">
+                    <label class="col-form-label-sm col-sm-1"><b>Tarih</b></label>
+                    <div class="col-sm-2">
+                        <input style="width:160px;" type="date" class="form-control-sm" name="SaatlikUretimTarih" />
+                    </div>
+                    <div class="col-sm-5">
+                        <input type="file" class="form-control-file" name="ExcelDosya" />
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="submit" value="Dosya Yükle" class="btn btn-sm btn-primary" />
+                    </div>
+                    <div class="container form-group-sm row col-sm-2">
+                        @Html.Raw(@ViewBag.State)
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+</div>

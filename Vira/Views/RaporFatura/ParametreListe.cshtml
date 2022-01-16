@@ -16,19 +16,33 @@
                         <div class="container form-group row">
                             <label class="col-form-label-sm col-2"><b>Rapor Tipi</b></label>
                             <div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="Detay" checked="checked" value="2" />
-                                    <label class="form-check-label" for="inlineRadio1">Detaylı</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="Detay" value="3" />
-                                    <label class="form-check-label" for="inlineRadio1">Detaysız</label>
-                                </div>
+                                @if (@ViewBag.raporTur == "2")
+                                {
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="Detay" checked="checked" value="2" />
+                                        <label class="form-check-label" for="inlineRadio1">Detaylı</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="Detay" value="3" />
+                                        <label class="form-check-label" for="inlineRadio1">Detaysız</label>
+                                    </div>
+                                }
+                                else if (@ViewBag.raporTur == "3")
+                                {
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="Detay" value="2" />
+                                        <label class="form-check-label" for="inlineRadio1">Detaylı</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="Detay" checked="checked" value="3" />
+                                        <label class="form-check-label" for="inlineRadio1">Detaysız</label>
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>
                     <div class="container form-group-sm row">
-                        <label class="col-form-label-sm col-2"><b>Dönem Başı (Yıl/Ay)</b></label>
+                        @*<label class="col-form-label-sm col-2"><b>Dönem Başı (Yıl/Ay)</b></label>
                         <div class="col-1">
                             @Html.DropDownListFor(x => x.BasYil, (List<SelectListItem>)ViewBag.dYil, "Seçiniz", new { @class = "form-control", @style = "width:90px" })
                         </div>
@@ -41,17 +55,24 @@
                         </div>
                         <div class="col-2">
                             @Html.DropDownListFor(x => x.BitAy, (List<SelectListItem>)ViewBag.dAy, "- Seçiniz -", new { @class = "form-control", @style = "width:120px" })
+                        </div>*@
+                        <label class="col-form-label-sm col-1"><b>Tarih Aralığı</b></label>
+                        <div class="col-2">
+                            @Html.TextBoxFor(x => x.BasTarih, "{0:yyyy-MM-dd}", new { @class = "form-control", @style = "width:160px;", @type = "date" })
+                        </div>
+                        <div class="col-8">
+                            @Html.TextBoxFor(x => x.BitTarih, "{0:yyyy-MM-dd}", new { @class = "form-control", @style = "width:160px;", @type = "date" })
                         </div>
                     </div>
                     <div class="container form-group-sm row ">
-                        <label class="col-form-label-sm col-md-2"><b>Kurum</b></label>
-                        <div class="col-md-3">
-                            @Html.DropDownListFor(x => x.KurumId, (List<SelectListItem>)ViewBag.kListe, "Seçiniz", new { @class = "form-control Kurum", @style = "width:100px" })
+                        <label class="col-form-label-sm col-md-1"><b>Kurum</b></label>
+                        <div class="col-md-5">
+                            @Html.DropDownListFor(x => x.KurumId, (List<SelectListItem>)ViewBag.kListe, "----------------------- Seçiniz -----------------------", new { @class = "form-control Kurum", @style = "width:400px" })
                         </div>
                         <div id="Detay2" class="col row desc">
-                            <label class="col-form-label-sm col-md-4"><b>Mal/Hizmet</b></label>
-                            <div class="col-md-4">
-                                @Html.DropDownListFor(x => x.MalHizmet, Enumerable.Empty<SelectListItem>(), "- Seçiniz -", new { @class = "form-control MalHizmet", @style = "width:350px" })
+                            <label class="col-form-label-sm col-md-3"><b>Mal/Hizmet</b></label>
+                            <div class="col-md-3">
+                                @Html.DropDownListFor(x => x.MalHizmet, (List<SelectListItem>)ViewBag.mhzListe, "------------------ Seçiniz ------------------", new { @class = "form-control MalHizmet", @style = "width:340px" })
                             </div>
                         </div>
                         <div class="col-md-1">
@@ -67,7 +88,7 @@
                     @Html.Action("RaporListeDetayli", "RaporFatura")
                 </div>
             }
-            @if (@ViewBag.raporTur == "3")
+            else if (@ViewBag.raporTur == "3")
             {
                 <div>
                     @Html.Action("RaporListeDetaysiz", "RaporFatura")

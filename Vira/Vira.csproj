@@ -178,6 +178,7 @@
     <Compile Include="Controllers\FirmaController.cs" />
     <Compile Include="Controllers\GelenEvrakController.cs" />
     <Compile Include="Controllers\GidenEvrakController.cs" />
+    <Compile Include="Controllers\GrafikBirimFiyatAnalizController.cs" />
     <Compile Include="Controllers\GrafikYakitTakipController.cs" />
     <Compile Include="Controllers\HavuzOkumaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -191,6 +192,7 @@
     <Compile Include="Controllers\RaporUretimAnalizController.cs" />
     <Compile Include="Controllers\RaporUretimController.cs" />
     <Compile Include="Controllers\RaporYakitTakipController.cs" />
+    <Compile Include="Controllers\SaatlikUretimController.cs" />
     <Compile Include="Controllers\SozlesmeController.cs" />
     <Compile Include="Controllers\YakitTakipController.cs" />
     <Compile Include="Controllers\YekdemGirisController.cs" />
@@ -333,9 +335,17 @@
     <Compile Include="Migrations\202108130637333_add_tables_malhizmetgrup.designer.cs">
       <DependentUpon>202108130637333_add_tables_malhizmetgrup.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202108180834053_change_malhizmet_malhizmetgrup.cs" />
-    <Compile Include="Migrations\202108180834053_change_malhizmet_malhizmetgrup.designer.cs">
-      <DependentUpon>202108180834053_change_malhizmet_malhizmetgrup.cs</DependentUpon>
+    <Compile Include="Migrations\202108191355395_change_malhizmet_malhizmetgrup.cs" />
+    <Compile Include="Migrations\202108191355395_change_malhizmet_malhizmetgrup.designer.cs">
+      <DependentUpon>202108191355395_change_malhizmet_malhizmetgrup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202108191357152_change_malhizmet_malhizmetgrup1.cs" />
+    <Compile Include="Migrations\202108191357152_change_malhizmet_malhizmetgrup1.designer.cs">
+      <DependentUpon>202108191357152_change_malhizmet_malhizmetgrup1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202108231327029_add_table_saatlikuretim.cs" />
+    <Compile Include="Migrations\202108231327029_add_table_saatlikuretim.designer.cs">
+      <DependentUpon>202108231327029_add_table_saatlikuretim.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AltBirim.cs" />
@@ -365,9 +375,11 @@
     <Compile Include="Models\Kurum.cs" />
     <Compile Include="Models\MalHizmet.cs" />
     <Compile Include="Models\MalHizmetGrup.cs" />
+    <Compile Include="Models\SaatlikUretim.cs" />
     <Compile Include="Models\Siniflar\AylikUretim.cs" />
     <Compile Include="Models\Siniflar\AylikUretimGrafik.cs" />
     <Compile Include="Models\Siniflar\AylikUretimListe.cs" />
+    <Compile Include="Models\Siniflar\BirimFiyatAnaliz.cs" />
     <Compile Include="Models\Siniflar\FaturaRapor.cs" />
     <Compile Include="Models\Siniflar\Miktar.cs" />
     <Compile Include="Models\Siniflar\TeiasVeris.cs" />
@@ -2510,9 +2522,12 @@
     <Content Include="Views\MalHizmetGrup\Index.cshtml" />
     <Content Include="Views\MalHizmetGrup\MalHizmetGrupEkle.cshtml" />
     <Content Include="Views\MalHizmetGrup\MalHizmetGrupGetir.cshtml" />
+    <Content Include="Views\SaatlikUretim\Index.cshtml" />
+    <Content Include="Views\GrafikBirimFiyatAnaliz\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Dosya\" />
+    <Folder Include="Views\Grafik\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -2630,8 +2645,14 @@
     <EmbeddedResource Include="Migrations\202108130637333_add_tables_malhizmetgrup.resx">
       <DependentUpon>202108130637333_add_tables_malhizmetgrup.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202108180834053_change_malhizmet_malhizmetgrup.resx">
-      <DependentUpon>202108180834053_change_malhizmet_malhizmetgrup.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202108191355395_change_malhizmet_malhizmetgrup.resx">
+      <DependentUpon>202108191355395_change_malhizmet_malhizmetgrup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202108191357152_change_malhizmet_malhizmetgrup1.resx">
+      <DependentUpon>202108191357152_change_malhizmet_malhizmetgrup1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202108231327029_add_table_saatlikuretim.resx">
+      <DependentUpon>202108231327029_add_table_saatlikuretim.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

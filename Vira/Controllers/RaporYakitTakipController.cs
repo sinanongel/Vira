@@ -55,7 +55,7 @@ namespace Vira.Controllers
                     KmBilgisi = z.Sum(t => t.GidilenKm),
                     AlimMiktari = z.Sum(m => m.YakitAlimMiktari)
                 })
-                .ToList();
+                .OrderBy(z => z.Ay).ToList();
 
             List<YakitAnaliz> yaListe = new List<YakitAnaliz>();
 
